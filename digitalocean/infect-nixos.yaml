@@ -1,0 +1,3 @@
+#cloud-config
+runcmd:
+– curl https://raw.githubusercontent.com/sheran/nixos-infect/master/nixos-infect | PROVIDER=digitalocean NIX_CHANNEL=nixos-23.05 bash 2>&1 | tee /tmp/infect.log
