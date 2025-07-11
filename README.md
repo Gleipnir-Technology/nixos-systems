@@ -88,3 +88,5 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 ```
 
 Next we'll try something at half that size
+
+`s-1vcpu-2gb` works fine. We won't bother going smaller at this point.
