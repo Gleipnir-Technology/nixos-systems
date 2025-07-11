@@ -46,9 +46,45 @@ I tried creating a cloud-init function based on NixOS-infect. You can see the co
 
 ## With nixos-anywhere.
 
+First we start up a _really small_ s-1vcpu-1gb. Then we try to install nixos via nixos-anywhere. Notice the `--no-disko-deps` which is recommended for very low RAM systems:
+
 ```
 $ nix run github:nix-community/nixos-anywhere -- --no-disko-deps --flake ./nixos-anywhere#digitalocean --target-host root@64.23.242.187
 ```
 
-Cloud init data:
-curl http://169.254.169.254/metadata/v1.json
+After an hour it was railed on the CPU at 100% and had been for an hour with no network data going anywhere. I gave up. Must be too small. Tried again with a larger system, `s-2vcpu-4gb`:
+
+```
+$ nix run github:nix-community/nixos-anywhere -- --flake ./nixos-anywhere/flake.nix#digitalocean --target-host root@128.199.4.31
+```
+
+This worked and I was then able to ssh in as root. Interestingly, it has no `/etc/nixos/*` files (but the directory does exist). Resulting disk images:
+
+```
+# fdisk -l
+Disk /dev/vda: 80 GiB, 85899345920 bytes, 167772160 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: E0C9241B-89EA-4E2C-A0CD-04A3FDEFEDA2
+
+Device       Start       End   Sectors  Size Type
+/dev/vda1     2048      4095      2048    1M BIOS boot
+/dev/vda2     4096   1028095   1024000  500M EFI System
+/dev/vda3  1028096 167770111 166742016 79.5G Linux filesystem
+
+
+Disk /dev/vdb: 482 KiB, 493568 bytes, 964 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+
+Disk /dev/mapper/pool-root: 79.51 GiB, 85370863616 bytes, 166739968 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+```
+
+Next we'll try something at half that size
