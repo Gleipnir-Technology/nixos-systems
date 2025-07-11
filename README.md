@@ -41,5 +41,14 @@ Error: POST https://api.digitalocean.com/v2/droplets: 422 (request "116c778d-8e7
 Oh. [Well that sucks](https://docs.digitalocean.com/products/custom-images/details/limits/). Digital Ocean can't do IPv6 on custom images.
 
 ## With cloud-init
+
+I tried creating a cloud-init function based on NixOS-infect. You can see the content in `digitalocean/infect-nixos.yaml`. I added it to the startup command via `doctl compute droplet create ... --user-data-file digitalocean/infect-nixos.yaml`. This may have a way of working, but I don't get a log and it doesn't get infected, so something fundamental isn't working. I abandoned it.
+
+## With nixos-anywhere.
+
+```
+$ nix run github:nix-community/nixos-anywhere -- --no-disko-deps --flake ./nixos-anywhere#digitalocean --target-host root@64.23.242.187
+```
+
 Cloud init data:
 curl http://169.254.169.254/metadata/v1.json

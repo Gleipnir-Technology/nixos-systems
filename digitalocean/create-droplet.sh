@@ -7,6 +7,5 @@ doctl compute droplet create \
 	--size s-1vcpu-1gb \
 	--ssh-keys 48777034,46710608 \
 	--tag-name nixos \
-	--user-data-file digitalocean/infect-nixos.yaml \
 	--wait
 
