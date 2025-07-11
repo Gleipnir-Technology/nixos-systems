@@ -9,7 +9,7 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
-		nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 	};
 
 	outputs =
@@ -34,7 +34,6 @@
 		in {
 			# tested with 2GB/2CPU droplet, 1GB droplets do not have enough RAM for kexec
 			nixosConfigurations.digitalocean = nixpkgs.lib.nixosSystem {
-				system = "${system}";
 				modules = [
 					./configuration.nix
 					./digitalocean.nix
@@ -49,6 +48,10 @@
 					./modules
 					./users
 				];
+				specialArgs = {
+					inherit configFiles;
+				};
+				system = "${system}";
 			};
 		};
 }
