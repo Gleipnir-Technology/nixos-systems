@@ -35,9 +35,13 @@
 					modules = [
 						home-manager.nixosModules.home-manager
 						{
+							home-manager.extraSpecialArgs = { inherit configFiles; };
+							home-manager.sharedModules = [
+								nixvim.homeManagerModules.nixvim
+								./modules/home/nixvim.nix
+							];
 							home-manager.useGlobalPkgs = true;
 							home-manager.useUserPackages = true;
-							home-manager.users.eliribble = import ./home.nix;
 						}
 						./host/corp/configuration.nix
 						./modules
@@ -66,6 +70,7 @@
 								};
 							};
 						}
+						./users
 					];
 					pkgs = import nixpkgs {
 						config = {

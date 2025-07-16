@@ -115,15 +115,6 @@
 		extraGroups = [ "deploy" ];
 		isNormalUser = true;
 	};
-	users.users.eliribble = {
-		extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-		initialHashedPassword = "$y$j9T$XYOMZR8RZEiTnpaF8lsxv1$H7YbWDpzbnYXTLN0ZMhvtKOlSMy64P7C/RdLBaeaNf/";
-		isNormalUser = true;
-		openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvhtF6nRWlA6PVs71Eek7p0p2PxTd3P6ZEGFV2t75MB eliribble@nixos"];
-	};
-	users.users.root.openssh.authorizedKeys.keys = [
-		''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvhtF6nRWlA6PVs71Eek7p0p2PxTd3P6ZEGFV2t75MB eliribble@nixos'' 
-	];
 	users.users.vikunja = {
 		group = "vikunja";
 		isNormalUser = false;
