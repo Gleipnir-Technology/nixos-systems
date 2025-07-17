@@ -3,16 +3,12 @@
 with lib;
 
 {
-	options.myModules.tmux.enable = mkEnableOption "custom tmux configuration";
+	environment.systemPackages = [ pkgs.tmux ];
 
-	config = mkIf config.myModules.tmux.enable {
-		environment.systemPackages = [ pkgs.tmux ];
+	environment.etc."tmux.conf".source = "${configFiles}/tmux/tmux.conf";
 
-		environment.etc."tmux.conf".source = "${configFiles}/tmux/tmux.conf";
-
-		# Alternative: if you want per-user configs
-		# users.users = mkMerge (map (user: {
-		#	 ${user}.home = "${configPath}/configs/tmux/tmux.conf";
-		# }) config.myModules.tmux.users);
-	};
+	# Alternative: if you want per-user configs
+	# users.users = mkMerge (map (user: {
+	#	 ${user}.home = "${configPath}/configs/tmux/tmux.conf";
+	# }) config.myModules.tmux.users);
 }

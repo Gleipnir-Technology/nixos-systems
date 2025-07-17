@@ -17,26 +17,8 @@
 		efiInstallAsRemovable = true;
 	};
 
-	environment.systemPackages = map lib.lowPrio [
-		pkgs.curl
-		pkgs.gitMinimal
-	];
-
 	myModules = {
 		cloud-init.enable = true;
 		do-agent.enable = true;
-		fish.enable = true;
-		tmux.enable = true;
 	};
-
-	services.openssh.enable = true;
-	services.swapspace.enable = true;
-
-	system.stateVersion = "25.05";
-
-	users.users.root.openssh.authorizedKeys.keys =
-	[
-		"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvhtF6nRWlA6PVs71Eek7p0p2PxTd3P6ZEGFV2t75MB eliribble@nixos"
-	] ++ (args.extraPublicKeys or []); # this is used for unit-testing this module and can be removed if not needed
-
 }
