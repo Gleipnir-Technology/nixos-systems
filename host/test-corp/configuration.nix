@@ -7,6 +7,6 @@
 	myModules = {
 		cloud-init.enable = true;
 		do-agent.enable = true;
+		podman.enable = true;
 	};
-	virtualisation.podman.enable = true;
 }

@@ -6,6 +6,7 @@
 		./fish.nix
 		./onlyoffice.nix
 		./openssh.nix
+		./podman.nix
 		./seafile.nix
 		./sudo.nix
 		./synapse.nix
