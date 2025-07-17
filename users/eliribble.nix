@@ -11,10 +11,6 @@ with lib;
 				enable = true;
 				user = "eliribble";
 			};
-			#neovim = {
-				#enable = true;
-				#user = "eliribble";
-			#};
 		};
 
 		home.stateVersion = "25.05";
