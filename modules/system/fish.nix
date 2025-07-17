@@ -3,5 +3,8 @@
 with lib;
 
 {
-	environment.systemPackages = [ pkgs.fish ];
+	options.myModules.fish.enable = mkEnableOption "custom fish configuration";
+	config = mkIf config.myModules.fish.enable {
+		environment.systemPackages = [ pkgs.fish ];
+	};
 }

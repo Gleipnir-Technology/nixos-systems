@@ -22,7 +22,12 @@
 		pkgs.gitMinimal
 	];
 
-	myModules.tmux.enable = true;
+	myModules = {
+		cloud-init.enable = true;
+		do-agent.enable = true;
+		fish.enable = true;
+		tmux.enable = true;
+	};
 
 	services.openssh.enable = true;
 
