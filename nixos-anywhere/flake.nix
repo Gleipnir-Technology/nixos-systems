@@ -27,7 +27,7 @@
 					cp -r * $out/
 				'';
 				name = "config-files";
-				src = ./configs;
+				src = ../configs;
 			};
 			pkgs = nixpkgs.legacyPackages.${system};
 			system = "x86_64-linux";
@@ -40,13 +40,13 @@
 					disko.nixosModules.disko
 					{ disko.devices.disk.disk1.device = "/dev/vda"; }
 					home-manager.nixosModules.home-manager {
+						home-manager.extraSpecialArgs = { inherit configFiles; };
+						home-manager.sharedModules = [];
 						home-manager.useGlobalPkgs = true;
 						home-manager.useUserPackages = true;
-						home-manager.sharedModules = [];
-						home-manager.extraSpecialArgs = { inherit configFiles; };
 					}
-					./modules
-					./users
+					../modules
+					../users
 				];
 				specialArgs = {
 					inherit configFiles;
