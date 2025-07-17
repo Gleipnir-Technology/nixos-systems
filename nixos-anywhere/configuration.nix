@@ -30,6 +30,7 @@
 	};
 
 	services.openssh.enable = true;
+	services.swapspace.enable = true;
 
 	system.stateVersion = "25.05";
 
