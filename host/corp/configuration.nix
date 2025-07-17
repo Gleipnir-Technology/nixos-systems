@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }: {
-	disabledModules = [ 
-		"services/web-apps/onlyoffice.nix"
-	];
 	imports = [
 		./hardware-configuration.nix
 		./networking.nix # generated at runtime by nixos-infect

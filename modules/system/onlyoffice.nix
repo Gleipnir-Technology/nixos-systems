@@ -4,6 +4,9 @@ let
   cfg = config.services.onlyoffice;
 in
 {
+	disabledModules = [ 
+		"services/web-apps/onlyoffice.nix"
+	];
 	# Override built-in onlyoffice definition to enable WOPI
 	options.services.onlyoffice = {
 		enable = lib.mkEnableOption "OnlyOffice DocumentServer";
