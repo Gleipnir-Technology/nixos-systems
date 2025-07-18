@@ -4,7 +4,6 @@
 		./networking.nix # generated at runtime by nixos-infect
 	];
 
-	boot.tmp.cleanOnBoot = true;
 	environment.systemPackages = with pkgs; [
 		age
 		element-web
@@ -19,23 +18,16 @@
 		tmux
 		wget
 	];
-	i18n.defaultLocale = "en_US.UTF-8";
 	myModules = {
 		onlyoffice.enable = true;
 		seafile.enable = true;
 		synapse.enable = true;
 		timecardbot.enable = true;
 	};
-	nix.settings.experimental-features = [ "nix-command" "flakes" ];
-	programs.neovim.enable = true;
-	programs.neovim.defaultEditor = true;
 	security.acme = {
 		acceptTerms = true;
 		defaults.email = "eli@gleipnir.technology";
 	};
-	security.sudo.wheelNeedsPassword = false;
-	# The Digital Ocean droplet agent
-	services.do-agent.enable = true;
 	services.nginx = {
 		# This adds the 'recommendedProxyConfig' without actually adding it since if I do add it,
 		# it'll include $nginx-recommended-proxy_set_headers-headers.conf at the http level, outside
@@ -99,13 +91,11 @@
 			enable = true;
 		};
 	};
-	services.swapspace.enable = true;
 	services.vikunja = {
 		enable = true;
 		frontendHostname = "todo.gleipnir.technology";
 		frontendScheme = "https";
 	};
-	time.timeZone = "America/Phoenix";
 
 	users.groups.vikunja = {};
 	users.users.deploy = {
@@ -117,7 +107,6 @@
 		isNormalUser = false;
 		isSystemUser = true;
 	};
-	virtualisation.podman.enable = true;
 	zramSwap.enable = true;
 
 	# Copy the NixOS configuration file and link it from the resulting system
