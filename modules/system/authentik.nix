@@ -5,12 +5,12 @@ with lib;
 
 	config = mkIf config.myModules.authentik.enable {
 		sops.secrets.authentik-env = {
-			format = "ini";
+			format = "env";
 			group = "authentik";
 			mode = "0440";
 			owner = "authentik";
 			restartUnits = ["authentik"];
-			sopsFile = ../../secrets/authentik.ini;
+			sopsFile = ../../secrets/authentik.env;
 		};
 		users.groups.authentik = {};
 		users.users.authentik = {
