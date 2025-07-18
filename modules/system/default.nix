@@ -5,6 +5,7 @@
 		./caddy.nix
 		./cloud-init.nix
 		./collabora.nix
+		./cloudreve.nix
 		./do-agent.nix
 		./element-web.nix
 		./fish.nix
