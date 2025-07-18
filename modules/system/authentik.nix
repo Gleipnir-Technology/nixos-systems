@@ -4,12 +4,12 @@ with lib;
 	options.myModules.authentik.enable = mkEnableOption "custom authentik configuration";
 
 	config = mkIf config.myModules.authentik.enable {
-		sops.secrets.authentik-env = {
-			format = "env";
+		sops.secrets.authentik-env = with config.virtualisation.oci-containers; {
+			format = "dotenv";
 			group = "authentik";
 			mode = "0440";
 			owner = "authentik";
-			restartUnits = ["authentik"];
+			restartUnits = ["${backend}-authentik-server" "${backend}-authentik-worker"];
 			sopsFile = ../../secrets/authentik.env;
 		};
 		systemd.services.podman-create-authentik-pod = with config.virtualisation.oci-containers; {
