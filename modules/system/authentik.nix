@@ -22,6 +22,11 @@ with lib;
 				    -p 127.0.0.1:10000:9000
 			'';
 		};
+		systemd.tmpfiles.rules = [
+			"d /opt/authentik/certs 0755 authentik authentik"
+			"d /opt/authentik/media 0755 authentik authentik"
+			"d /opt/authentik/templates 0755 authentik authentik"
+		];
 		users.groups.authentik = {};
 		users.users.authentik = {
 			group = "authentik";
