@@ -3,6 +3,7 @@
 		./authentik.nix
 		./base.nix
 		./cloud-init.nix
+		./collabora.nix
 		./do-agent.nix
 		./fish.nix
 		./onlyoffice.nix
