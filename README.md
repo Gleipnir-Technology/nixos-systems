@@ -44,6 +44,30 @@ $ digitalocean/create-droplet.sh
 
 ### Convert to NixOS with nixos-anywhere
 
+```
+$ nix run github:nix-community/nixos-anywhere -- --flake nixos-anywhere#digitalocean --target-host root@1.2.3.4
+```
+
+This will take a while, maybe 20 minutes, but after you'll have a fully-functioning NixOS system with the correct SSH keys.
+
+### Adding a new host to the secrets
+
+The host should create its own new ssh host key that lives at `/etc/ssh/ssh_host_ed25519_key.pub`. We're going to convert that into a sops key and add it to our key material.
+
+On the server you just added run:
+
+```
+$ nix-shell -p ssh-to-age --run 'cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
+age1lzzlx60f9ra4evdkn4l9px735mz7uxml5467ptzc4hg3t86gn9mq3ddsxy
+```
+
+This will produce an age key. Copy that into `.sops.yaml`. You'll want to add it to the list of keys at the top, then add it to any sections that the host should be able to read. Once that's done you'll need to add the key into each secret file's encryption with the following on a dev machine:
+
+```
+$ nix-shell -p sops --run "sops updatekeys secrets/example.yaml"
+```
+
+See [the official sops-nix docs](https://github.com/Mic92/sops-nix/blob/master/README.md) for details.
 
 ## Successful avenues of exploration
 

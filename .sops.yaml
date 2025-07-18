@@ -1,10 +1,12 @@
 keys:
   - &pazuzu_local age15y4k929zaj9fdg3vd40pa40tgvrgv9mn22xfummn5zxfmkcw5d0st6prjx
+  - &server_test_corp age1lzzlx60f9ra4evdkn4l9px735mz7uxml5467ptzc4hg3t86gn9mq3ddsxy
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
       - *pazuzu_local
+      - *server_test_corp
   - path_regex: host/pazuzu/secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:

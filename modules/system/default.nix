@@ -1,5 +1,6 @@
 {
 	imports = [
+		./authentik.nix
 		./base.nix
 		./cloud-init.nix
 		./do-agent.nix
