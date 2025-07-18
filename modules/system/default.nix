@@ -2,11 +2,12 @@
 	imports = [
 		./authentik.nix
 		./base.nix
+		./caddy.nix
 		./cloud-init.nix
 		./collabora.nix
 		./do-agent.nix
+		./element-web.nix
 		./fish.nix
-		./onlyoffice.nix
 		./openssh.nix
 		./podman.nix
 		./seafile.nix
@@ -14,5 +15,6 @@
 		./synapse.nix
 		./timecardbot.nix
 		./tmux.nix
+		./vikunja.nix
 	];
 }

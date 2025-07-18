@@ -6,7 +6,6 @@
 
 	environment.systemPackages = with pkgs; [
 		age
-		element-web
 		fish
 		git
 		htop
@@ -20,93 +19,18 @@
 	];
 	myModules = {
 		authentik.enable = true;
-		onlyoffice.enable = true;
+		caddy.enable = true;
+		collabora.enable = true;
+		element-web.enable = true;
 		seafile.enable = true;
 		synapse.enable = true;
 		timecardbot.enable = true;
-	};
-	security.acme = {
-		acceptTerms = true;
-		defaults.email = "eli@gleipnir.technology";
-	};
-	services.nginx = {
-		# This adds the 'recommendedProxyConfig' without actually adding it since if I do add it,
-		# it'll include $nginx-recommended-proxy_set_headers-headers.conf at the http level, outside
-		# a server block, which breaks everything.
-		appendHttpConfig = ''
-			proxy_redirect					off;
-			proxy_connect_timeout	 60s;
-			proxy_send_timeout			60s;
-			proxy_read_timeout			60s;
-			proxy_http_version			1.1;
-			# don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
-			# https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
-			proxy_set_header				"Connection" "";
-		'';
-		enable = true;
-		recommendedGzipSettings = true;
-		recommendedProxySettings = false;
-		virtualHosts."auth.gleipnir.technology" = {
-			addSSL = true;
-			enableACME = true;
-			locations."/" = {
-				extraConfig = ''
-					proxy_set_header Upgrade $http_upgrade;
-					proxy_set_header Connection $connection_upgrade;
-					proxy_set_header X-Forwarded-Proto $scheme;
-					proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-					include /etc/nginx/proxy.conf;
-				'';
-				proxyPass = "http://127.0.0.1:10000";
-			};
-			root = "/var/www/auth";
-		};
-		virtualHosts."static.gleipnir.technology" = {
-			addSSL = true;
-			enableACME = true;
-			locations."/" = {
-				index = "index.html";
-			};
-			root = "/var/www/static";
-		};
-		virtualHosts."todo.gleipnir.technology" = {
-			addSSL = true;
-			enableACME = true;
-			locations."/" = {
-				extraConfig = ''
-					proxy_set_header Upgrade $http_upgrade;
-					proxy_set_header Connection $connection_upgrade;
-					proxy_set_header X-Forwarded-Proto $scheme;
-					proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-					include /etc/nginx/proxy.conf;
-				'';
-				proxyPass = "http://127.0.0.1:10010";
-			};
-			root = "/var/www/todo";
-		};
+		vikunja.enable = true;
 	};
 	services.openssh.enable = true;
-	services.redis = {
-		servers."" = {
-			bind = "127.0.0.1";
-			enable = true;
-		};
-	};
-	services.vikunja = {
-		enable = true;
-		frontendHostname = "todo.gleipnir.technology";
-		frontendScheme = "https";
-	};
-
-	users.groups.vikunja = {};
 	users.users.deploy = {
 		extraGroups = [ "deploy" ];
 		isNormalUser = true;
-	};
-	users.users.vikunja = {
-		group = "vikunja";
-		isNormalUser = false;
-		isSystemUser = true;
 	};
 	zramSwap.enable = true;
 

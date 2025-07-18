@@ -59,15 +59,6 @@
 									restartUnits = [ "matrix-synapse.service" ];
 									sopsFile = ./host/corp/secrets/matrix.yaml;
 								};
-								secrets.vikunja = {
-									format = "yaml";
-									group = "vikunja";
-									key = "";
-									owner = "vikunja";
-									path = "/etc/vikunja/config.yaml";
-									restartUnits = [ "vikunja.service" ];
-									sopsFile = ./host/corp/secrets/vikunja.yaml;
-								};
 							};
 						}
 						./users

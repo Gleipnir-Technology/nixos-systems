@@ -4,6 +4,9 @@ with lib;
 	options.myModules.authentik.enable = mkEnableOption "custom authentik configuration";
 
 	config = mkIf config.myModules.authentik.enable {
+		services.caddy.virtualHosts."auth.gleipnir.technology".extraConfig = ''
+			reverse_proxy http://127.0.0.1:10000
+		'';
 		sops.secrets.authentik-env = with config.virtualisation.oci-containers; {
 			format = "dotenv";
 			group = "authentik";

@@ -2,7 +2,6 @@
 with lib;
 let
 	domain = "files.gleipnir.technology";
-	domain2 = "filez.gleipnir.technology";
 	stripTabs = text: let
 		# Whether all lines start with a tab (or is empty)
 		shouldStripTab = lines: builtins.all (line: (line == "") || (pkgs.lib.strings.hasPrefix "	" line)) lines;
@@ -16,57 +15,14 @@ let
 in {
 	options.myModules.seafile.enable = mkEnableOption "custom seafile configuration";
 	config = mkIf config.myModules.seafile.enable {
-		services.nginx = {
-			virtualHosts."${domain}" = {
-				enableACME = true;
-				forceSSL = true;
-				locations = {
-					"/" = {
-						proxyPass = "http://unix:/run/seahub/gunicorn.sock";
-						extraConfig = ''
-							proxy_set_header	 Host $host;
-							proxy_set_header	 X-Real-IP $remote_addr;
-							proxy_set_header	 X-Forwarded-For $proxy_add_x_forwarded_for;
-							proxy_set_header	 X-Forwarded-Host $server_name;
-							proxy_set_header	 X-Forwarded-Proto https;
-							proxy_read_timeout	1200s;
-							client_max_body_size 0;
-						'';
-					};
-					"/seafhttp" = {
-						proxyPass = "http://unix:/run/seafile/server.sock";
-						extraConfig = ''
-							rewrite ^/seafhttp(.*)$ $1 break;
-							client_max_body_size 0;
-							proxy_set_header	 X-Forwarded-For $proxy_add_x_forwarded_for;
-							proxy_set_header	 X-Forwarded-Proto https;
-							proxy_connect_timeout	36000s;
-							proxy_read_timeout	36000s;
-							proxy_send_timeout	36000s;
-							send_timeout	36000s;
-						'';
-					};
-				};
-			};
-			virtualHosts."${domain2}" = {
-				enableACME = true;
-				forceSSL = true;
-				locations = {
-					"/" = {
-						proxyPass = "http://[::1]:10030";
-						extraConfig = ''
-							proxy_set_header	 Host $host;
-							proxy_set_header	 X-Real-IP $remote_addr;
-							proxy_set_header	 X-Forwarded-For $proxy_add_x_forwarded_for;
-							proxy_set_header	 X-Forwarded-Host $server_name;
-							proxy_set_header	 X-Forwarded-Proto https;
-							proxy_read_timeout	1200s;
-							client_max_body_size 0;
-						'';
-					};
-				};
-			};
-		};
+		services.caddy.virtualHosts."files.gleipnir.technology".extraConfig = ''
+			handle /seafhttp* {
+				reverse_proxy unix//run/seafile/server.sock
+			}
+			handle {
+				reverse_proxy unix//run/seahub/gunicorn.sock
+			}
+		'';
 		services.seafile = {
 			adminEmail = "eli@gleipnir.technology";
 			ccnetSettings = {
@@ -88,8 +44,25 @@ in {
 				quota.default = "50"; # Amount of GB allotted to users
 			};
 			seahubExtraConf = stripTabs(''
+				DEBUG = True
+				# Enable edit files through LibreOffice Online
+				ENABLE_OFFICE_WEB_APP_EDIT = True
+				
+				# types of files should be editable through LibreOffice Online
+				ENABLE_OFFICE_WEB_APP = True
+				OFFICE_SERVER_TYPE = 'CollaboraOffice'
+				OFFICE_WEB_APP_BASE_URL = 'https://collabora.gleipnir.technology/hosting/discovery'
+				OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ('odp', 'ods', 'odt', 'xls', 'xlsb', 'xlsm', 'xlsx','ppsx', 'ppt', 'pptm', 'pptx', 'doc', 'docm', 'docx')
+				OFFICE_WEB_APP_FILE_EXTENSION = ('odp', 'ods', 'odt', 'xls', 'xlsb', 'xlsm', 'xlsx','ppsx', 'ppt', 'pptm', 'pptx', 'doc', 'docm', 'docx')
+				# Expiration of WOPI access token
+				# WOPI access token is a string used by Seafile to determine the file's
+				# identity and permissions when use LibreOffice Online view it online
+				# And for security reason, this token should expire after a set time period
+				WOPI_ACCESS_TOKEN_EXPIRATION = 30 * 60	 # seconds
+
+
+
 				ENABLE_OAUTH = True
-				ENABLE_ONLYOFFICE = True
 
 				# If create new user when he/she logs in Seafile for the first time, defalut `True`.
 				OAUTH_CREATE_UNKNOWN_USER = True
@@ -121,23 +94,6 @@ in {
 						"email": (True, "email"),
 				}
 				SEAHUB_DATA_ROOT = "/var/lib/seafile/seahub/data"
-
-				OFFICE_SERVER_TYPE = 'CollaboraOffice'
-				ENABLE_OFFICE_WEB_APP = True
-				OFFICE_WEB_APP_BASE_URL = 'https://docs.gleipnir.technology/hosting/discovery'
-
-				# Expiration of WOPI access token
-				# WOPI access token is a string used by Seafile to determine the file's
-				# identity and permissions when use LibreOffice Online view it online
-				# And for security reason, this token should expire after a set time period
-				WOPI_ACCESS_TOKEN_EXPIRATION = 30 * 60	 # seconds
-
-				VERIFY_ONLYOFFICE_CERTIFICATE = False
-				ONLYOFFICE_APIJS_URL = 'https://docs.gleipnir.technology/web-apps/apps/api/documents/api.js'
-				ONLYOFFICE_FILE_EXTENSION = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'odt', 'fodt', 'odp', 'fodp', 'ods', 'fods')
-				ONLYOFFICE_EDIT_FILE_EXTENSION = ('docx', 'pptx', 'xlsx')
-				ONLYOFFICE_FORCE_SAVE = True
-
 			'');	
 		};
 	};
