@@ -34,6 +34,10 @@ with lib;
 			isSystemUser = true;
 		};
 		virtualisation.oci-containers.containers = {
+			authentik-redis = {
+				extraOptions = [ "--pod=authentik" ];
+				image = "docker.io/redis:8.0.3-alpine";
+			};
 			authentik-server = {
 				cmd = ["server"];
 				environmentFiles = [

@@ -19,6 +19,7 @@
 		wget
 	];
 	myModules = {
+		authentik.enable = true;
 		onlyoffice.enable = true;
 		seafile.enable = true;
 		synapse.enable = true;
