@@ -19,7 +19,6 @@ with lib;
 				${pkgs.podman}/bin/podman pod exists authentik || \
 				  ${pkgs.podman}/bin/podman pod create \
 				    --name authentik \
-				    --network slirp4netns:allow_host_loopback=true \
 				    -p 127.0.0.1:10000:9000
 			'';
 		};
