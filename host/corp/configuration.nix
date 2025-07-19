@@ -20,6 +20,7 @@
 	myModules = {
 		authentik.enable = true;
 		caddy.enable = true;
+		cloudreve.enable = true;
 		collabora.enable = true;
 		element-web.enable = true;
 		seafile.enable = true;

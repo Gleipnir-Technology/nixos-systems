@@ -6,16 +6,35 @@ with lib;
 	options.myModules.cloudreve.enable = mkEnableOption "custom cloudreve configuration";
 
 	config = mkIf config.myModules.cloudreve.enable {
+		services.caddy.virtualHosts."files.gleipnir.technology".extraConfig = ''
+			reverse_proxy http://127.0.0.1:10040
+		'';
+		sops.secrets.cloudreve-env = with config.virtualisation.oci-containers; {
+			format = "dotenv";
+			group = "cloudreve";
+			mode = "0440";
+			owner = "cloudreve";
+			restartUnits = ["${backend}-cloudreve"];
+			sopsFile = ../../secrets/cloudreve.env;
+		};
+		systemd.tmpfiles.rules = [
+			"d /opt/cloudreve 0755 cloudreve cloudreve"
+		];
 		virtualisation.oci-containers.containers.cloudreve = {
-			environment = {
-				"CR_CONF_Database.Type" = "postgres";
-				"CR_CONF_Database.DatabaseURL" = "postgresql:///cloudreve?host=/run/postgresql/&user=cloudreve";
-			};
-			image = "cloudreve.azurecr.io/cloudreve/pro:4.3.0
+			environmentFiles = [
+				"/var/run/secrets/cloudreve-env"
+			];
+			image = "cloudreve.azurecr.io/cloudreve/pro:4.3.0";
 			ports = [ "127.0.0.1:10040:5212" ];
 			volumes = [
-				"/var/lib/cloudreve:/cloudreve/data"
+				"/opt/cloudreve:/cloudreve/data"
 			];
+		};
+		users.groups.cloudreve = {};
+		users.users.cloudreve = {
+			group = "authentik";
+			isNormalUser = false;
+			isSystemUser = true;
 		};
 	};
 }
