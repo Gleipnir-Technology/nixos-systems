@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-	domain = "files.gleipnir.technology";
+	domain = "filez.gleipnir.technology";
 	stripTabs = text: let
 		# Whether all lines start with a tab (or is empty)
 		shouldStripTab = lines: builtins.all (line: (line == "") || (pkgs.lib.strings.hasPrefix "	" line)) lines;
@@ -15,7 +15,7 @@ let
 in {
 	options.myModules.seafile.enable = mkEnableOption "custom seafile configuration";
 	config = mkIf config.myModules.seafile.enable {
-		services.caddy.virtualHosts."files.gleipnir.technology".extraConfig = ''
+		services.caddy.virtualHosts."filez.gleipnir.technology".extraConfig = ''
 			handle /seafhttp* {
 				reverse_proxy unix//run/seafile/server.sock
 			}
@@ -58,7 +58,7 @@ in {
 				# WOPI access token is a string used by Seafile to determine the file's
 				# identity and permissions when use LibreOffice Online view it online
 				# And for security reason, this token should expire after a set time period
-				WOPI_ACCESS_TOKEN_EXPIRATION = 30 * 60	 # seconds
+				WOPI_ACCESS_TOKEN_EXPIRATION = 24 * 60 * 60	 # seconds
 
 
 
@@ -78,7 +78,7 @@ in {
 				OAUTH_CLIENT_SECRET = "secret"
 				
 				# Callback url when user authentication succeeded. Note, the redirect url you input when you register your client application MUST be exactly the same as this value.
-				OAUTH_REDIRECT_URL = 'https://files.gleipnir.technology/oauth/callback/'
+				OAUTH_REDIRECT_URL = 'https://filez.gleipnir.technology/oauth/callback/'
 				
 				# The following should NOT be changed if you are using Github as OAuth provider.
 				OAUTH_PROVIDER_DOMAIN = 'gleipnir.technology' 
