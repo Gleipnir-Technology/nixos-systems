@@ -18,7 +18,7 @@
 	};
 
 	myModules = {
-		cloud-init.enable = true;
+		cloud-init.enable = false;
 		do-agent.enable = true;
 	};
 }
