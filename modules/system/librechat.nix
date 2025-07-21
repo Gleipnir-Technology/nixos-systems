@@ -18,7 +18,7 @@ with lib;
 			group = "librechat";
 			mode = "0440";
 			owner = "librechat";
-			restartUnits = ["librechat"];
+			restartUnits = ["librechat.service"];
 			sopsFile = ../../secrets/librechat.env;
 		};
 		systemd.services.librechat = {
