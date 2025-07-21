@@ -5,7 +5,24 @@ with lib;
 
 	config = mkIf config.myModules.librechat.enable {
 		environment.systemPackages = [
-			pkgs.librechat
+			(pkgs.librechat.overrideAttrs (
+				final: prev: {
+					pname = "librechat";
+					version = "0.7.9-rc1";
+					src = pkgs.fetchFromGitHub {
+						owner = "danny-avila";
+						repo = "LibreChat";
+						rev = "v${final.version}";
+						sha256 = "sha256-IC/KyHfHYeUo8bXY/JU2cMvCwsUsiAyTZGyslpzjwKg=";
+					};
+					npmDepsHash = "sha256-zVqr/yNwQeytPlmhU+yfeXOUbIpczM1qhRX8MOfM584=";
+					npmDeps = pkgs.fetchNpmDeps {
+						inherit (final) src;
+						name = "${final.pname}-${final.version}-npm-deps";
+						hash = final.npmDepsHash;
+					};
+				}
+			))
 		];
 		services.caddy.virtualHosts."ai.gleipnir.technology".extraConfig = ''
 			reverse_proxy http://localhost:10050
