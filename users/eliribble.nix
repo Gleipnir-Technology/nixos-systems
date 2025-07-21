@@ -7,12 +7,15 @@ with lib;
 		imports = [ ../modules/home ];
 
 		myModules.home = {
-			fish = {
-				enable = true;
-				user = "eliribble";
-			};
+			fish.enable = true;
+			git.enable = true;
+			user = "eliribble";
 		};
 
+		home.sessionVariables = {
+			EDITOR = "nvim";
+			TESTVALUE = "eli";
+		};
 		home.stateVersion = "25.05";
 	};
 
