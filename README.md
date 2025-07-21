@@ -45,7 +45,8 @@ $ digitalocean/create-droplet.sh
 ### Convert to NixOS with nixos-anywhere
 
 ```
-$ nix run github:nix-community/nixos-anywhere -- --flake nixos-anywhere#digitalocean --target-host root@1.2.3.4
+$ cd nixos-anywhere
+$ nix run github:nix-community/nixos-anywhere -- --flake ./#digitalocean --target-host root@1.2.3.4
 ```
 
 This will take a while, maybe 20 minutes, but after you'll have a fully-functioning NixOS system with the correct SSH keys.
