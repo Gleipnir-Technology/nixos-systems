@@ -32,7 +32,7 @@ with lib;
 		};
 		users.groups.cloudreve = {};
 		users.users.cloudreve = {
-			group = "authentik";
+			group = "cloudreve";
 			isNormalUser = false;
 			isSystemUser = true;
 		};
