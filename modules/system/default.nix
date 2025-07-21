@@ -12,6 +12,7 @@
 		./openssh.nix
 		./podman.nix
 		./seafile.nix
+		./sillytavern.nix
 		./sudo.nix
 		./synapse.nix
 		./timecardbot.nix
