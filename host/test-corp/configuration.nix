@@ -5,9 +5,11 @@
 	];
 
 	myModules = {
-		authentik.enable = true;
-		cloud-init.enable = true;
+		authentik.enable = false;
+		caddy.enable = true;
+		cloud-init.enable = false;
 		do-agent.enable = true;
 		podman.enable = true;
+		sillytavern.enable = false;
 	};
 }
