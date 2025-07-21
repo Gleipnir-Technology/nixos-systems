@@ -18,6 +18,7 @@
 		let
 			allowed-unfree-packages = [
 				"corefonts"
+				"mongodb"
 			];
 			configFiles = pkgs.stdenv.mkDerivation {
 			name = "config-files";

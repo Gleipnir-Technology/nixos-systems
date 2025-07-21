@@ -9,6 +9,7 @@
 		caddy.enable = true;
 		cloud-init.enable = false;
 		do-agent.enable = true;
+		librechat.enable = true;
 		podman.enable = true;
 		sillytavern.enable = false;
 	};

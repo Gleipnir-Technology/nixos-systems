@@ -9,6 +9,7 @@
 		./do-agent.nix
 		./element-web.nix
 		./fish.nix
+		./librechat.nix
 		./openssh.nix
 		./podman.nix
 		./seafile.nix
