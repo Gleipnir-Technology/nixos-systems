@@ -1,4 +1,5 @@
 keys:
+  - &dev_macmini age1x704pjnueguchkl54ly8w4w26ltys5900v7xnl7w3zlgasus09jszz45t8
   - &dev_pazuzu age15y4k929zaj9fdg3vd40pa40tgvrgv9mn22xfummn5zxfmkcw5d0st6prjx
   - &server_corp age1kgwk20cc6t68kqj5nhem6swvx6k4e7zjx2xdwy382360h8tdyqrq0nn3gf
   - &server_test_corp age1t3ryfktuhr3cysf49m9q2n8fkjf9ajjjnhztxw9hz8paxgk4lpcq065jge
@@ -6,15 +7,18 @@ creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
+      - *dev_macmini
       - *dev_pazuzu
       - *server_corp
       - *server_test_corp
   - path_regex: host/corp/secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
+      - *dev_macmini
       - *dev_pazuzu
       - *server_corp
   - path_regex: host/pazuzu/secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
+      - *dev_macmini
       - *dev_pazuzu
