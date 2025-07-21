@@ -10,6 +10,10 @@
 		};
 		nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+		nixvim = {
+			url = "github:nix-community/nixvim/nixos-25.05";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 		sops-nix.url = "github:Mic92/sops-nix";
 	};
 
@@ -19,6 +23,7 @@
 			home-manager,
 			nixpkgs,
 			nixos-facter-modules,
+			nixvim,
 			sops-nix,
 			...
 		}:
@@ -43,7 +48,10 @@
 					{ disko.devices.disk.disk1.device = "/dev/vda"; }
 					home-manager.nixosModules.home-manager {
 						home-manager.extraSpecialArgs = { inherit configFiles; };
-						home-manager.sharedModules = [];
+						home-manager.sharedModules = [
+							nixvim.homeManagerModules.nixvim
+							./modules/home/nixvim.nix
+						];
 						home-manager.useGlobalPkgs = true;
 						home-manager.useUserPackages = true;
 					}
