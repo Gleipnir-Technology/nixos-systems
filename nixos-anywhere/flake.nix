@@ -10,6 +10,7 @@
 		};
 		nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+		sops-nix.url = "github:Mic92/sops-nix";
 	};
 
 	outputs =
@@ -18,6 +19,7 @@
 			home-manager,
 			nixpkgs,
 			nixos-facter-modules,
+			sops-nix,
 			...
 		}:
 		let
@@ -46,6 +48,14 @@
 						home-manager.useUserPackages = true;
 					}
 					../modules
+					sops-nix.nixosModules.sops {
+						sops = {
+							age.generateKey = true;
+							age.keyFile = "/var/libs/sops-nix/key.txt";
+							age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+							defaultSopsFile = ./secrets/secrets.yaml;
+						};
+					}
 					../users
 				];
 				specialArgs = {
