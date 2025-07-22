@@ -1,3 +1,5 @@
 [user]
-	email = eli@theribbles.org
+	email = eli@gleipnir.technology
 	name = Eli Ribble
+[init]
+	defaultBranch = main
