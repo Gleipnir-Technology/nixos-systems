@@ -23,6 +23,7 @@
 		cloudreve.enable = true;
 		collabora.enable = true;
 		element-web.enable = true;
+		librechat.enable = true;
 		seafile.enable = true;
 		synapse.enable = true;
 		timecardbot.enable = true;
