@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 {
 	options.myModules.authentik.enable = mkEnableOption "custom authentik configuration";

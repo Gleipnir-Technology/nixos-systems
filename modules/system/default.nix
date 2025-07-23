@@ -1,6 +1,7 @@
 {
 	imports = [
 		./authentik.nix
+		./authentik-backup.nix
 		./base.nix
 		./caddy.nix
 		./cloud-init.nix
