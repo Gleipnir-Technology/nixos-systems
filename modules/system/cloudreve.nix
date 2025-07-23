@@ -33,7 +33,6 @@ with lib;
 		users.groups.cloudreve = {};
 		users.users.cloudreve = {
 			group = "cloudreve";
-			isNormalUser = false;
 			isSystemUser = true;
 		};
 	};
