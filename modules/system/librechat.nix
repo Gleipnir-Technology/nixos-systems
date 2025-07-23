@@ -30,6 +30,23 @@ with lib;
 			restartUnits = ["meilisearch.service"];
 			sopsFile = ../../secrets/meilisearch.env;
 		};
+		sops.secrets."rag-api-credentials.json" = with config.virtualisation.oci-containers; {
+			format = "json";
+			group = "rag-api";
+			mode = "0440";
+			owner = "rag-api";
+			key = "";
+			restartUnits = ["${backend}-rag-api"];
+			sopsFile = ../../secrets/rag-api-credentials.json;
+		};
+		sops.secrets.rag-api-env = with config.virtualisation.oci-containers; {
+			format = "dotenv";
+			group = "rag-api";
+			mode = "0440";
+			owner = "rag-api";
+			restartUnits = ["${backend}-rag-api"];
+			sopsFile = ../../secrets/rag-api.env;
+		};
 		systemd.services.librechat = {
 			after=["network.target" "network-online.target"];
 			description="Self-hosted LLM chat frontend";
@@ -67,9 +84,11 @@ with lib;
 		systemd.tmpfiles.rules = [
 			"d /opt/librechat 0755 librechat librechat"
 			"d /opt/meilisearch 0755 meilisearch meilisearch"
+			"d /opt/rag-api 0755 rag-api rag-api"
 		];
 		users.groups.librechat = {};
 		users.groups.meilisearch = {};
+		users.groups.rag-api = {};
 		users.users.librechat = {
 			group = "librechat";
 			isSystemUser = true;
@@ -78,6 +97,20 @@ with lib;
 			group = "meilisearch";
 			isSystemUser = true;
 		};
-
+		users.users.rag-api = {
+			group = "rag-api";
+			isSystemUser = true;
+		};
+		virtualisation.oci-containers.containers.rag-api = {
+			environmentFiles = [
+				"/var/run/secrets/rag-api-env"
+			];
+			image = "docker.io/library/rag_api:latest";
+			ports = [ "127.0.0.1:10051:8000" ];
+			volumes = [
+				"/opt/rag-api:/app/uploads"
+				"/var/run/secrets/rag-api-credentials.json:/var/run/secrets/rag-api-credentials.json"
+			];
+		};
 	};
 }
