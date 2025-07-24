@@ -1,6 +1,9 @@
 { config, configFiles, lib, pkgs, ... }:
 
 {
+	# Add my custom utilities
+	_module.args.myutils = import ../../lib/myutils.nix { lib = lib; pkgs = pkgs; };
+
 	boot.tmp.cleanOnBoot = true;
 	environment.systemPackages = map lib.lowPrio [
 		pkgs.curl
