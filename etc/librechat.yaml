@@ -1,0 +1,10 @@
+version: 1.2.8
+ 
+# Balance settings
+balance:
+  enabled: true                # Enable token credit balances for users
+  startBalance: 20000          # Initial tokens credited upon registration
+  autoRefillEnabled: true      # Enable automatic token refills
+  refillIntervalValue: 1      # Numerical value for refill interval
+  refillIntervalUnit: "days"   # Time unit for refill interval (days, hours, etc.)
+  refillAmount: 10000          # Tokens added during each refill

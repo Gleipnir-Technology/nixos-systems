@@ -4,6 +4,12 @@ with lib;
 	options.myModules.librechat.enable = mkEnableOption "custom librechat configuration";
 
 	config = mkIf config.myModules.librechat.enable {
+		environment.etc."librechat.yaml" = {
+			source = ../../etc/librechat.yaml;
+			mode = "0440";
+			user = "librechat";
+			group = "librechat";
+		};
 		environment.systemPackages = [
 			pkgs.librechat
 			pkgs.meilisearch
