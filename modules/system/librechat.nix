@@ -1,5 +1,8 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, nixpkgs, pkgs, ... }:
 with lib;
+let
+	librechat = (pkgs.callPackage (./librechat/package.nix  ) { });
+in
 {
 	options.myModules.librechat.enable = mkEnableOption "custom librechat configuration";
 
@@ -11,7 +14,7 @@ with lib;
 			group = "librechat";
 		};
 		environment.systemPackages = [
-			pkgs.librechat
+			librechat
 			pkgs.meilisearch
 		];
 		services.caddy.virtualHosts."ai.gleipnir.technology".extraConfig = ''
@@ -63,7 +66,7 @@ with lib;
 				Type = "simple";
 				User = "librechat";
 				Group = "librechat";
-				ExecStart = "${pkgs.librechat}/bin/librechat-server";
+				ExecStart = "${librechat}/bin/librechat-server";
 				TimeoutStopSec = "5s";
 				PrivateTmp = true;
 				WorkingDirectory = "/opt/librechat";

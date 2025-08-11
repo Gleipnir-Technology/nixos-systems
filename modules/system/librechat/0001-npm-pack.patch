@@ -1,0 +1,21 @@
+diff --git a/package.json b/package.json
+index 3a86469c..11e6afb3 100644
+--- a/package.json
++++ b/package.json
+@@ -146,5 +146,16 @@
+       "admin/",
+       "packages/"
+     ]
++  },
++  "files": [
++    "api",
++    "client/dist",
++    "config",
++    "packages/data-provider",
++    "packages/data-schemas",
++    "packages/mcp"
++  ],
++  "bin": {
++    "librechat-server": "api/server/index.js"
+   }
+ }
