@@ -6,7 +6,9 @@
 
 	boot.tmp.cleanOnBoot = true;
 	environment.systemPackages = map lib.lowPrio [
+		pkgs.cloud-init
 		pkgs.curl
+		pkgs.dig
 		pkgs.htop
 		pkgs.git
 		pkgs.sops
