@@ -56,5 +56,13 @@ in {
 				server_name = config.networking.domain;
 			};
 		};
+		sops.secrets.matrix = {
+			format = "yaml";
+			group = "matrix-synapse";
+			key = "";
+			owner = "matrix-synapse";
+			restartUnits = [ "matrix-synapse.service" ];
+			sopsFile = ./host/corp/secrets/matrix.yaml;
+		};
 	};
 }
