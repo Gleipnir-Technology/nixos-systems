@@ -30,30 +30,15 @@
 			nixosConfigurations = {
 				corp = import ./system.nix {
 					configuration = ./host/corp/configuration.nix;
-					inherit configFiles;
-					inherit home-manager;
-					inherit nixpkgs;
-					inherit nixvim;
-					inherit sops-nix;
-					inherit system;
+					inherit configFiles home-manager nixpkgs nixvim sops-nix system;
 				};
 				"sync.nidus.cloud" = import ./system.nix {
 					configuration = ./host/sync/configuration.nix;
-					inherit configFiles;
-					inherit home-manager;
-					inherit nixpkgs;
-					inherit nixvim;
-					inherit sops-nix;
-					inherit system;
+					inherit configFiles home-manager nixpkgs nixvim sops-nix system;
 				};
 				test-corp = nixpkgs.lib.nixosSystem {
 					configuration = ./host/test-corp/configuration.nix;
-					inherit configFiles;
-					inherit home-manager;
-					inherit nixpkgs;
-					inherit nixvim;
-					inherit sops-nix;
-					inherit system;
+					inherit configFiles home-manager nixpkgs nixvim sops-nix system;
 				};
 			};
 		};
