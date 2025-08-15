@@ -17,6 +17,7 @@
 	i18n.defaultLocale = "en_US.UTF-8";
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	services.swapspace.enable = true;
+	systemd.network.enable = true;
 	time.timeZone = "UTC";
 	zramSwap.enable = true;
 
