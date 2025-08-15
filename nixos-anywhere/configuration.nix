@@ -16,8 +16,12 @@
 		efiSupport = true;
 		efiInstallAsRemovable = true;
 	};
+	environment.systemPackages = map lib.lowPrio [
+		pkgs.dig
+	];
 
 	myModules = {
+		# Disable standard cloud-init, use nixos-anywhere special cloud-init instead
 		cloud-init.enable = false;
 		do-agent.enable = true;
 	};

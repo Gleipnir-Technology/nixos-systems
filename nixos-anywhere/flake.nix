@@ -50,7 +50,7 @@
 						home-manager.extraSpecialArgs = { inherit configFiles; };
 						home-manager.sharedModules = [
 							nixvim.homeManagerModules.nixvim
-							./modules/home/nixvim.nix
+							../modules/home/nixvim.nix
 						];
 						home-manager.useGlobalPkgs = true;
 						home-manager.useUserPackages = true;
