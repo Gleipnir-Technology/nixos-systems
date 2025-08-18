@@ -11,11 +11,6 @@ in {
 	options.myModules.fieldseeker-sync.enable = mkEnableOption "custom fieldseeker-sync configuration";
 
 	config = mkIf config.myModules.fieldseeker-sync.enable {
-		environment.etc."fieldseeker-sync.toml" = {
-			group = "fieldseeker-sync";
-			source = ./fieldseeker-sync.toml;
-			user = "fieldseeker-sync";
-		};
 		environment.systemPackages = [
 			src
 		];
@@ -34,7 +29,7 @@ in {
 			mode = "0440";
 			owner = "fieldseeker-sync";
 			restartUnits = ["fieldseeker-sync.service"];
-			sopsFile = ../../../secrets/fieldseeker-sync.env;
+			sopsFile = ../../secrets/fieldseeker-sync.env;
 		};
 		systemd.services.fieldseeker-sync = {
 			after=["network.target" "network-online.target"];
