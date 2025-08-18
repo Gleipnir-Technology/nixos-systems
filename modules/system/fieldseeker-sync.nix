@@ -4,7 +4,7 @@ let
 	src = pkgs.fetchFromGitHub {
 		owner  = "Gleipnir-Technology";
 		repo   = "fieldseeker-sync";
-		rev    = "ff56a904cc9212434a1f8025cafafe59f8b48b4f";
+		rev    = "5d19ceb020cf74327c966fabae51e0e1cdd7bd70";
 		sha256 = "sha256-J2k3a960TT31eNp77wKUGJJZSaEYI9ENyVgxxY/RMls=";
   	};
 in {
