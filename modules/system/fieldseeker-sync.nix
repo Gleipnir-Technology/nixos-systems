@@ -37,7 +37,7 @@ in {
 			requires=["network-online.target"];
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
-				Type = "simple";
+				Type = "oneshot";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
 				ExecStart = "${src}/bin/full-export";
@@ -46,6 +46,14 @@ in {
 				WorkingDirectory = "/tmp";
 			};
 			wantedBy = ["multi-user.target"];
+		};
+		systemd.timers.fieldseeker-sync = {
+			wantedBy = ["timers.target"];
+			timerConfig = {
+				OnBootSec = "15m";
+				OnUnitActiveSec = "15m";
+				Unit = "fieldseeker-sync.service";
+			};
 		};
 		users.groups.fieldseeker-sync = {};
 		users.users.fieldseeker-sync = {
