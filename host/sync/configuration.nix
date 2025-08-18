@@ -2,4 +2,5 @@
 	imports = [
 		./hardware-configuration.nix
 	];
+	myModules.fieldseeker-sync.enable = true;
 }

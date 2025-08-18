@@ -9,6 +9,7 @@
 		./cloudreve.nix
 		./do-agent.nix
 		./element-web.nix
+		./fieldseeker-sync.nix
 		./fish.nix
 		./librechat.nix
 		./openssh.nix
