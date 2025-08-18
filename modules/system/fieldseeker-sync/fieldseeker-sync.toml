@@ -1,0 +1,5 @@
+[database]
+url = "postgres://fieldseeker:letmein@127.0.0.1:5432/fieldseeker"
+
+[userfiles]
+directory = "/opt/fieldseeker-sync"

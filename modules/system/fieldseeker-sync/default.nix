@@ -4,24 +4,37 @@ let
 	src = pkgs.callPackage (pkgs.fetchFromGitHub {
 		owner  = "Gleipnir-Technology";
 		repo   = "fieldseeker-sync";
-		rev    = "2aa2d37e1ccd9471d332d36042fb0b1edd89d08f";
-		sha256 = "sha256-Sa69TONC+EJW9/SmbrimJptnqmxQc1uh2NfY9UuD7e0=";
+		rev    = "ecc408d09e7769dc43cd6a01c09c8d00255802bf";
+		sha256 = "sha256-hPdtf78PlkMCXZC3fG7Q7ZVM8moYlwbVnkElR5yx6yA=";
   	}) { };
 in {
 	options.myModules.fieldseeker-sync.enable = mkEnableOption "custom fieldseeker-sync configuration";
 
 	config = mkIf config.myModules.fieldseeker-sync.enable {
+		environment.etc."fieldseeker-sync.toml" = {
+			group = "fieldseeker-sync";
+			source = ./fieldseeker-sync.toml;
+			user = "fieldseeker-sync";
+		};
 		environment.systemPackages = [
 			src
 		];
-		services.postgresql.enable = true;
+		services.postgresql = {
+			enable = true;
+			ensureDatabases = [ "fieldseeker-sync" ];
+			ensureUsers = [{
+				ensureClauses.login = true;
+				ensureDBOwnership = true;
+				name = "fieldseeker-sync";
+			}];
+		};
 		sops.secrets.fieldseeker-sync-env = {
 			format = "dotenv";
 			group = "fieldseeker-sync";
 			mode = "0440";
 			owner = "fieldseeker-sync";
 			restartUnits = ["fieldseeker-sync.service"];
-			sopsFile = ../../secrets/fieldseeker-sync.env;
+			sopsFile = ../../../secrets/fieldseeker-sync.env;
 		};
 		systemd.services.fieldseeker-sync = {
 			after=["network.target" "network-online.target"];
