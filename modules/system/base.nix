@@ -15,6 +15,7 @@
 		pkgs.tig
 	];
 	i18n.defaultLocale = "en_US.UTF-8";
+	networking.useNetworkd = true;
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	services.swapspace.enable = true;
 	systemd.network.enable = true;
