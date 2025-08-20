@@ -14,6 +14,9 @@ in {
 		environment.systemPackages = [
 			src
 		];
+		services.caddy.virtualHosts."deltamvcd.nidus.cloud".extraConfig = ''
+			reverse_proxy http://127.0.0.1:3000
+		'';
 		services.postgresql = {
 			enable = true;
 			ensureDatabases = [ "fieldseeker-sync" ];
@@ -31,10 +34,12 @@ in {
 			restartUnits = ["fieldseeker-sync.service"];
 			sopsFile = ../../secrets/fieldseeker-sync.env;
 		};
-		systemd.services.fieldseeker-sync = {
+		systemd.services.fieldseeker-sync-export = {
 			after=["network.target" "network-online.target"];
-			description="FieldSeeker sync";
+			description="FieldSeeker sync periodic sync tool";
 			requires=["network-online.target"];
+			restartIfChanged = false;
+			stopIfChanged = false;
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
 				Type = "oneshot";
@@ -47,12 +52,28 @@ in {
 			};
 			wantedBy = ["multi-user.target"];
 		};
-		systemd.timers.fieldseeker-sync = {
+		systemd.services.fieldseeker-sync-webserver = {
+			after=["network.target" "network-online.target"];
+			description="FieldSeeker sync";
+			requires=["network-online.target"];
+			serviceConfig = {
+				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
+				Type = "simple";
+				User = "fieldseeker-sync";
+				Group = "fieldseeker-sync";
+				ExecStart = "${src}/bin/webserver";
+				TimeoutStopSec = "5s";
+				PrivateTmp = true;
+				WorkingDirectory = "/tmp";
+			};
+			wantedBy = ["multi-user.target"];
+		};
+		systemd.timers.fieldseeker-sync-export = {
 			wantedBy = ["timers.target"];
 			timerConfig = {
 				OnBootSec = "15m";
 				OnUnitActiveSec = "15m";
-				Unit = "fieldseeker-sync.service";
+				Unit = "fieldseeker-sync-export.service";
 			};
 		};
 		users.groups.fieldseeker-sync = {};
