@@ -6,7 +6,11 @@
 
 	boot.tmp.cleanOnBoot = true;
 	environment.systemPackages = map lib.lowPrio [
+<<<<<<< HEAD
 		pkgs.cloud-init
+=======
+		pkgs.binutils
+>>>>>>> 3563d6b (Add binutils to all servers)
 		pkgs.curl
 		pkgs.dig
 		pkgs.htop
