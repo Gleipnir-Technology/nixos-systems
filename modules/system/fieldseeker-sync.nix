@@ -50,7 +50,7 @@ in {
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
 			};
-			wantedBy = ["multi-user.target"];
+			wantedBy = ["timers.target"];
 		};
 		systemd.services.fieldseeker-sync-webserver = {
 			after=["network.target" "network-online.target"];
