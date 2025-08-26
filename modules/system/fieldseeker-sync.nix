@@ -4,9 +4,10 @@ let
 	src = pkgs.callPackage (pkgs.fetchFromGitHub {
 		owner  = "Gleipnir-Technology";
 		repo   = "fieldseeker-sync";
-		rev    = "0.0.2";
-		sha256 = "sha256-gLtHQn/5AK5SOT4vs3I/CrO+59dZFwEjuUbc4Aknr8k=";
+		rev    = rev;
+		sha256 = "sha256-PMHyYhBaB0cCDSBG+qHMhspWBtLKsbGx2I5g8nxMEFw=";
   	}) { };
+	rev = "0.0.8";
 in {
 	options.myModules.fieldseeker-sync.enable = mkEnableOption "custom fieldseeker-sync configuration";
 
@@ -86,6 +87,7 @@ in {
 			description="FieldSeeker sync";
 			requires=["network-online.target"];
 			serviceConfig = {
+				Environment="SENTRY_RELEASE=${rev}";
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
 				Type = "simple";
 				User = "fieldseeker-sync";
@@ -102,6 +104,7 @@ in {
 			description="FieldSeeker sync";
 			requires=["network-online.target"];
 			serviceConfig = {
+				Environment="SENTRY_RELEASE=${rev}";
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
 				Type = "simple";
 				User = "fieldseeker-sync";
