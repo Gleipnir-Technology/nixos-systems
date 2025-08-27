@@ -21,7 +21,10 @@
 	services.swapspace.enable = true;
 	systemd.network = {
 		enable = true;
-		wait-online.anyInterface = true;
+		wait-online = {
+			anyInterface = true;
+			timeout = 10;
+		};
 	};
 	time.timeZone = "UTC";
 	zramSwap.enable = true;
