@@ -62,7 +62,7 @@ in {
 			key = "";
 			owner = "matrix-synapse";
 			restartUnits = [ "matrix-synapse.service" ];
-			sopsFile = ./host/corp/secrets/matrix.yaml;
+			sopsFile = ../../secrets/matrix.yaml;
 		};
 	};
 }
