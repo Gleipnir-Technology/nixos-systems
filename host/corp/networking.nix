@@ -3,7 +3,10 @@
   # details gathered from the active system.
   networking = {
     hostName = "corp";
-    defaultGateway = "159.89.144.1";
+    defaultGateway = {
+      address = "159.89.144.1";
+      interface = "eth0";
+    };
     defaultGateway6 = {
       address = "2604:a880:2:d1::1";
       interface = "eth0";
