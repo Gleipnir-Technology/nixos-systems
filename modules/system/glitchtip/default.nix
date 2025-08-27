@@ -1,6 +1,10 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
+	disabledModules = [ "services/web-apps/glitchtip.nix" ];
+	imports = [
+		./glitchtip.nix
+	];
 	options.myModules.glitchtip.enable = mkEnableOption "custom glitchtip configuration";
 
 	config = mkIf config.myModules.glitchtip.enable {
@@ -21,7 +25,7 @@ with lib;
 			mode = "0440";
 			owner = "glitchtip";
 			restartUnits = ["glitchtip.service"];
-			sopsFile = ../../secrets/glitchtip.env;
+			sopsFile = ../../../secrets/glitchtip.env;
 		};
 	};
 }
