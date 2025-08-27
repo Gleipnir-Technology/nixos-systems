@@ -19,7 +19,10 @@
 	networking.useNetworkd = true;
 	nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	services.swapspace.enable = true;
-	systemd.network.enable = true;
+	systemd.network = {
+		enable = true;
+		wait-online.anyInterface = true;
+	};
 	time.timeZone = "UTC";
 	zramSwap.enable = true;
 
