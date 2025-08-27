@@ -58,6 +58,12 @@ in
         default = 8000;
       };
 
+      workingDirectory = lib.mkOption {
+        type = lib.types.str;
+	description = "The working directory for the GlitchTip services. It will receive user upload data when using the default local filesystem storage.";
+	default = "/var/lib/glitchtip";
+      };
+
       settings = lib.mkOption {
         description = ''
           Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information.
@@ -189,7 +195,7 @@ in
           RuntimeDirectory = "glitchtip";
           StateDirectory = "glitchtip";
           EnvironmentFile = cfg.environmentFiles;
-          WorkingDirectory = "/var/lib/glitchtip";
+          WorkingDirectory = cfg.workingDirectory;
 
           # hardening
           AmbientCapabilities = "";
@@ -248,8 +254,8 @@ in
           serviceConfig = {
 	    Type = "simple";
               #${lib.getExe python.pkgs.gunicorn} \
-	    ExecStartPre="${lib.getExe' pkgs.coreutils "cp"} -pur ${pkg}/lib/glitchtip /var/lib";
-	    ExecStart="/run/current-system/sw/bin/chown -R glitchtip: /var/lib/glitchtip";
+	    ExecStartPre="${lib.getExe' pkgs.coreutils "cp"} -pur ${pkg}/lib/glitchtip ${cfg.workingDirectory}";
+	    ExecStart="/run/current-system/sw/bin/chown -R glitchtip: ${cfg.workingDirectory}";
 	    Restart="on-abort";
 	  };
 	};
@@ -283,7 +289,6 @@ in
 
     users.users = lib.mkIf (cfg.user == "glitchtip") {
       glitchtip = {
-        home = "/var/lib/glitchtip";
         group = cfg.group;
         extraGroups = lib.optionals cfg.redis.createLocally [ "redis-glitchtip" ];
         isSystemUser = true;
