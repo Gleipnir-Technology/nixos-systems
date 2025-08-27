@@ -171,7 +171,8 @@ in
 
           wants = [ "network-online.target" ];
           requires =
-            lib.optional cfg.database.createLocally "postgresql.service"
+	    [ "glitchtip-setup.service" ]
+            ++ lib.optional cfg.database.createLocally "postgresql.service"
             ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
           after = [
             "network-online.target"
@@ -188,7 +189,7 @@ in
           RuntimeDirectory = "glitchtip";
           StateDirectory = "glitchtip";
           EnvironmentFile = cfg.environmentFiles;
-          WorkingDirectory = "${pkg}/lib/glitchtip";
+          WorkingDirectory = "/var/lib/glitchtip";
 
           # hardening
           AmbientCapabilities = "";
@@ -241,6 +242,17 @@ in
             '';
           };
         };
+
+	glitchtip-setup = {
+	  description = "Setup GlitchTip working directory";
+          serviceConfig = {
+	    Type = "simple";
+              #${lib.getExe python.pkgs.gunicorn} \
+	    ExecStartPre="${lib.getExe' pkgs.coreutils "cp"} -pur ${pkg}/lib/glitchtip /var/lib";
+	    ExecStart="/run/current-system/sw/bin/chown -R glitchtip: /var/lib/glitchtip";
+	    Restart="on-abort";
+	  };
+	};
 
         glitchtip-worker = commonService // {
           description = "GlitchTip Job Runner";
