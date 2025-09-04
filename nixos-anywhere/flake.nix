@@ -42,8 +42,7 @@
 			# tested with 2GB/2CPU droplet, 1GB droplets do not have enough RAM for kexec
 			nixosConfigurations.digitalocean = nixpkgs.lib.nixosSystem {
 				modules = [
-					./configuration.nix
-					./digitalocean.nix
+					./digitalocean
 					disko.nixosModules.disko
 					{ disko.devices.disk.disk1.device = "/dev/vda"; }
 					home-manager.nixosModules.home-manager {
@@ -65,6 +64,35 @@
 						};
 					}
 					../users
+				];
+				specialArgs = {
+					inherit configFiles;
+				};
+				system = "${system}";
+			};
+			nixosConfigurations.nocix = nixpkgs.lib.nixosSystem {
+				modules = [
+					../modules
+					../users
+					./nocix
+					disko.nixosModules.disko
+					home-manager.nixosModules.home-manager {
+						home-manager.extraSpecialArgs = { inherit configFiles; };
+						home-manager.sharedModules = [
+							nixvim.homeManagerModules.nixvim
+							../modules/home/nixvim.nix
+						];
+						home-manager.useGlobalPkgs = true;
+						home-manager.useUserPackages = true;
+					}
+					sops-nix.nixosModules.sops {
+						sops = {
+							age.generateKey = true;
+							age.keyFile = "/var/libs/sops-nix/key.txt";
+							age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+							defaultSopsFile = ./secrets/secrets.yaml;
+						};
+					}
 				];
 				specialArgs = {
 					inherit configFiles;
