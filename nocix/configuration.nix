@@ -11,7 +11,10 @@
     ];
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
+  boot.loader.grub = {
+    device = "/dev/disk/by-uuid/0f6e950a-b913-4698-9431-14a6fe1f2ed9";
+    enable = true;
+  };
   # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
@@ -118,19 +121,22 @@
   services.openssh.enable = true;
   systemd.network.enable = true;
 
-	users.users.eliribble.openssh.authorizedKeys.keys =
-	[
-		# change this to your ssh key
-	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvhtF6nRWlA6PVs71Eek7p0p2PxTd3P6ZEGFV2t75MB eliribble@nixos"
-	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHL1SpT3KR8XeXtH19muncYVrKxWzWdWtJYNTwoJGTm3 eliribble@Elis-Mac-mini.local"
-	]
+        users.users.eliribble = {
+                extraGroups = [ "sudo" "wheel" ];
+                isNormalUser = true;
+                initialHashedPassword = "$y$j9T$pXXR8iNU81XAghZWEXVrC/$Xp4nL6FrTAZ3DnJkcx.zi0q2SGk8KUz8YfejkAoWSE.";
+                openssh.authorizedKeys.keys = [
+                        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvhtF6nRWlA6PVs71Eek7p0p2PxTd3P6ZEGFV2t75MB eliribble@nixos"
+                        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHL1SpT3KR8XeXtH19muncYVrKxWzWdWtJYNTwoJGTm3 eliribble@Elis-Mac-mini.local"
+                ];
+        };
 
 	users.users.root = {
 		initialHashedPassword = "";
 		openssh.authorizedKeys.keys = [
 			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvhtF6nRWlA6PVs71Eek7p0p2PxTd3P6ZEGFV2t75MB eliribble@nixos"
 			"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHL1SpT3KR8XeXtH19muncYVrKxWzWdWtJYNTwoJGTm3 eliribble@Elis-Mac-mini.local"
-		]
+		];
 	};
 
   # Open ports in the firewall.
