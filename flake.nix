@@ -2,6 +2,10 @@
 	description = "Multi-host NixOS configuration";
 
 	inputs = {
+		disko = {
+			inputs.nixpkgs.follows = "nixpkgs";
+			url = "github:nix-community/disko";
+		};
 		home-manager = {
 			url = "github:nix-community/home-manager/release-25.05";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -14,7 +18,7 @@
 		sops-nix.url = "github:Mic92/sops-nix";
 	};
 
-	outputs = { self, home-manager, nixpkgs, nixvim, sops-nix, ...}:
+	outputs = { self, disko, home-manager, nixpkgs, nixvim, sops-nix, ...}:
 		let
 			configFiles = pkgs.stdenv.mkDerivation {
 			name = "config-files";
@@ -30,15 +34,15 @@
 			nixosConfigurations = {
 				corp = import ./system.nix {
 					configuration = ./host/corp/configuration.nix;
-					inherit configFiles home-manager nixpkgs nixvim sops-nix system;
+					inherit configFiles disko home-manager nixpkgs nixvim sops-nix system;
 				};
 				"sync.nidus.cloud" = import ./system.nix {
 					configuration = ./host/sync/configuration.nix;
-					inherit configFiles home-manager nixpkgs nixvim sops-nix system;
+					inherit configFiles disko home-manager nixpkgs nixvim sops-nix system;
 				};
 				test-corp = nixpkgs.lib.nixosSystem {
 					configuration = ./host/test-corp/configuration.nix;
-					inherit configFiles home-manager nixpkgs nixvim sops-nix system;
+					inherit configFiles disko home-manager nixpkgs nixvim sops-nix system;
 				};
 			};
 		};
