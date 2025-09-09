@@ -31,6 +31,7 @@
 		vikunja.enable = true;
 	};
 	services.openssh.enable = true;
+	services.postgresql.enable = true;
 	users.users.deploy = {
 		extraGroups = [ "deploy" ];
 		isNormalUser = true;

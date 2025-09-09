@@ -1,4 +1,4 @@
-{ configFiles, configuration, disko, home-manager, nixpkgs, nixvim, sops-nix, system, ... }:
+{ authentik-nix, configFiles, configuration, disko, home-manager, nixpkgs, nixvim, sops-nix, system, ... }:
 let 
 	allowed-unfree-packages = [
 		"corefonts"
@@ -6,6 +6,7 @@ let
 	];
 in nixpkgs.lib.nixosSystem {
 	modules = [
+		authentik-nix.nixosModules.default
 		disko.nixosModules.disko
 		home-manager.nixosModules.home-manager
 		{

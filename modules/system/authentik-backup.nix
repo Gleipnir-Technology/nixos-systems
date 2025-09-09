@@ -17,24 +17,24 @@ in
 		sops.secrets.authentik-backup-pgpass = {
 			mode = "0400";
 		};
-		systemd.services.backup-authentik-db = {
-			description = "Backup authentik database";
-			after = [ "network-online.target" ];
-			wants = [ "network-online.target" ];
-			path = [ pkgs.bash pkgs.postgresql ];
-			requires = [ "podman-authentik-worker.service" ];	# Ensure authentik is running first
-			script = "${backupScript}/bin/backup-authentik-db.sh";
-			serviceConfig = {
-				# Needs root so it can stop other services
-				User = "root";
-				Group = "root";
-				Environment = "PGPASSFILE=${config.sops.secrets.authentik-backup-pgpass.path}";
-				EnvironmentFile = "/var/run/secrets/authentik-env";
-				Type = "oneshot";
-				Restart = "on-failure";
-			};
-			wantedBy = [ "timers.target" ];
-		};
+		# systemd.services.backup-authentik-db = {
+		# 	description = "Backup authentik database";
+		# 	after = [ "network-online.target" ];
+		# 	wants = [ "network-online.target" ];
+		# 	path = [ pkgs.bash pkgs.postgresql ];
+		# 	requires = [ "podman-authentik-worker.service" ];	# Ensure authentik is running first
+		# 	script = "${backupScript}/bin/backup-authentik-db.sh";
+		# 	serviceConfig = {
+		# 		# Needs root so it can stop other services
+		# 		User = "root";
+		# 		Group = "root";
+		# 		Environment = "PGPASSFILE=${config.sops.secrets.authentik-backup-pgpass.path}";
+		# 		EnvironmentFile = "/var/run/secrets/authentik-env";
+		# 		Type = "oneshot";
+		# 		Restart = "on-failure";
+		# 	};
+		# 	wantedBy = [ "timers.target" ];
+		# };
 
 		systemd.tmpfiles.rules = [
 			"d /var/backups/authentik-db 0755 root root"
