@@ -1,9 +1,19 @@
-{ modulesPath, ... }:
+{ config, lib, modulesPath, ... }:
 {
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
-  boot.loader.grub.device = "/dev/vda";
-  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "xen_blkfront" "vmw_pvscsi" ];
-  boot.initrd.kernelModules = [ "nvme" ];
-  fileSystems."/" = { device = "/dev/vda1"; fsType = "ext4"; };
-  
+	imports = [
+		(modulesPath + "/installer/scan/not-detected.nix")
+		(modulesPath + "/profiles/qemu-guest.nix")
+		./disk-config.nix
+	];
+
+	boot.loader.grub = {
+		efiSupport = true;
+		efiInstallAsRemovable = true;
+	};
+	boot.initrd.availableKernelModules = [ "ahci" "ohci_pci" "ehci_pci" "xhci_pci" "sd_mod" ];
+	boot.initrd.kernelModules = [ ];
+	boot.kernelModules = [ "kvm-amd" ];
+	boot.extraModulePackages = [ ];
+	hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+	nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
