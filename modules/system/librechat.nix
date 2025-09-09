@@ -23,6 +23,14 @@ in
 		services.mongodb = {
 			enable = true;
 		};
+		services.postgresql = {
+			ensureDatabases = [ "rag_api" ];
+			ensureUsers = [{
+				ensureClauses.login = true;
+				ensureDBOwnership = true;
+				name = "rag_api";
+			}];
+		};
 		sops.secrets.librechat-env = {
 			format = "dotenv";
 			group = "librechat";
@@ -114,7 +122,7 @@ in
 			environmentFiles = [
 				"/var/run/secrets/rag-api-env"
 			];
-			image = "docker.io/library/rag_api:latest";
+			image = "localhost/rag_api:latest";
 			ports = [ "127.0.0.1:10051:8000" ];
 			volumes = [
 				"/opt/rag-api:/app/uploads"
