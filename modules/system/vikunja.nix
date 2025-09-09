@@ -7,10 +7,26 @@ with lib;
 		services.caddy.virtualHosts."todo.gleipnir.technology".extraConfig = ''
 			reverse_proxy http://127.0.0.1:10010
 		'';
+		services.postgresql = {
+			authentication = pkgs.lib.mkOverride 10 ''
+				#type database DBuser auth-method
+				local all      all    trust
+			'';
+			enable = true;
+			ensureDatabases = [ "vikunja" ];
+			ensureUsers = [{
+				ensureClauses.login = true;
+				ensureDBOwnership = true;
+				name = "vikunja";
+			}];
+		};
 		services.vikunja = {
 			enable = true;
 			frontendHostname = "todo.gleipnir.technology";
 			frontendScheme = "https";
+			settings = {
+				service.interface = lib.mkForce "127.0.0.1:3456";
+			};
 		};
 		sops.secrets.vikunja = {
 			format = "yaml";
@@ -19,7 +35,7 @@ with lib;
 			owner = "vikunja";
 			path = "/etc/vikunja/config.yaml";
 			restartUnits = [ "vikunja.service" ];
-			sopsFile = ../../host/corp/secrets/vikunja.yaml;
+			sopsFile = ../../secrets/vikunja.yaml;
 		};
 		users.groups.vikunja = {};
 		users.users.vikunja = {
