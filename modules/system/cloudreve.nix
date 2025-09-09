@@ -52,12 +52,12 @@ with lib;
 				"/var/run/secrets/cloudreve-env"
 			];
 			#extraOptions = ["--network=pasta:--map-gw"];
-			image = "cloudreve.azurecr.io/cloudreve/pro:4.5.0";
+			image = "cloudreve.azurecr.io/cloudreve/pro:4.7.0";
 			# I'd much rather be doing this, but it fails in inscrutible ways
 			#podman.user = "cloudreve";
 			ports = [ "127.0.0.1:10040:5212" ];
 			volumes = [
-				"/var/lib/cloudreve:/cloudreve/data"
+				"/mnt/bigdisk/cloudreve:/cloudreve/data"
 			];
 		};
 		users.groups.cloudreve = {};
