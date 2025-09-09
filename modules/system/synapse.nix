@@ -32,7 +32,7 @@ in {
 			enable = true;
 			extras = ["oidc"];
 			extraConfigFiles = [
-				"/run/secrets/matrix"
+				"/run/secrets/matrix-synapse.yaml"
 			];
 			log.root.level = "WARNING";
 			settings = {
@@ -56,13 +56,31 @@ in {
 				server_name = config.networking.domain;
 			};
 		};
-		sops.secrets.matrix = {
+		# Ideally we'd like to use this to create the database, but we can't because it needs to have a special
+		# "Collate" and "Ctype" value for matrix-synapse that is checked on startup.
+		# Instead we have to manually create the database by hand like barbarians
+		# with createdb --encoding=UTF8 --locale=C --template=template0 --owner=matrix-synapse matrix-synapse
+		# See https://github.com/matrix-org/synapse/blob/develop/docs/postgres.md#set-up-database
+		#services.postgresql = {
+		#	authentication = pkgs.lib.mkOverride 10 ''
+		#		#type database DBuser auth-method
+		#		local all      all    trust
+		#	'';
+		#	enable = true;
+		#	ensureDatabases = [ "matrix-synapse" ];
+		#	ensureUsers = [{
+		#		ensureClauses.login = true;
+		#		ensureDBOwnership = true;
+		#		name = "matrix-synapse";
+		#	}];
+		#};
+		sops.secrets."matrix-synapse.yaml" = {
 			format = "yaml";
 			group = "matrix-synapse";
 			key = "";
 			owner = "matrix-synapse";
 			restartUnits = [ "matrix-synapse.service" ];
-			sopsFile = ../../secrets/matrix.yaml;
+			sopsFile = ../../secrets/matrix-synapse.yaml;
 		};
 	};
 }
