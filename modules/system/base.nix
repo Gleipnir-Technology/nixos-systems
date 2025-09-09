@@ -17,7 +17,16 @@
 	];
 	i18n.defaultLocale = "en_US.UTF-8";
 	networking.useNetworkd = true;
-	nix.settings.experimental-features = [ "nix-command" "flakes" ];
+	nix.settings = {
+		download-buffer-size = 524288000;
+		experimental-features = [ "nix-command" "flakes" ];
+	};
+	security.pam.loginLimits = [{
+		domain = "*";
+		type = "soft";
+		item = "nofile";
+		value = "8192";
+	}];
 	services.swapspace.enable = true;
 	systemd.network = {
 		enable = true;
