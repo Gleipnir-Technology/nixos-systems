@@ -8,11 +8,6 @@ with lib;
 			reverse_proxy http://127.0.0.1:10010
 		'';
 		services.postgresql = {
-			authentication = pkgs.lib.mkOverride 10 ''
-				#type database DBuser auth-method
-				local all      all    trust
-			'';
-			enable = true;
 			ensureDatabases = [ "vikunja" ];
 			ensureUsers = [{
 				ensureClauses.login = true;
