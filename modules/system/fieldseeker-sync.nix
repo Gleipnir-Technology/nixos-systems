@@ -5,14 +5,15 @@ let
 		owner  = "Gleipnir-Technology";
 		repo   = "fieldseeker-sync";
 		rev    = rev;
-		sha256 = "sha256-PMHyYhBaB0cCDSBG+qHMhspWBtLKsbGx2I5g8nxMEFw=";
+		sha256 = "sha256-oyHJDFMjdqBCp9eotLcETvJpZLndMGlEDH6gJ5LtJtI=";
   	}) { };
-	rev = "0.0.8";
+	rev = "0.0.17";
 in {
 	options.myModules.fieldseeker-sync.enable = mkEnableOption "custom fieldseeker-sync configuration";
 
 	config = mkIf config.myModules.fieldseeker-sync.enable {
 		environment.systemPackages = [
+			pkgs.ffmpeg
 			src
 		];
 		services.caddy.virtualHosts."deltamvcd.nidus.cloud".extraConfig = ''
@@ -45,6 +46,42 @@ in {
 			owner = "fieldseeker-sync";
 			restartUnits = ["fieldseeker-sync-gleipnir.service"];
 			sopsFile = ../../secrets/fieldseeker-sync-gleipnir.env;
+		};
+		systemd.services.fieldseeker-sync-audio-post-processor = {
+			after=["network.target" "network-online.target"];
+			description="FieldSeeker sync audio post processor";
+			requires=["network-online.target"];
+			restartIfChanged = false;
+			stopIfChanged = false;
+			serviceConfig = {
+				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
+				Type = "oneshot";
+				User = "fieldseeker-sync";
+				Group = "fieldseeker-sync";
+				ExecStart = "${src}/bin/audio-post-processor";
+				TimeoutStopSec = "5s";
+				PrivateTmp = true;
+				WorkingDirectory = "/tmp";
+			};
+			wantedBy = ["multi-user.target"];
+		};
+		systemd.services.fieldseeker-sync-gleipnir-audio-post-processor = {
+			after=["network.target" "network-online.target"];
+			description="FieldSeeker sync audio post processor";
+			requires=["network-online.target"];
+			restartIfChanged = false;
+			stopIfChanged = false;
+			serviceConfig = {
+				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
+				Type = "oneshot";
+				User = "fieldseeker-sync";
+				Group = "fieldseeker-sync";
+				ExecStart = "${src}/bin/audio-post-processor";
+				TimeoutStopSec = "5s";
+				PrivateTmp = true;
+				WorkingDirectory = "/tmp";
+			};
+			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-export = {
 			after=["network.target" "network-online.target"];
@@ -115,6 +152,22 @@ in {
 				WorkingDirectory = "/tmp";
 			};
 			wantedBy = ["multi-user.target"];
+		};
+		systemd.timers.fieldseeker-sync-audio-post-processor = {
+			wantedBy = ["timers.target"];
+			timerConfig = {
+				OnBootSec = "15m";
+				OnUnitActiveSec = "15m";
+				Unit = "fieldseeker-sync-audio-post-processor.service";
+			};
+		};
+		systemd.timers.fieldseeker-sync-gleipnir-audio-post-processor = {
+			wantedBy = ["timers.target"];
+			timerConfig = {
+				OnBootSec = "15m";
+				OnUnitActiveSec = "15m";
+				Unit = "fieldseeker-sync-gleipnir-audio-post-processor.service";
+			};
 		};
 		systemd.timers.fieldseeker-sync-export = {
 			wantedBy = ["timers.target"];
