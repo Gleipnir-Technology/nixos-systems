@@ -5,9 +5,9 @@ let
 		owner  = "Gleipnir-Technology";
 		repo   = "fieldseeker-sync";
 		rev    = rev;
-		sha256 = "sha256-oyHJDFMjdqBCp9eotLcETvJpZLndMGlEDH6gJ5LtJtI=";
+		sha256 = "sha256-231h18uvb5b1kP6iTZmnwSqV3Ip/EkYiF9O7takvTbg=";
   	}) { };
-	rev = "0.0.17";
+	rev = "0.0.23";
 in {
 	options.myModules.fieldseeker-sync.enable = mkEnableOption "custom fieldseeker-sync configuration";
 
@@ -48,7 +48,7 @@ in {
 			sopsFile = ../../secrets/fieldseeker-sync-gleipnir.env;
 		};
 		systemd.services.fieldseeker-sync-audio-post-processor = {
-			after=["network.target" "network-online.target"];
+			after=["network.target" "network-online.target" "fieldseeker-sync-migrate.service"];
 			description="FieldSeeker sync audio post processor";
 			requires=["network-online.target"];
 			restartIfChanged = false;
@@ -66,7 +66,7 @@ in {
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-gleipnir-audio-post-processor = {
-			after=["network.target" "network-online.target"];
+			after=["network.target" "network-online.target" "fieldseeker-sync-gleipnir-migrate.service"];
 			description="FieldSeeker sync audio post processor";
 			requires=["network-online.target"];
 			restartIfChanged = false;
@@ -84,7 +84,7 @@ in {
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-export = {
-			after=["network.target" "network-online.target"];
+			after=["network.target" "network-online.target" "fieldseeker-sync-migrate.service"];
 			description="FieldSeeker sync periodic sync tool";
 			requires=["network-online.target"];
 			restartIfChanged = false;
@@ -102,7 +102,7 @@ in {
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-gleipnir-export = {
-			after=["network.target" "network-online.target"];
+			after=["network.target" "network-online.target" "fieldseeker-sync-gleipnir-migrate.service"];
 			description="FieldSeeker sync periodic sync tool";
 			requires=["network-online.target"];
 			restartIfChanged = false;
@@ -119,8 +119,42 @@ in {
 			};
 			wantedBy = ["multi-user.target"];
 		};
-		systemd.services.fieldseeker-sync-webserver = {
+		systemd.services.fieldseeker-sync-migrate = {
 			after=["network.target" "network-online.target"];
+			description="FieldSeeker DB migrate";
+			requires=["network-online.target"];
+			serviceConfig = {
+				Environment="SENTRY_RELEASE=${rev}";
+				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
+				Type = "oneshot";
+				User = "fieldseeker-sync";
+				Group = "fieldseeker-sync";
+				ExecStart = "${src}/bin/migrate";
+				TimeoutStopSec = "5s";
+				PrivateTmp = true;
+				WorkingDirectory = "/tmp";
+			};
+			wantedBy = ["multi-user.target"];
+		};
+		systemd.services.fieldseeker-sync-gleipnir-migrate = {
+			after=["network.target" "network-online.target"];
+			description="FieldSeeker Gleipnir DB migrate";
+			requires=["network-online.target"];
+			serviceConfig = {
+				Environment="SENTRY_RELEASE=${rev}";
+				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
+				Type = "oneshot";
+				User = "fieldseeker-sync";
+				Group = "fieldseeker-sync";
+				ExecStart = "${src}/bin/migrate";
+				TimeoutStopSec = "5s";
+				PrivateTmp = true;
+				WorkingDirectory = "/tmp";
+			};
+			wantedBy = ["multi-user.target"];
+		};
+		systemd.services.fieldseeker-sync-webserver = {
+			after=["network.target" "network-online.target" "fieldseeker-sync-migrate.service"];
 			description="FieldSeeker sync";
 			requires=["network-online.target"];
 			serviceConfig = {
@@ -137,7 +171,7 @@ in {
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-gleipnir-webserver = {
-			after=["network.target" "network-online.target"];
+			after=["network.target" "network-online.target" "fieldseeker-sync-gleipnir-migrate.service"];
 			description="FieldSeeker sync";
 			requires=["network-online.target"];
 			serviceConfig = {
