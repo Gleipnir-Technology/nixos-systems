@@ -25,6 +25,7 @@
 		glitchtip.enable = true;
 		element-web.enable = true;
 		librechat.enable = true;
+		static-websites.enable = true;
 		synapse.enable = true;
 		timecardbot.enable = true;
 		vikunja.enable = true;

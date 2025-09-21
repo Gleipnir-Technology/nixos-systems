@@ -16,6 +16,7 @@
 		./openssh.nix
 		./podman.nix
 		./sillytavern.nix
+		./static-websites.nix
 		./sudo.nix
 		./synapse.nix
 		./timecardbot.nix
