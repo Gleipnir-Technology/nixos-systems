@@ -11,6 +11,7 @@
 		pkgs.curl
 		pkgs.dig
 		pkgs.htop
+		pkgs.ghostty.terminfo
 		pkgs.git
 		pkgs.sops
 		pkgs.tig
