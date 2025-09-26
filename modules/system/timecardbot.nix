@@ -1,21 +1,43 @@
-{ pkgs, lib, config, ... }:
+{ config, lib, pkgs, timecard-bot, ... }:
 with lib;
 let
-	timecardBotSrc = pkgs.fetchFromGitHub {
-		owner  = "Gleipnir-Technology";
-		repo   = "timecard-bot";
-		rev    = "00b2850655295513c1e99a519d1d59c3b9847122";
-		sha256 = "1f78jm3jgzwzc69q1h9nplmcbz5hb9l74phyhzkbfjb99n3vrf1q";
-	};
-	timecardBotFlake = (import timecardBotSrc);
-	timecardBotPackage = timecardBotFlake.packages.${pkgs.system}.default;
+	timecard-bot-pkg = timecard-bot.packages.x86_64-linux.default;
 in
 {
 	options.myModules.timecardbot.enable = mkEnableOption "custom timecardbot configuration";
 
 	config = mkIf config.myModules.timecardbot.enable {
-		#environment.systemPackages = with pkgs; [
-			#timecardBotPackage
-		#];
+		environment.systemPackages = with pkgs; [
+			timecard-bot-pkg
+		];
+		sops.secrets.timecarder-env = {
+			format = "dotenv";
+			group = "timecarder";
+			mode = "0440";
+			owner = "timecarder";
+			restartUnits = ["timecarder.service"];
+			sopsFile = ../../secrets/timecarder.env;
+		};
+		systemd.services.timecarder = {
+			after=["network.target" "network-online.target"];
+			description="Timecarder Matrix bot";
+			requires=["network-online.target"];
+			serviceConfig = {
+				EnvironmentFile="/var/run/secrets/timecarder-env";
+				Type = "simple";
+				User = "timecarder";
+				Group = "timecarder";
+				ExecStart = "${timecard-bot-pkg}/bin/timecardbot";
+				TimeoutStopSec = "5s";
+				PrivateTmp = true;
+				WorkingDirectory = "/tmp";
+			};
+			wantedBy = ["multi-user.target"];
+		};
+		users.groups.timecarder = {};
+		users.users.timecarder = {
+			group = "timecarder";
+			isSystemUser = true;
+		};
 	};
 }

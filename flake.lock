@@ -296,6 +296,20 @@
         "type": "github"
       }
     },
+    "nixpkgs_4": {
+      "locked": {
+        "lastModified": 1758763312,
+        "narHash": "sha256-puBMviZhYlqOdUUgEmMVJpXqC/ToEqSvkyZ30qQ09xM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e57b3b16ad8758fd681511a078f35c416a8cc939",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -393,6 +407,27 @@
         "type": "github"
       }
     },
+    "pyproject-nix_2": {
+      "inputs": {
+        "nixpkgs": [
+          "timecard-bot",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1758265079,
+        "narHash": "sha256-amLaLNwKSZPShQHzfgmc/9o76dU8xzN0743dWgvYlr8=",
+        "owner": "nix-community",
+        "repo": "pyproject.nix",
+        "rev": "02e9418fd4af638447dca4b17b1280da95527fc9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "pyproject.nix",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "authentik-nix": "authentik-nix",
@@ -400,7 +435,8 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
         "nixvim": "nixvim",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "timecard-bot": "timecard-bot"
       }
     },
     "sops-nix": {
@@ -463,6 +499,26 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "timecard-bot": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4",
+        "pyproject-nix": "pyproject-nix_2"
+      },
+      "locked": {
+        "lastModified": 1758911329,
+        "narHash": "sha256-ZYAG5ZegC+NjH59Jgmi1lyn2UyyVHzvC3UVm99wIE4M=",
+        "owner": "Gleipnir-Technology",
+        "repo": "timecard-bot",
+        "rev": "8c81b6683f97aa2712323836e629adf102be58ac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Gleipnir-Technology",
+        "repo": "timecard-bot",
+        "rev": "8c81b6683f97aa2712323836e629adf102be58ac",
         "type": "github"
       }
     },

@@ -19,9 +19,10 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		sops-nix.url = "github:Mic92/sops-nix";
+		timecard-bot.url = "github:Gleipnir-Technology/timecard-bot?rev=8c81b6683f97aa2712323836e629adf102be58ac";
 	};
 
-	outputs = { self, authentik-nix, disko, home-manager, nixpkgs, nixvim, sops-nix, ...}:
+	outputs = { self, authentik-nix, disko, home-manager, nixpkgs, nixvim, sops-nix, timecard-bot, ...}:
 		let
 			configFiles = pkgs.stdenv.mkDerivation {
 			name = "config-files";
@@ -37,7 +38,7 @@
 			nixosConfigurations = {
 				corp = import ./system.nix {
 					configuration = ./host/corp/configuration.nix;
-					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system;
+					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
 				};
 				"sync.nidus.cloud" = import ./system.nix {
 					configuration = ./host/sync/configuration.nix;
