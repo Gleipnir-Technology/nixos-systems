@@ -5,9 +5,9 @@ let
 		owner  = "Gleipnir-Technology";
 		repo   = "fieldseeker-sync";
 		rev    = rev;
-		sha256 = "sha256-231h18uvb5b1kP6iTZmnwSqV3Ip/EkYiF9O7takvTbg=";
+		sha256 = "sha256-Y8B/HcBzne5sn3/W3p444VT5nx5ltXqoPMX9PPnJ5M8=";
   	}) { };
-	rev = "0.0.23";
+	rev = "0.0.25";
 in {
 	options.myModules.fieldseeker-sync.enable = mkEnableOption "custom fieldseeker-sync configuration";
 
