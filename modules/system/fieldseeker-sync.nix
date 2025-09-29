@@ -63,6 +63,7 @@ in {
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
 			};
+			startAt = "*:0/15";
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-gleipnir-audio-post-processor = {
@@ -81,6 +82,7 @@ in {
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
 			};
+			startAt = "*:0/15";
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-export = {
@@ -91,14 +93,15 @@ in {
 			stopIfChanged = false;
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
+				ExecStart = "${src}/bin/full-export";
+				Group = "fieldseeker-sync";
+				PrivateTmp = true;
+				TimeoutStopSec = "5s";
 				Type = "oneshot";
 				User = "fieldseeker-sync";
-				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/full-export";
-				TimeoutStopSec = "5s";
-				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
 			};
+			startAt = "*:0/15";
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-gleipnir-export = {
@@ -109,14 +112,15 @@ in {
 			stopIfChanged = false;
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
+				ExecStart = "${src}/bin/full-export";
+				Group = "fieldseeker-sync";
+				PrivateTmp = true;
+				TimeoutStopSec = "5s";
 				Type = "oneshot";
 				User = "fieldseeker-sync";
-				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/full-export";
-				TimeoutStopSec = "5s";
-				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
 			};
+			startAt = "*:0/15";
 			wantedBy = ["multi-user.target"];
 		};
 		systemd.services.fieldseeker-sync-migrate = {
@@ -186,38 +190,6 @@ in {
 				WorkingDirectory = "/tmp";
 			};
 			wantedBy = ["multi-user.target"];
-		};
-		systemd.timers.fieldseeker-sync-audio-post-processor = {
-			wantedBy = ["timers.target"];
-			timerConfig = {
-				OnBootSec = "15m";
-				OnUnitActiveSec = "15m";
-				Unit = "fieldseeker-sync-audio-post-processor.service";
-			};
-		};
-		systemd.timers.fieldseeker-sync-gleipnir-audio-post-processor = {
-			wantedBy = ["timers.target"];
-			timerConfig = {
-				OnBootSec = "15m";
-				OnUnitActiveSec = "15m";
-				Unit = "fieldseeker-sync-gleipnir-audio-post-processor.service";
-			};
-		};
-		systemd.timers.fieldseeker-sync-export = {
-			wantedBy = ["timers.target"];
-			timerConfig = {
-				OnBootSec = "15m";
-				OnUnitActiveSec = "15m";
-				Unit = "fieldseeker-sync-export.service";
-			};
-		};
-		systemd.timers.fieldseeker-sync-gleipnir-export = {
-			wantedBy = ["timers.target"];
-			timerConfig = {
-				OnBootSec = "15m";
-				OnUnitActiveSec = "15m";
-				Unit = "fieldseeker-sync-gleipnir-export.service";
-			};
 		};
 		users.groups.fieldseeker-sync = {};
 		users.users.fieldseeker-sync = {
