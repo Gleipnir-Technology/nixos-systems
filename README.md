@@ -55,6 +55,9 @@ Generate the hardware configuration
 $ cd nixos-anywhere
 $ nix run github:nix-community/nixos-anywhere -- --flake ./#digitalocean --generate-hardware-config nixos-generate-config ./nocix/hardware-configuration --target-host root@1.2.3.4
 ```
+This apparently destroys the operating system. I'm not sure why.
+
+```
 $ cd nixos-anywhere
 $ nix run github:nix-community/nixos-anywhere -- --flake ./#digitalocean --target-host root@1.2.3.4
 ```
