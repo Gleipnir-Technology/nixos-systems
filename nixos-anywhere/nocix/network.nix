@@ -9,7 +9,7 @@
 			address = "2604:4300:a:88::1";
 			interface = "enp3s0";
 		};
-		interfaces.enp2s0 = {
+		interfaces.enp3s0 = {
 			ipv4.addresses = [{
 				address = "63.141.227.154";
 				prefixLength = 29;
