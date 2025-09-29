@@ -3,7 +3,7 @@
 {
 	disko.devices = {
 		disk = {
-			sda = {
+			root = {
 				device = "/dev/sda";
 				type = "disk";
 				content = {
@@ -35,7 +35,7 @@
 					};
 				};
 			};
-			sdb = {
+			data = {
 				device = "/dev/sdb";
 				type = "disk";
 				content = {
