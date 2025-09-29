@@ -42,11 +42,11 @@
 				};
 				"sync.nidus.cloud" = import ./system.nix {
 					configuration = ./host/sync/configuration.nix;
-					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system;
+					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
 				};
 				test-corp = nixpkgs.lib.nixosSystem {
 					configuration = ./host/test-corp/configuration.nix;
-					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system;
+					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
 				};
 			};
 		};
