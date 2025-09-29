@@ -44,6 +44,16 @@ $ digitalocean/create-droplet.sh
 
 ### Convert to NixOS with nixos-anywhere
 
+First log in to the host using regular credentials. Set up an ssh key for root access.
+
+Get the disk layout using `/sbin/fdisk -l`. You're looking to figure out which disk is the boot disk and which isn't. Then update the `disk-config.nix` file for the matching provider to ensure that the boot disk gets written.
+
+Then check the network configuration via `ip route` and `ip addr` or `/etc/network/interfaces`. Update the network configuration at `network.nix` to match.
+
+Generate the hardware configuration
+```
+$ cd nixos-anywhere
+$ nix run github:nix-community/nixos-anywhere -- --flake ./#digitalocean --generate-hardware-config nixos-generate-config ./nocix/hardware-configuration --target-host root@1.2.3.4
 ```
 $ cd nixos-anywhere
 $ nix run github:nix-community/nixos-anywhere -- --flake ./#digitalocean --target-host root@1.2.3.4
