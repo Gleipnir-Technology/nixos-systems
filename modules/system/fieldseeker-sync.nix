@@ -31,6 +31,39 @@ in {
 				name = "fieldseeker-sync";
 			}];
 		};
+		services.restic.backups.deltamvcd-db = {
+			# Need nixos unstable for this
+			#command = [
+				#"\${lib.getExe pkgs.sudo}"
+				#"-u postgres"
+				#"\${pkgs.postgresql}/bin/pg_dump fieldseeker-sync"
+			#];
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag database"
+				# Replace the below with 'command=' after next release
+				"--stdin-from-command -- \${lib.getExe pkgs.sudo} -u postgres \${pkgs.postgresql}/bin/pg_dump fieldseeker-sync"
+			];
+			initialize = true;
+			passwordFile = "/var/run/secrets/restic-password";
+			pruneOpts = [
+				"--keep-daily 14"
+				"--keep-weekly 4"
+				"--keep-monthly 2"
+				"--group-by tags"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-deltamvcd/database";
+		};
+		services.restic.backups.deltamvcd-files = {
+			environmentFile = "/var/run/secrets/restic-env";
+			initialize = true;
+			passwordFile = "/var/run/secrets/restic-password";
+			paths = [
+				"/opt/fieldseeker-sync/deltamvcd"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-deltamvcd/files";
+			
+		};
 		sops.secrets.fieldseeker-sync-env = {
 			format = "dotenv";
 			group = "fieldseeker-sync";
@@ -46,6 +79,24 @@ in {
 			owner = "fieldseeker-sync";
 			restartUnits = ["fieldseeker-sync-gleipnir.service"];
 			sopsFile = ../../secrets/fieldseeker-sync-gleipnir.env;
+		};
+		sops.secrets.restic-env = {
+			format = "yaml";
+			key = "backblaze";
+			group = "root";
+			mode = "0440";
+			owner = "root";
+			#restartUnits = ["fieldseeker-sync.service"];
+			sopsFile = ../../secrets/restic.yaml;
+		};
+		sops.secrets.restic-password = {
+			format = "yaml";
+			key = "password";
+			group = "root";
+			mode = "0440";
+			owner = "root";
+			#restartUnits = ["fieldseeker-sync.service"];
+			sopsFile = ../../secrets/restic.yaml;
 		};
 		systemd.services.fieldseeker-sync-audio-post-processor = {
 			after=["network.target" "network-online.target" "fieldseeker-sync-migrate.service"];
