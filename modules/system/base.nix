@@ -13,6 +13,7 @@
 		pkgs.htop
 		pkgs.ghostty.terminfo
 		pkgs.git
+		pkgs.restic
 		pkgs.sops
 		pkgs.tig
 	];
