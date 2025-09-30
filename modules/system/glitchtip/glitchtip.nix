@@ -118,6 +118,14 @@ in
         };
       };
 
+      environment = lib.mkOption {
+        type = lib.types.listOf lib.types.string;
+	default = [ ];
+	example = [ "TMPDIR=/tmp/glitchtip" ];
+	description = ''
+	  Additional environment variables to set
+	'';
+      };
       environmentFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ ];
@@ -194,6 +202,7 @@ in
           Group = cfg.group;
           RuntimeDirectory = "glitchtip";
           StateDirectory = "glitchtip";
+	  Environment = ''${lib.concatStringsSep " " cfg.environment}'';
           EnvironmentFile = cfg.environmentFiles;
           WorkingDirectory = cfg.workingDirectory;
 

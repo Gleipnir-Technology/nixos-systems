@@ -13,11 +13,15 @@ with lib;
 		'';
 		services.glitchtip = {
 			enable = true;
+			environment = [
+				"TMPDIR=/tmp/glitchtip"
+			];
 			environmentFiles = [
 				"/var/run/secrets/glitchtip-env"
 			];
 			port = 10060;
 			settings.GLITCHTIP_DOMAIN = "https://glitchtip.gleipnir.technology";
+			workingDirectory = "/mnt/bigdisk/glitchtip";
 		};
 		sops.secrets.glitchtip-env = {
 			format = "dotenv";
@@ -27,5 +31,8 @@ with lib;
 			restartUnits = ["glitchtip.service"];
 			sopsFile = ../../../secrets/glitchtip.env;
 		};
+		systemd.tmpfiles.rules = [
+			"d /tmp/glitchtip 0755 glitchtip glitchtip 1d"
+		];
 	};
 }
