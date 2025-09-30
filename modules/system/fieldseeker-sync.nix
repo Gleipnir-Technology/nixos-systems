@@ -106,7 +106,7 @@ in {
 			stopIfChanged = false;
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
-				Type = "oneshot";
+				Type = "simple";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
 				ExecStart = "${src}/bin/audio-post-processor";
@@ -125,7 +125,7 @@ in {
 			stopIfChanged = false;
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
-				Type = "oneshot";
+				Type = "simple";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
 				ExecStart = "${src}/bin/audio-post-processor";
@@ -148,7 +148,7 @@ in {
 				Group = "fieldseeker-sync";
 				PrivateTmp = true;
 				TimeoutStopSec = "5s";
-				Type = "oneshot";
+				Type = "simple";
 				User = "fieldseeker-sync";
 				WorkingDirectory = "/tmp";
 			};
@@ -167,7 +167,7 @@ in {
 				Group = "fieldseeker-sync";
 				PrivateTmp = true;
 				TimeoutStopSec = "5s";
-				Type = "oneshot";
+				Type = "simple";
 				User = "fieldseeker-sync";
 				WorkingDirectory = "/tmp";
 			};
