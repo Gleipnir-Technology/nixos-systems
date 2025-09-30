@@ -69,7 +69,7 @@ in {
 			group = "fieldseeker-sync";
 			mode = "0440";
 			owner = "fieldseeker-sync";
-			restartUnits = ["fieldseeker-sync.service"];
+			restartUnits = ["fieldseeker-sync-webserver.service"];
 			sopsFile = ../../secrets/fieldseeker-sync.env;
 		};
 		sops.secrets.fieldseeker-sync-gleipnir-env = {
