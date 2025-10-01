@@ -4,6 +4,9 @@ with lib;
 	options.myModules.label-studio.enable = mkEnableOption "custom label-studio configuration";
 
 	config = mkIf config.myModules.label-studio.enable {
+		services.caddy.virtualHosts."label-studio.gleipnir.technology".extraConfig = ''
+			reverse_proxy http://localhost:10070
+		'';
 		services.postgresql = {
 			ensureDatabases = [ "label-studio" ];
 			ensureUsers = [{
