@@ -24,6 +24,7 @@
 		collabora.enable = true;
 		glitchtip.enable = true;
 		element-web.enable = true;
+		label-studio.enable = true;
 		librechat.enable = true;
 		static-websites.enable = true;
 		synapse.enable = true;
@@ -32,10 +33,6 @@
 	};
 	services.openssh.enable = true;
 	services.postgresql.enable = true;
-	users.users.deploy = {
-		extraGroups = [ "deploy" ];
-		isNormalUser = true;
-	};
 	zramSwap.enable = true;
 
 	# Copy the NixOS configuration file and link it from the resulting system

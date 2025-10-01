@@ -12,6 +12,7 @@
 		./element-web.nix
 		./fieldseeker-sync.nix
 		./fish.nix
+		./label-studio.nix
 		./librechat.nix
 		./openssh.nix
 		./podman.nix
