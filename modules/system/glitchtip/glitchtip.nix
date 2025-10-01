@@ -263,7 +263,6 @@ in
           serviceConfig = {
 	    Type = "simple";
               #${lib.getExe python.pkgs.gunicorn} \
-	    ExecStartPre="${lib.getExe' pkgs.coreutils "cp"} -pur ${pkg}/lib/glitchtip ${cfg.workingDirectory}";
 	    ExecStart="/run/current-system/sw/bin/chown -R glitchtip: ${cfg.workingDirectory}";
 	    Restart="on-abort";
 	  };
