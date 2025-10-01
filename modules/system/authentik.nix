@@ -25,8 +25,8 @@ with lib;
 				listen = {
 					listen_debug = "127.0.0.1:9900";
 					listen_debug_py = "127.0.0.1:9901";
-					listen_http = "127.0.0.1:9000";
-					listen_https = "127.0.0.1:9443";
+					listen_http = "127.0.0.1:10030";
+					listen_https = "127.0.0.1:10031";
 					listen_ldap = "127.0.0.1:3389";
 					listen_ldaps = "127.0.0.1:6636";
 					listen_radius = "127.0.0.1:1812";
@@ -35,7 +35,7 @@ with lib;
 			};
 		};
 		services.caddy.virtualHosts."auth.gleipnir.technology".extraConfig = ''
-			reverse_proxy http://127.0.0.1:9000
+			reverse_proxy http://127.0.0.1:10030
 		'';
 		services.postgresql = {
 			ensureDatabases = [ "authentik" ];

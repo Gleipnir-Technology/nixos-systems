@@ -14,6 +14,7 @@
 		./fish.nix
 		./label-studio.nix
 		./librechat.nix
+		./minio.nix
 		./openssh.nix
 		./podman.nix
 		./restic
