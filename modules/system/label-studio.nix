@@ -12,13 +12,21 @@ with lib;
 				name = "label-studio";
 			}];
 		};
+		sops.secrets.label-studio-env = {
+			format = "dotenv";
+			group = "label-studio";
+			mode = "0440";
+			owner = "label-studio";
+			restartUnits = ["podman-label-studio.service"];
+			sopsFile = ../../secrets/label-studio.env;
+		};
 		systemd.tmpfiles.rules = [
 			"d /mnt/bigdisk/label-studio 0755 label-studio label-studio"
 		];
 		virtualisation.oci-containers.containers.label-studio = {
-			#environmentFiles = [
-				#"/var/run/secrets/rag-api-env"
-			#];
+			environmentFiles = [
+				"/var/run/secrets/label-studio-env"
+			];
 			extraOptions = [
 				"--userns=keep-id:uid=1001,gid=0"
 			];
