@@ -4,14 +4,18 @@ with lib;
 	options.myModules.minio.enable = mkEnableOption "custom minio configuration";
 	config = mkIf config.myModules.minio.enable {
 		services.caddy.virtualHosts."s3.gleipnir.technology".extraConfig = ''
+			handle_path /console* {
+				reverse_proxy http://localhost:10081
+			}
 			reverse_proxy http://localhost:10080
 		'';
 		services.minio = {
 			certificatesDir = "/mnt/bigdisk/minio/certificates";
 			configDir = "/mnt/bigdisk/minio/config";
-			consoleAddress = "127.0.0.1:10080";
+			consoleAddress = "127.0.0.1:10081";
 			enable = true;
 			dataDir = ["/mnt/bigdisk/minio/data"];
+			listenAddress = "127.0.0.1:10080";
 			rootCredentialsFile = "/var/run/secrets/minio-env";
 		};
 		sops.secrets.minio-env = {
