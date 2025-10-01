@@ -15,6 +15,7 @@
 		./librechat.nix
 		./openssh.nix
 		./podman.nix
+		./restic
 		./sillytavern.nix
 		./static-websites.nix
 		./sudo.nix

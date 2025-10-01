@@ -32,17 +32,15 @@ in {
 			}];
 		};
 		services.restic.backups.deltamvcd-db = {
-			# Need nixos unstable for this
-			#command = [
-				#"\${lib.getExe pkgs.sudo}"
-				#"-u postgres"
-				#"\${pkgs.postgresql}/bin/pg_dump fieldseeker-sync"
-			#];
+			# We can use this due to overridding restic with unstable
+			command = [
+				"${lib.getExe pkgs.sudo}"
+				"-u postgres"
+				"${pkgs.postgresql}/bin/pg_dump fieldseeker-sync"
+			];
 			environmentFile = "/var/run/secrets/restic-env";
 			extraBackupArgs = [
 				"--tag database"
-				# Replace the below with 'command=' after next release
-				"--stdin-from-command -- \${lib.getExe pkgs.sudo} -u postgres \${pkgs.postgresql}/bin/pg_dump fieldseeker-sync"
 			];
 			initialize = true;
 			passwordFile = "/var/run/secrets/restic-password";
@@ -56,6 +54,9 @@ in {
 		};
 		services.restic.backups.deltamvcd-files = {
 			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag user-files"
+			];
 			initialize = true;
 			passwordFile = "/var/run/secrets/restic-password";
 			paths = [
