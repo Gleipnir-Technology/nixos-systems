@@ -30,6 +30,12 @@ in
 				ensureDBOwnership = true;
 				name = "rag_api";
 			}];
+			#extensions = ps: with ps; [ pgvecto-rs ];
+			extensions = ps: with ps; [ pgvector ];
+			settings = {
+				shared_preload_libraries = [ "vector.so" ];
+				search_path = "\"$user\", public, vector";
+			};
 		};
 		sops.secrets.librechat-env = {
 			format = "dotenv";
@@ -98,6 +104,18 @@ in
 			};
 			wantedBy = ["multi-user.target"];
 		};
+		systemd.services.postgresql.serviceConfig.ExecStartPost =
+			let sqlFile = pkgs.writeText "librechat-pgvectors-setup.sql" ''
+				CREATE EXTENSION IF NOT EXISTS vector;
+
+				ALTER SCHEMA public OWNER TO rag_api;
+				ALTER SCHEMA vector OWNER TO rag_api;
+
+				ALTER EXTENSION vector UPDATE;
+			'';
+			in [''
+				${lib.getExe' config.services.postgresql.package "psql"} -d "rag_api" -f "${sqlFile}"
+			''];
 		systemd.tmpfiles.rules = [
 			"d /opt/librechat 0755 librechat librechat"
 			"d /opt/meilisearch 0755 meilisearch meilisearch"
@@ -126,6 +144,7 @@ in
 			ports = [ "127.0.0.1:10051:8000" ];
 			volumes = [
 				"/opt/rag-api:/app/uploads"
+				"/run/postgresql/.s.PGSQL.5432:/run/postgresql/.s.PGSQL.5432"
 				"/var/run/secrets/rag-api-credentials.json:/var/run/secrets/rag-api-credentials.json"
 			];
 		};
