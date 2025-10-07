@@ -1,20 +1,14 @@
-{ pkgs, lib, config, ... }:
+{ config, inputs, lib, pkgs, ... }:
 with lib;
 let
-	src = pkgs.callPackage (pkgs.fetchFromGitHub {
-		owner  = "Gleipnir-Technology";
-		repo   = "fieldseeker-sync";
-		rev    = rev;
-		sha256 = "sha256-Y8B/HcBzne5sn3/W3p444VT5nx5ltXqoPMX9PPnJ5M8=";
-  	}) { };
-	rev = "0.0.25";
+	fieldseeker-sync-pkg = inputs.fieldseeker-sync.packages.x86_64-linux.default;
 in {
 	options.myModules.fieldseeker-sync.enable = mkEnableOption "custom fieldseeker-sync configuration";
 
 	config = mkIf config.myModules.fieldseeker-sync.enable {
 		environment.systemPackages = [
+			fieldseeker-sync-pkg
 			pkgs.ffmpeg
-			src
 		];
 		services.caddy.virtualHosts."deltamvcd.nidus.cloud".extraConfig = ''
 			reverse_proxy http://127.0.0.1:3000
@@ -110,7 +104,7 @@ in {
 				Type = "simple";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/audio-post-processor";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/audio-post-processor";
 				TimeoutStopSec = "5s";
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
@@ -129,7 +123,7 @@ in {
 				Type = "simple";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/audio-post-processor";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/audio-post-processor";
 				TimeoutStopSec = "5s";
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
@@ -145,7 +139,7 @@ in {
 			stopIfChanged = false;
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
-				ExecStart = "${src}/bin/full-export";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/full-export";
 				Group = "fieldseeker-sync";
 				PrivateTmp = true;
 				TimeoutStopSec = "5s";
@@ -164,7 +158,7 @@ in {
 			stopIfChanged = false;
 			serviceConfig = {
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
-				ExecStart = "${src}/bin/full-export";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/full-export";
 				Group = "fieldseeker-sync";
 				PrivateTmp = true;
 				TimeoutStopSec = "5s";
@@ -180,12 +174,12 @@ in {
 			description="FieldSeeker DB migrate";
 			requires=["network-online.target"];
 			serviceConfig = {
-				Environment="SENTRY_RELEASE=${rev}";
+				Environment="SENTRY_RELEASE=${inputs.fieldseeker-sync.rev}";
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
 				Type = "oneshot";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/migrate";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/migrate";
 				TimeoutStopSec = "5s";
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
@@ -197,12 +191,12 @@ in {
 			description="FieldSeeker Gleipnir DB migrate";
 			requires=["network-online.target"];
 			serviceConfig = {
-				Environment="SENTRY_RELEASE=${rev}";
+				Environment="SENTRY_RELEASE=${inputs.fieldseeker-sync.rev}";
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
 				Type = "oneshot";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/migrate";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/migrate";
 				TimeoutStopSec = "5s";
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
@@ -214,12 +208,12 @@ in {
 			description="FieldSeeker sync";
 			requires=["network-online.target"];
 			serviceConfig = {
-				Environment="SENTRY_RELEASE=${rev}";
+				Environment="SENTRY_RELEASE=${inputs.fieldseeker-sync.rev}";
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-env";
 				Type = "simple";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/webserver";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/webserver";
 				TimeoutStopSec = "5s";
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
@@ -231,12 +225,12 @@ in {
 			description="FieldSeeker sync";
 			requires=["network-online.target"];
 			serviceConfig = {
-				Environment="SENTRY_RELEASE=${rev}";
+				Environment="SENTRY_RELEASE=${inputs.fieldseeker-sync.rev}";
 				EnvironmentFile="/var/run/secrets/fieldseeker-sync-gleipnir-env";
 				Type = "simple";
 				User = "fieldseeker-sync";
 				Group = "fieldseeker-sync";
-				ExecStart = "${src}/bin/webserver";
+				ExecStart = "${fieldseeker-sync-pkg}/bin/webserver";
 				TimeoutStopSec = "5s";
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";

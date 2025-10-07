@@ -9,6 +9,12 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 			url = "github:nix-community/disko";
 		};
+		fieldseeker-sync = {
+			type = "github";
+			owner = "Gleipnir-Technology";
+			repo = "fieldseeker-sync";
+			rev = "71ffd1ef99510feb7a3a0cda69a8130f4eafa733";
+		};
 		home-manager = {
 			url = "github:nix-community/home-manager/release-25.05";
 			inputs.nixpkgs.follows = "nixpkgs";
