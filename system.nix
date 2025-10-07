@@ -1,4 +1,4 @@
-{ authentik-nix, configFiles, configuration, disko, home-manager, nixpkgs, nixvim, roles, sops-nix, system, timecard-bot, ... }:
+{ configFiles, configuration, disko, home-manager, inputs, nixpkgs, nixvim, roles, sops-nix, system, timecard-bot, ... }:
 let 
 	allowed-unfree-packages = [
 		"corefonts"
@@ -6,11 +6,11 @@ let
 	];
 in nixpkgs.lib.nixosSystem {
 	modules = [
-		authentik-nix.nixosModules.default
+		inputs.authentik-nix.nixosModules.default
 		disko.nixosModules.disko
 		home-manager.nixosModules.home-manager
 		{
-			home-manager.extraSpecialArgs = { inherit configFiles; };
+			home-manager.extraSpecialArgs = { inherit configFiles inputs; };
 			home-manager.sharedModules = [
 				nixvim.homeManagerModules.nixvim
 				./modules/home/nixvim.nix
@@ -37,7 +37,7 @@ in nixpkgs.lib.nixosSystem {
 		system = "${system}";
 	};
 	specialArgs = {
-		inherit configFiles timecard-bot;
+		inherit configFiles inputs timecard-bot;
 	};
 	system = "${system}";
 }

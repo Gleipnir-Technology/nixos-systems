@@ -22,7 +22,7 @@
 		timecard-bot.url = "github:Gleipnir-Technology/timecard-bot?rev=8c81b6683f97aa2712323836e629adf102be58ac";
 	};
 
-	outputs = { self, authentik-nix, disko, home-manager, nixpkgs, nixvim, sops-nix, timecard-bot, ...}:
+	outputs = inputs@{ self, disko, home-manager, nixpkgs, nixvim, sops-nix, timecard-bot, ...}:
 		let
 			configFiles = pkgs.stdenv.mkDerivation {
 			name = "config-files";
@@ -38,20 +38,21 @@
 			nixosConfigurations = {
 				corp = import ./system.nix {
 					configuration = ./host/corp/configuration.nix;
-					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
+					roles = [ ./roles/corp.nix ];
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
 				"nocix-amd-legacy-hexcore" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-hexcore;
 					roles = [ ./roles/nidus-sync.nix ];
-					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
 				"sync.nidus.cloud" = import ./system.nix {
 					configuration = ./host/sync/configuration.nix;
-					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
 				test-corp = nixpkgs.lib.nixosSystem {
 					configuration = ./host/test-corp/configuration.nix;
-					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
 			};
 		};
