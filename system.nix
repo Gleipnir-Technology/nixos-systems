@@ -1,4 +1,4 @@
-{ authentik-nix, configFiles, configuration, disko, home-manager, nixpkgs, nixvim, sops-nix, system, timecard-bot, ... }:
+{ authentik-nix, configFiles, configuration, disko, home-manager, nixpkgs, nixvim, roles, sops-nix, system, timecard-bot, ... }:
 let 
 	allowed-unfree-packages = [
 		"corefonts"
@@ -29,7 +29,7 @@ in nixpkgs.lib.nixosSystem {
 			};
 		}
 		./users
-	];
+	] ++ roles;
 	pkgs = import nixpkgs {
 		config = {
 			allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) allowed-unfree-packages;

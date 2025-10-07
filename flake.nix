@@ -40,6 +40,11 @@
 					configuration = ./host/corp/configuration.nix;
 					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
 				};
+				"nocix-amd-legacy-hexcore" = import ./system.nix {
+					configuration = ./host/nocix/amd-legacy-hexcore;
+					roles = [ ./roles/nidus-sync.nix ];
+					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
+				};
 				"sync.nidus.cloud" = import ./system.nix {
 					configuration = ./host/sync/configuration.nix;
 					inherit authentik-nix configFiles disko home-manager nixpkgs nixvim sops-nix system timecard-bot;
