@@ -17,7 +17,7 @@
 				allowedTCPPorts = [ 22 80 443 ];
 			};
 		};
-		hostName = "nocix-amd-legacy-hexcore";
+		hostName = "nocix-amd-legacy-sexcore";
 		interfaces.enp3s0 = {
 			ipv4.addresses = [{
 				address = "63.141.227.154";

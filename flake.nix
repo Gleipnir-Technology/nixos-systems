@@ -47,8 +47,8 @@
 					roles = [ ./roles/corp.nix ];
 					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
-				"nocix-amd-legacy-hexcore" = import ./system.nix {
-					configuration = ./host/nocix/amd-legacy-hexcore;
+				"nocix-amd-legacy-sexcore" = import ./system.nix {
+					configuration = ./host/nocix/amd-legacy-sexcore;
 					roles = [ ./roles/nidus-sync.nix ];
 					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
