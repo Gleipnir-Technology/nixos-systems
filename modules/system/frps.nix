@@ -37,7 +37,6 @@ in {
 				PrivateTmp = true;
 				WorkingDirectory = "/tmp";
 			};
-			startAt = "*:0/15";
 			wantedBy = ["multi-user.target"];
 		};
 		users.groups.${group} = {};
