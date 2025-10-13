@@ -8,6 +8,7 @@
 		./collabora.nix
 		./cloudreve.nix
 		./do-agent.nix
+		./frps.nix
 		./glitchtip
 		./element-web.nix
 		./fieldseeker-sync.nix

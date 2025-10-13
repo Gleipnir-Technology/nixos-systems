@@ -49,7 +49,10 @@
 				};
 				"nocix-amd-legacy-sexcore" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-sexcore;
-					roles = [ ./roles/nidus-sync.nix ];
+					roles = [
+						./roles/nidus-sync.nix
+						./roles/sovr.nix
+					];
 					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
 				"sync.nidus.cloud" = import ./system.nix {

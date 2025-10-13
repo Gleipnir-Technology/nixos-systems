@@ -1,0 +1,7 @@
+# frps.toml
+auth.method = "token"
+auth.token = "{{ .Envs.FRP_AUTH_TOKEN }}"
+bindAddr = "{{ .Envs.FRP_BIND_ADDRESS }}"
+bindPort = {{ .Envs.FRP_BIND_PORT }}
+vhostHTTPPort = {{ .Envs.FRP_VHOST_HTTP_PORT }}
+
