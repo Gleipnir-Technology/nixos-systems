@@ -1,11 +1,16 @@
 { config, configFiles, inputs, lib, pkgs, ... }:
 with lib;
 let
+	cfg = config.myModules.frps;
 	group = "frps";
 	user = "frps";
 in {
 	options.myModules.frps = {
 		enable = mkEnableOption "custom frps configuration";
+		subdomains = mkOption {
+			type = types.listOf types.str;
+			description = "All the subdomains to handle";
+		};
 	};
 	config = mkIf config.myModules.frps.enable {
 		environment = {
@@ -15,6 +20,15 @@ in {
 			];
 
 		};
+		services.caddy.virtualHosts = mkMerge (
+			map (subdomain: {
+				"${subdomain}.sovr.cloud" = {
+					extraConfig = ''
+						reverse_proxy [::1]:8000
+					'';
+				};
+			}) cfg.subdomains
+		);
 		sops.secrets.frps-env = {
 			format = "dotenv";
 			group = "${group}";
