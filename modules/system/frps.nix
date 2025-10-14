@@ -4,7 +4,9 @@ let
 	group = "frps";
 	user = "frps";
 in {
-	options.myModules.frps.enable = mkEnableOption "custom frps configuration";
+	options.myModules.frps = {
+		enable = mkEnableOption "custom frps configuration";
+	};
 	config = mkIf config.myModules.frps.enable {
 		environment = {
 			etc."frps.toml".source = "${configFiles}/frps/frps.toml";
@@ -24,11 +26,15 @@ in {
 		systemd.services.frps = {
 			after=["network.target" "network-online.target"];
 			description="FRP server process";
+			environment = {
+				FRPS_BIND_PORT="7000";
+				FRPS_VHOST_HTTP_PORT="8000";
+			};
 			requires=["network-online.target"];
 			restartIfChanged = true;
 			stopIfChanged = true;
 			serviceConfig = {
-				EnvironmentFile="/var/run/secrets/frps-env";
+				EnvironmentFile = "/var/run/secrets/frps-env";
 				Type = "simple";
 				User = "${user}";
 				Group = "${group}";
