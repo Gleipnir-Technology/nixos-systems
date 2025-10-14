@@ -13,8 +13,8 @@
 		firewall = {
 			enable = true;
 			interfaces.enp3s0 = {
-				allowedUDPPorts = [ 22 80 443 ];
-				allowedTCPPorts = [ 22 80 443 ];
+				allowedUDPPorts = [ 22 80 443 7000 ];
+				allowedTCPPorts = [ 22 80 443 7000 ];
 			};
 		};
 		hostName = "nocix-amd-legacy-sexcore";
