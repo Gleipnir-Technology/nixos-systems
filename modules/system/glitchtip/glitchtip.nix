@@ -119,7 +119,7 @@ in
       };
 
       environment = lib.mkOption {
-        type = lib.types.listOf lib.types.string;
+        type = lib.types.listOf lib.types.str;
 	default = [ ];
 	example = [ "TMPDIR=/tmp/glitchtip" ];
 	description = ''
