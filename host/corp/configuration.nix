@@ -22,7 +22,7 @@
 		caddy.enable = true;
 		cloudreve.enable = true;
 		collabora.enable = true;
-		glitchtip.enable = true;
+		glitchtip.enable = false;
 		element-web.enable = true;
 		label-studio.enable = true;
 		librechat.enable = true;

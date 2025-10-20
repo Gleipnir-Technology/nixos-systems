@@ -32,7 +32,7 @@ with lib;
 			sopsFile = ../../../secrets/glitchtip.env;
 		};
 		systemd.tmpfiles.rules = [
-			"d /tmp/glitchtip 0755 glitchtip glitchtip 1d"
+			"d /tmp/glitchtip 0755 glitchtip glitchtip 1h"
 		];
 	};
 }
