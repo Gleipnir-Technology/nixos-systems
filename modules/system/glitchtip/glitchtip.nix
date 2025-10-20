@@ -214,7 +214,6 @@ in
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
-          PrivateTmp = true;
           PrivateUsers = true;
           ProcSubset = "pid";
           ProtectClock = true;
@@ -226,6 +225,7 @@ in
           ProtectKernelTunables = true;
           ProtectProc = "invisible";
           ProtectSystem = "strict";
+	  ReadWritePaths = "/tmp/glitchtip /mnt/bigdisk/glitchtip/uploads";
           RemoveIPC = true;
           RestrictAddressFamilies = [ "AF_INET AF_INET6 AF_UNIX" ];
           RestrictNamespaces = true;
@@ -249,6 +249,7 @@ in
           '';
 
           serviceConfig = commonServiceConfig // {
+	    PrivateTmp = false;
             ExecStart = ''
               ${lib.getExe python.pkgs.gunicorn} \
                 --bind=${cfg.listenAddress}:${toString cfg.port} \
@@ -272,6 +273,7 @@ in
           description = "GlitchTip Job Runner";
 
           serviceConfig = commonServiceConfig // {
+	    PrivateTmp = false;
             ExecStart = ''
               ${lib.getExe python.pkgs.celery} \
                 -A glitchtip worker \
