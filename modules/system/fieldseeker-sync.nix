@@ -151,6 +151,7 @@ in {
 				systemd.services."fss-${deployment.customer}-webserver" = {
 					after=["network.target" "network-online.target" "fss-${deployment.customer}-migrate.service"];
 					description="FieldSeeker sync";
+					path = [ pkgs.ffmpeg ];
 					requires=["network-online.target"];
 					serviceConfig = {
 						Environment="SENTRY_RELEASE=${inputs.fieldseeker-sync.rev}";
