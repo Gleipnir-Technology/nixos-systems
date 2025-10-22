@@ -1,8 +1,10 @@
 { pkgs, lib, config, ... }:
 with lib;
 let
-	tag = "v1.8.2";
+	group = "twenty_crm";
 	port = "10090";
+	tag = "v1.8.2";
+	user = "twenty_crm";
 in {
 	options.myModules.twenty-crm.enable = mkEnableOption "custom twenty-crm configuration";
 
@@ -11,39 +13,55 @@ in {
 			reverse_proxy http://localhost:${port}
 		'';
 		services.postgresql = {
-			ensureDatabases = [ "twenty_crm" ];
+			ensureDatabases = [ user ];
 			ensureUsers = [{
 				ensureClauses.login = true;
 				ensureDBOwnership = true;
-				name = "twenty_crm";
+				name = user;
 			}];
+		};
+		services.redis.servers.twenty-crm = {
+			bind = "10.88.0.1";
+			enable = true;
+			port = 6379;
+			requirePass = "letmein";
+			user = user;
 		};
 		sops.secrets.twenty-crm-env = {
 			format = "dotenv";
-			group = "twenty-crm";
+			group = user;
 			mode = "0440";
-			owner = "twenty-crm";
-			restartUnits = ["podman-twenty-crm.service"];
+			owner = user;
+			restartUnits = ["podman-twenty-crm-webserver.service" "podman-twenty-crm-worker.service"];
 			sopsFile = ../../secrets/twenty-crm.env;
 		};
-		users.groups.twenty-crm = {};
-		users.users.twenty-crm = {
-			group = "twenty-crm";
+		users.groups."${group}" = {};
+		users.users."${user}" = {
+			group = group;
 			isSystemUser = true;
 		};
 		virtualisation.oci-containers.containers.twenty-crm-webserver = {
+			environment = {
+				DISABLE_DB_MIGRATIONS = "false";
+				DISABLE_CRON_JOBS_REGISTRATION = "false";
+			};
 			environmentFiles = [
 				"/var/run/secrets/twenty-crm-env"
 			];
 			image = "docker.io/twentycrm/twenty:${tag}";
-			ports = [ "127.0.0.1:3000:${port}" ];
+			ports = [ "127.0.0.1:${port}:3000" ];
 			volumes = [
 				"/run/postgresql/.s.PGSQL.5432:/run/postgresql/.s.PGSQL.5432"
 				"twenty-crm-data:/app/packages/twenty-server/.local-storage"
+				"/home/eliribble/src/twentycrm/entrypoint.sh:/app/entrypoint.sh"
 			];
 		};
 		virtualisation.oci-containers.containers.twenty-crm-worker = {
-			entrypoint = "yarn worker:prod";
+			cmd = ["yarn" "worker:prod"];
+			environment = {
+				DISABLE_DB_MIGRATIONS = "true";
+				DISABLE_CRON_JOBS_REGISTRATION = "true";
+			};
 			environmentFiles = [
 				"/var/run/secrets/twenty-crm-env"
 			];

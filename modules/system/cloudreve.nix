@@ -19,6 +19,8 @@ with lib;
 				host  all       all        ::1/128         trust
 				host  cloudreve cloudreve  10.88.0.1/16    trust
 				host  cloudreve cloudreve  107.150.59.1/24 trust
+				host  twenty_crm twenty_crm  10.88.0.1/16    trust
+				host  twenty_crm twenty_crm  107.150.59.1/24 trust
 			'';
 			enable = true;
 			ensureDatabases = [ "cloudreve" ];
