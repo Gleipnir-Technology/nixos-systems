@@ -1,6 +1,6 @@
 {
-	modulesPath,
 	lib,
+	modulesPath,
 	pkgs,
 	...
 } @ args:

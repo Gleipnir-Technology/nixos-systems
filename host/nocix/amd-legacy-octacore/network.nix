@@ -11,7 +11,7 @@
 		dhcpcd.enable = false;
 		domain = "gleipnir.technology";
 		firewall.enable = false;
-		hostName = "corp";
+		hostName = "nocix-amd-legacy-octacore";
 		interfaces.enp2s0 = {
 			ipv4.addresses = [{
 				address = "107.150.59.202";

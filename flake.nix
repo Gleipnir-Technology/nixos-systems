@@ -42,9 +42,11 @@
 			system = "x86_64-linux";
 		in {
 			nixosConfigurations = {
-				corp = import ./system.nix {
-					configuration = ./host/corp/configuration.nix;
-					roles = [ ./roles/corp.nix ];
+				"nocix-amd-legacy-octacore" = import ./system.nix {
+					configuration = ./host/nocix/amd-legacy-octacore;
+					roles = [
+						./roles/corp.nix
+					];
 					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
 				"nocix-amd-legacy-sexcore" = import ./system.nix {
