@@ -25,6 +25,7 @@
 		./synapse.nix
 		./timecardbot.nix
 		./tmux.nix
+		./twenty-crm.nix
 		./vikunja.nix
 	];
 }
