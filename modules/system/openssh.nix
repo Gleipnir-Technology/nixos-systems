@@ -3,7 +3,7 @@
 {
 	services.openssh = {
 		enable = true;
-		# ports = [ 22 16652 ];
+		ports = [ 22 16652 ];
 	};
 
 }
