@@ -13,7 +13,7 @@
 			type = "github";
 			owner = "Gleipnir-Technology";
 			repo = "fieldseeker-sync";
-			rev = "71ffd1ef99510feb7a3a0cda69a8130f4eafa733";
+			rev = "4cba4c5d2e32366a6f38184e053c3a2bd6166020";
 		};
 		home-manager = {
 			url = "github:nix-community/home-manager/release-25.05";

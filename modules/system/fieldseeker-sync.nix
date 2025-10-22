@@ -112,25 +112,6 @@ in {
 					restartUnits = ["fss-${deployment.customer}-webserver.service"];
 					sopsFile = ../../secrets/fieldseeker-sync/${deployment.customer}.env;
 				};
-				systemd.services."fss-${deployment.customer}-audio-post-processor" = {
-					after=["network.target" "network-online.target" "fss-${deployment.customer}-migrate.service"];
-					description="FieldSeeker sync audio post processor";
-					requires=["network-online.target"];
-					restartIfChanged = false;
-					stopIfChanged = false;
-					serviceConfig = {
-						EnvironmentFile="${environmentFile}";
-						Type = "simple";
-						User = "${user}";
-						Group = "${group}";
-						ExecStart = "${fieldseeker-sync-pkg}/bin/audio-post-processor";
-						TimeoutStopSec = "5s";
-						PrivateTmp = true;
-						WorkingDirectory = "/tmp";
-					};
-					startAt = "*:0/15";
-					wantedBy = ["multi-user.target"];
-				};
 				systemd.services."fss-${deployment.customer}-export" = {
 					after=["network.target" "network-online.target" "fss-${deployment.customer}-migrate.service"];
 					description="FieldSeeker sync periodic sync tool";

@@ -70,17 +70,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1759858818,
-        "narHash": "sha256-UOcAlg4lWVB6c4ROZDO2JICf3ZsmEqIpylUGS1VgQTs=",
+        "lastModified": 1761103291,
+        "narHash": "sha256-QdrG6BbQVvVg7A/AZSY8LQXH4jjzO1nXRd3pkCVu+fU=",
         "owner": "Gleipnir-Technology",
         "repo": "fieldseeker-sync",
-        "rev": "71ffd1ef99510feb7a3a0cda69a8130f4eafa733",
+        "rev": "4cba4c5d2e32366a6f38184e053c3a2bd6166020",
         "type": "github"
       },
       "original": {
         "owner": "Gleipnir-Technology",
         "repo": "fieldseeker-sync",
-        "rev": "71ffd1ef99510feb7a3a0cda69a8130f4eafa733",
+        "rev": "4cba4c5d2e32366a6f38184e053c3a2bd6166020",
         "type": "github"
       }
     },
