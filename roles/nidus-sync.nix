@@ -2,7 +2,7 @@
 let
 	fss-deltamvcd = import ../modules/system/fieldseeker-sync.nix {
 		customer = "deltamvcd";
-		dataDirectory = /opt/fieldseeker-sync/deltamvcd;
+		dataDirectory = /mnt/bigdisk/fieldseeker-sync/deltamvcd;
 		fieldseeker-sync = inputs.fieldseeker-sync;
 		port = 3000;
 		subdomain = "deltamvcd";
@@ -10,7 +10,7 @@ let
 	};
 	fss-gleipnir-qa = import ../modules/system/fieldseeker-sync.nix {
 		customer = "gleipnir-qa";
-		dataDirectory = /opt/fieldseeker-sync/gleipnir;
+		dataDirectory = /mnt/bigdisk/fieldseeker-sync/gleipnir-qa;
 		fieldseeker-sync = inputs.fieldseeker-sync;
 		port = 3001;
 		subdomain = "gleipnir-qa";
