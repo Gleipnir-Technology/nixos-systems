@@ -16,6 +16,7 @@
 		pkgs.restic
 		pkgs.sops
 		pkgs.tig
+		pkgs.watchexec
 	];
 	i18n.defaultLocale = "en_US.UTF-8";
 	networking.useNetworkd = true;
