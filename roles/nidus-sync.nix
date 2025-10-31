@@ -18,9 +18,21 @@ let
 	};
 in {
 	environment = pkgs.lib.mkMerge [ fss-deltamvcd.environment fss-gleipnir-qa.environment ];
-	services = pkgs.lib.mkMerge [ fss-deltamvcd.services fss-gleipnir-qa.services ];
+	services = pkgs.lib.mkMerge [
+		fss-deltamvcd.services
+		fss-gleipnir-qa.services
+
+		{
+			caddy.virtualHosts."sync.nidus.cloud".extraConfig = ''
+				reverse_proxy http://127.0.0.1:9001
+			'';
+		}
+
+	];
 	sops = pkgs.lib.mkMerge [ fss-deltamvcd.sops fss-gleipnir-qa.sops ];
 	systemd = pkgs.lib.mkMerge [ fss-deltamvcd.systemd fss-gleipnir-qa.systemd ];
 	users = pkgs.lib.mkMerge [ fss-deltamvcd.users fss-gleipnir-qa.users ];
+
+
 	myModules.caddy.enable = true;
 }
