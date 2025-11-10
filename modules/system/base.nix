@@ -14,6 +14,7 @@
 		pkgs.ghostty.terminfo
 		pkgs.git
 		pkgs.git-lfs
+		pkgs.jq
 		pkgs.restic
 		pkgs.sops
 		pkgs.tig
