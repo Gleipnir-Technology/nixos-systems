@@ -1,5 +1,6 @@
 {
 	imports = [
+		./asterisk.nix
 		./authentik.nix
 		./authentik-backup.nix
 		./base.nix

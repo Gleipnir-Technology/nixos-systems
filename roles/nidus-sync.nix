@@ -55,6 +55,6 @@ in {
 
 	];
 
-
+	myModules.asterisk.enable = false;
 	myModules.caddy.enable = true;
 }
