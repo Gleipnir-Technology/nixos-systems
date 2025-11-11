@@ -19,6 +19,12 @@
 			url = "github:nix-community/home-manager/release-25.05";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+		nidus-sync = {
+			type = "github";
+			owner = "Gleipnir-Technology";
+			repo = "nidus-sync";
+			rev = "f0ace114b0789d82fa70be0eb5591881ba31c1a5";
+		};
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 		nixvim = {
 			url = "github:nix-community/nixvim/nixos-25.05";

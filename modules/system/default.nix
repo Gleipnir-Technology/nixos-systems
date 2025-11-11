@@ -17,6 +17,7 @@
 		./label-studio.nix
 		./librechat.nix
 		./minio.nix
+		./nidus-sync.nix
 		./openssh.nix
 		./podman.nix
 		./restic

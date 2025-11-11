@@ -16,7 +16,7 @@ let
 		subdomain = "gleipnir-qa";
 		inherit lib pkgs;
 	};
-	nidus-name = "nidus-sync";
+	nidus-name-dev = "nidus-dev-sync";
 in {
 	environment = pkgs.lib.mkMerge [ fss-deltamvcd.environment fss-gleipnir-qa.environment ];
 	services = pkgs.lib.mkMerge [
@@ -27,13 +27,20 @@ in {
 			caddy.virtualHosts."sync.nidus.cloud".extraConfig = ''
 				reverse_proxy http://127.0.0.1:9001
 			'';
+			caddy.virtualHosts."dev-sync.nidus.cloud".extraConfig = ''
+				reverse_proxy http://127.0.0.1:9002
+			'';
 			postgresql = {
 				enable = true;
-				ensureDatabases = [nidus-name];
+				ensureDatabases = [nidus-name-dev];
 				ensureUsers = [{
 					ensureClauses.login = true;
 					ensureDBOwnership = true;
-					name = nidus-name;
+					name = nidus-name-dev;
+				} {
+					ensureClauses.login = true;
+					ensureDBOwnership = true;
+					name = nidus-name-dev;
 				}];
 			};
 		}
@@ -46,15 +53,16 @@ in {
 		fss-gleipnir-qa.users
 
 		{
-			groups."${nidus-name}" = {};
-			users."${nidus-name}" = {
-				group = nidus-name;
+			groups."${nidus-name-dev}" = {};
+			users."${nidus-name-dev}" = {
+				group = nidus-name-dev;
 				isSystemUser = true;
 			};
 		}
 
 	];
 
-	myModules.asterisk.enable = false;
+	myModules.asterisk.enable = true;
 	myModules.caddy.enable = true;
+	myModules.nidus-sync.enable = true;
 }
