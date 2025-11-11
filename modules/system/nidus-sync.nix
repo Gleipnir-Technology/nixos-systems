@@ -22,11 +22,11 @@ in {
 			ffmpeg
 			nidus-sync-pkg
 		];
-		/*services.caddy.virtualHosts."${domainName}" = {
+		services.caddy.virtualHosts."${domainName}" = {
 			extraConfig = ''
 				reverse_proxy http://127.0.0.1:${toString port}
 			'';
-		};*/
+		};
 		services.postgresql = {
 			enable = true;
 			ensureDatabases = [databaseName];

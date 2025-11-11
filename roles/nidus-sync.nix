@@ -24,9 +24,6 @@ in {
 		fss-gleipnir-qa.services
 
 		{
-			caddy.virtualHosts."sync.nidus.cloud".extraConfig = ''
-				reverse_proxy http://127.0.0.1:9001
-			'';
 			caddy.virtualHosts."dev-sync.nidus.cloud".extraConfig = ''
 				reverse_proxy http://127.0.0.1:9002
 			'';

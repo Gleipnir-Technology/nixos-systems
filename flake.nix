@@ -23,7 +23,7 @@
 			type = "github";
 			owner = "Gleipnir-Technology";
 			repo = "nidus-sync";
-			rev = "f0ace114b0789d82fa70be0eb5591881ba31c1a5";
+			rev = "0a74bd83454c5a07444849e08395ca220aa5ef62";
 		};
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 		nixvim = {
