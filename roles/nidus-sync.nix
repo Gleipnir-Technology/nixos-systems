@@ -43,7 +43,20 @@ in {
 		}
 
 	];
-	sops = pkgs.lib.mkMerge [ fss-deltamvcd.sops fss-gleipnir-qa.sops ];
+	sops = pkgs.lib.mkMerge [
+		fss-deltamvcd.sops
+		fss-gleipnir-qa.sops  
+		{
+			secrets."nidus-dev-sync-env" = {
+				format = "dotenv";
+				group = nidus-name-dev;
+				mode = "0440";
+				owner = nidus-name-dev;
+				restartUnits = [];
+				sopsFile = ../secrets/${nidus-name-dev}.env;
+			};
+		}
+	];
 	systemd = pkgs.lib.mkMerge [ fss-deltamvcd.systemd fss-gleipnir-qa.systemd ];
 	users = pkgs.lib.mkMerge [
 		fss-deltamvcd.users
