@@ -75,4 +75,5 @@ in {
 	myModules.asterisk.enable = true;
 	myModules.caddy.enable = true;
 	myModules.nidus-sync.enable = true;
+	myModules.tegola.enable = true;
 }

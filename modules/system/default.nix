@@ -25,6 +25,7 @@
 		./static-websites.nix
 		./sudo.nix
 		./synapse.nix
+		./tegola.nix
 		./timecardbot.nix
 		./tmux.nix
 		./twenty-crm.nix

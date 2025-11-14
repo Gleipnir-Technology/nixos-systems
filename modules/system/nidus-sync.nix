@@ -35,6 +35,7 @@ in {
 				ensureDBOwnership = true;
 				name = databaseUser;
 			}];
+			extensions = ps: with ps; [ h3-pg postgis ];
 		};
 		services.restic.backups."${backupName}-db" = {
 			# We can use this due to overridding restic with unstable
