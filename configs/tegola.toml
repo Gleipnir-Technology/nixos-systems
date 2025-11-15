@@ -15,7 +15,6 @@ type = "mvt_postgis"        # the type of data provider. currently only supports
 uri = "postgres://tegola:@localhost:/tegola?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
 srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
 
-
   [[providers.layers]]
   name = "road"
   geometry_fieldname = "wkb_geometry"
@@ -37,8 +36,30 @@ srid = 4326             # The default srid for this provider. If not provided it
   id_fieldname = "ogc_fid"
   sql = "SELECT ST_AsMVTGeom(wkb_geometry, !BBOX!) AS wkb_geometry, name, ogc_fid FROM lakes WHERE wkb_geometry && !BBOX!"
 
+  [[providers.layers]]
+  name = "h3"
+  geometry_fieldname = "wkb_geometry"
+  geometry_type="polygon"
+  id_fieldname = "ogc_fid"
+  sql = "SELECT ST_AsMVTGeom(wkb_geometry, !BBOX!) AS wkb_geometry, name, ogc_fid FROM hexes WHERE wkb_geometry && !BBOX!"
+
+[[providers]]
+name = "nidus"   # provider name is referenced from map layers
+type = "mvt_postgis"        # the type of data provider. currently only supports postgis
+#uri = "postgres://tegola:supersecret@localhost:5432/tegola?sslmode=prefer" # PostGIS connection string (required)
+uri = "postgres://tegola:@localhost:/nidus-dev-sync?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
+srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
+
+  [[providers.layers]]
+  name = "h3_aggregation"
+  geometry_fieldname = "geometry"
+  geometry_type="polygon"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE geometry && !BBOX!"
+
 [[maps]]
 name = "bonn"
+# center is lng, lat, zoom
 center = [7.0982, 50.7374, 11.0] # set the center of the map so the user is auto navigated to Bonn
 
   [[maps.layers]]
@@ -55,3 +76,17 @@ center = [7.0982, 50.7374, 11.0] # set the center of the map so the user is auto
   provider_layer = "bonn.lakes"
   min_zoom = 5
   max_zoom = 20
+
+  [[maps.layers]]
+  provider_layer = "bonn.h3"
+  min_zoom = 3
+  max_zoom = 20
+
+[[maps]]
+name = "nidus"
+center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto navigated to Bonn
+
+  [[maps.layers]]
+  provider_layer = "nidus.h3_aggregation"
+  #min_zoom = 5
+  #max_zoom = 20
