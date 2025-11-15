@@ -4,6 +4,8 @@ with lib;
 let
 	databaseName = "tegola";
 	databaseUser = "tegola";
+	domainName = "tegola.nidus.cloud";
+	port = 9090;
 	group = "tegola";
 	user = "tegola";
 in {
@@ -21,6 +23,11 @@ in {
 			];
 		};
 		networking.firewall.allowedTCPPorts = [ 9090 ];
+		services.caddy.virtualHosts."${domainName}" = {
+			extraConfig = ''
+				reverse_proxy http://127.0.0.1:${toString port}
+			'';
+		};
 		services.postgresql = {
 			enable = true;
 			ensureDatabases = [databaseName];
