@@ -22,6 +22,9 @@
 			ipv4.addresses = [{
 				address = "63.141.227.154";
 				prefixLength = 29;
+			} {
+				address = "63.141.227.155";
+				prefixLength = 29;
 			}];
 			ipv6.addresses = [{
 				address = "2604:4300:a:88::2";
