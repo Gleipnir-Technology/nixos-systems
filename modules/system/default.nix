@@ -20,6 +20,7 @@
 		./nidus-sync.nix
 		./openssh.nix
 		./podman.nix
+		./qgis.nix
 		./restic
 		./sillytavern.nix
 		./static-websites.nix
