@@ -16,7 +16,7 @@
 			rev = "e250e0abbb35f6d64851305d3b59c4ed1d968bc8";
 		};
 		home-manager = {
-			url = "github:nix-community/home-manager/release-25.05";
+			url = "github:nix-community/home-manager/release-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		nidus-sync = {
@@ -25,9 +25,9 @@
 			repo = "nidus-sync";
 			rev = "637decea113ba1bbed7b373244f5989e00626f38";
 		};
-		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 		nixvim = {
-			url = "github:nix-community/nixvim/nixos-25.05";
+			url = "github:nix-community/nixvim/nixos-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		sops-nix.url = "github:Mic92/sops-nix";
