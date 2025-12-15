@@ -2,6 +2,7 @@ keys:
   - &dev_corp age1fnkhk9rv7r8gh84vxnhvndk4fgh20qcj4hvnfhdpumcydl6m6vrse50lrz
   - &dev_macmini age1x704pjnueguchkl54ly8w4w26ltys5900v7xnl7w3zlgasus09jszz45t8
   - &dev_pazuzu age15y4k929zaj9fdg3vd40pa40tgvrgv9mn22xfummn5zxfmkcw5d0st6prjx
+  - &dev_poweredge age1q5syuyx3n255vllv6elfj72yk5mhxnk9pqawzyy4gzkzmpw3gpjqz9ujx2
   - &server_corp age1ck44jqpuz3zlthquvuh7wsemrjrgfzhn462sk7rlfetwxpgy0uqs79xn2h
   - &server_nocix_amd_legacy_sexcore age1z87rm3qrrspv44nsg73ntn9zys5g498lry4t4cy6x9hffapug5cqfprntm
   - &server_test_corp age1t3ryfktuhr3cysf49m9q2n8fkjf9ajjjnhztxw9hz8paxgk4lpcq065jge
@@ -13,6 +14,7 @@ creation_rules:
       - *dev_corp
       - *dev_macmini
       - *dev_pazuzu
+      - *dev_poweredge
       - *server_corp
       - *server_nocix_amd_legacy_sexcore
       - *server_test_corp
