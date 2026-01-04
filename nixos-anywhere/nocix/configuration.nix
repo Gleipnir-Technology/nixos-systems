@@ -29,5 +29,5 @@
 	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvhtF6nRWlA6PVs71Eek7p0p2PxTd3P6ZEGFV2t75MB eliribble@nixos"
 	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHL1SpT3KR8XeXtH19muncYVrKxWzWdWtJYNTwoJGTm3 eliribble@Elis-Mac-mini.local"
 	] ++ (args.extraPublicKeys or []); # this is used for unit-testing this module and can be removed if not needed
-	system.stateVersion = "25.05";
+	system.stateVersion = "25.11";
 }

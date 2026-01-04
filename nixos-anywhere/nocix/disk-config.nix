@@ -35,6 +35,7 @@
 					};
 				};
 			};
+			/*
 			data = {
 				device = "/dev/sdb";
 				type = "disk";
@@ -55,28 +56,18 @@
 					};
 				};
 			};
+			*/
 		};
 		lvm_vg = {
 			pool = {
 				type = "lvm_vg";
 				lvs = {
 					root = {
-						size = "50G";
-						content = {
-							type = "filesystem";
-							format = "ext4";
-							mountpoint = "/";
-							mountOptions = [
-								"defaults"
-							];
-						};
-					};
-					var = {
 						size = "100%FREE";
 						content = {
 							type = "filesystem";
 							format = "ext4";
-							mountpoint = "/var";
+							mountpoint = "/";
 							mountOptions = [
 								"defaults"
 							];

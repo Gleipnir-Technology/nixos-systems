@@ -3,8 +3,8 @@
 {
 	services.openssh = {
 		enable = true;
-		# ports = [ 22 16652 ];
-		listenAddresses = [{
+		ports = [ 22 16652 ];
+		/*listenAddresses = [{
 			addr = "63.141.227.154";
 			port = 22;
 		} {
@@ -13,7 +13,7 @@
 		} {
 			addr = "63.141.227.155";
 			port = 443;
-		}];
+		}];*/
 	};
 
 }
