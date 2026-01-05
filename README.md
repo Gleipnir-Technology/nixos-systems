@@ -83,6 +83,14 @@ $ nix-shell -p sops --run "sops updatekeys secrets/example.yaml"
 
 See [the official sops-nix docs](https://github.com/Mic92/sops-nix/blob/master/README.md) for details.
 
+## Switch-fix
+
+I've added a tool, [switch-fix](https://blog.femtodata.com/posts/switch-fix/) to the deployment. From the docs:
+
+    "you set-rollback before you do your nixos-rebuild switch."
+    "you do cancel-rollback if it works"
+    "you wait if it doesn't, and the system should come back."
+
 ## Successful avenues of exploration
 
 ### nixos-anywhere

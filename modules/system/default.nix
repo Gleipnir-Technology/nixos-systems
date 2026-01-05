@@ -25,6 +25,7 @@
 		./sillytavern.nix
 		./static-websites.nix
 		./sudo.nix
+		./switch-fix.nix
 		./synapse.nix
 		./tegola.nix
 		./timecardbot.nix
