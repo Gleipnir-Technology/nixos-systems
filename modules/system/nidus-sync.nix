@@ -56,7 +56,7 @@ in {
 				"--keep-monthly 2"
 				"--group-by tags"
 			];
-			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-deltamvcd/database";
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-nidus-sync/database";
 		};
 		services.restic.backups."${backupName}-files" = {
 			environmentFile = "/var/run/secrets/restic-env";
@@ -68,7 +68,7 @@ in {
 			paths = [
 				(builtins.toString dataDirectory)
 			];
-			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-deltamvcd/files";
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-nidus-sync/files";
 			
 		};
 		sops.secrets."${secretsName}" = {
