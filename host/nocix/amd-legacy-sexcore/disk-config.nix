@@ -35,6 +35,7 @@
 					};
 				};
 			};
+			/*
 			data = {
 				device = "/dev/sdb";
 				type = "disk";
@@ -55,6 +56,7 @@
 					};
 				};
 			};
+			*/
 		};
 		lvm_vg = {
 			pool = {

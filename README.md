@@ -53,13 +53,13 @@ Then check the network configuration via `ip route` and `ip addr` or `/etc/netwo
 Generate the hardware configuration
 ```
 $ cd nixos-anywhere
-$ nix run github:nix-community/nixos-anywhere -- --flake ./#digitalocean --generate-hardware-config nixos-generate-config ./nocix/hardware-configuration --target-host root@1.2.3.4
+$ nix run github:nix-community/nixos-anywhere -- --flake ./#nocix --generate-hardware-config nixos-generate-config ./nocix/hardware-configuration --target-host root@1.2.3.4
 ```
 This apparently destroys the operating system. I'm not sure why.
 
 ```
 $ cd nixos-anywhere
-$ nix run github:nix-community/nixos-anywhere -- --flake ./#digitalocean --target-host root@1.2.3.4
+$ nix run github:nix-community/nixos-anywhere -- --flake ./#nocix-amd-legacy-sexcore --target-host root@nocix-amd-legacy-sexcore.gleipnir.technology
 ```
 
 This will take a while, maybe 20 minutes, but after you'll have a fully-functioning NixOS system with the correct SSH keys.
