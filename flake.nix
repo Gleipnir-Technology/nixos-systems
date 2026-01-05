@@ -25,6 +25,7 @@
 			repo = "nidus-sync";
 			rev = "b31ca6c83ed96dbb1d15c94bcf57cfdb07a11b5a";
 		};
+		nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
 		nixvim = {
 			url = "github:nix-community/nixvim/nixos-25.05";
@@ -37,12 +38,12 @@
 	outputs = inputs@{ self, disko, home-manager, nixpkgs, nixvim, sops-nix, timecard-bot, ...}:
 		let
 			configFiles = pkgs.stdenv.mkDerivation {
-			name = "config-files";
-				src = ./configs;
 				installPhase = ''
 					mkdir -p $out
 					cp -r * $out/
 				'';
+				name = "config-files";
+				src = ./configs;
 			};
 			pkgs = nixpkgs.legacyPackages.${system};
 			system = "x86_64-linux";
