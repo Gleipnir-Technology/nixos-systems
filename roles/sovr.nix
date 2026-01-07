@@ -7,6 +7,8 @@
 			"carddav.theribbles.org"
 			"chores.theribbles.org"
 			"collabora.theribbles.org"
+			"dev-sync.nidus.cloud"
+			"dev-tegola.nidus.cloud"
 			"docs.theribbles.org"
 			"files.theribbles.org"
 			"home-assistant.theribbles.org"

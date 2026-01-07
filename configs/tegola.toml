@@ -47,7 +47,7 @@ srid = 4326             # The default srid for this provider. If not provided it
 name = "nidus"   # provider name is referenced from map layers
 type = "mvt_postgis"        # the type of data provider. currently only supports postgis
 #uri = "postgres://tegola:supersecret@localhost:5432/tegola?sslmode=prefer" # PostGIS connection string (required)
-uri = "postgres://tegola:@localhost:/nidus-dev-sync?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
+uri = "postgres://tegola:@localhost:/nidus-sync?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
 srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
 
   [[providers.layers]]
