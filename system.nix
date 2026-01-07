@@ -12,7 +12,7 @@ in nixpkgs.lib.nixosSystem {
 		{
 			home-manager.extraSpecialArgs = { inherit configFiles inputs; };
 			home-manager.sharedModules = [
-				nixvim.homeManagerModules.nixvim
+				nixvim.homeModules.nixvim
 				./modules/home/nixvim.nix
 			];
 			home-manager.useGlobalPkgs = true;
