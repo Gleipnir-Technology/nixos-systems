@@ -5,7 +5,8 @@ let
 	databaseName = nidusName;
 	databaseUser = nidusName;
 	dataDirectory = /mnt/bigdisk/nidus-sync;
-	domainName = "sync.nidus.cloud";
+	domainNameReport = "report.mosquitoes.online";
+	domainNameSync = "sync.nidus.cloud";
 	group = nidusName;
 	nidusName = "nidus-sync";
 	nidus-sync-pkg = inputs.nidus-sync.packages.x86_64-linux.default;
@@ -22,7 +23,12 @@ in {
 			ffmpeg
 			nidus-sync-pkg
 		];
-		services.caddy.virtualHosts."${domainName}" = {
+		services.caddy.virtualHosts."${domainNameReport}" = {
+			extraConfig = ''
+				reverse_proxy http://127.0.0.1:${toString port}
+			'';
+		};
+		services.caddy.virtualHosts."${domainNameSync}" = {
 			extraConfig = ''
 				reverse_proxy http://127.0.0.1:${toString port}
 			'';

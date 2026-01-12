@@ -7,6 +7,8 @@
 			"carddav.theribbles.org"
 			"chores.theribbles.org"
 			"collabora.theribbles.org"
+			"dev-report.mosquitoes.online"
+			"dev-tegola.nidus.cloud"
 			"dev-sync.nidus.cloud"
 			"dev-tegola.nidus.cloud"
 			"docs.theribbles.org"
