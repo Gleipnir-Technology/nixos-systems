@@ -34,6 +34,39 @@ with lib;
 				#listen_addresses = lib.mkForce "10.88.0.1,localhost";
 			#};
 		};
+		services.restic.backups."cloudreve-db" = {
+			# We can use this due to overridding restic with unstable
+			command = [
+				"${lib.getExe pkgs.sudo}"
+				"-u postgres"
+				"${pkgs.postgresql}/bin/pg_dump cloudreve"
+			];
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag database"
+			];
+			passwordFile = "/var/run/secrets/restic-password";
+			pruneOpts = [
+				"--keep-daily 14"
+				"--keep-weekly 4"
+				"--keep-monthly 2"
+				"--group-by tags"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/cloudreve";
+		};
+		services.restic.backups."cloudreve-files" = {
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag files"
+			];
+			initialize = true;
+			passwordFile = "/var/run/secrets/restic-password";
+			paths = [
+				"/mnt/bigdisk/cloudreve"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/cloudreve";
+			
+		};
 		sops.secrets.cloudreve-env = with config.virtualisation.oci-containers; {
 			format = "dotenv";
 			group = "cloudreve";
@@ -43,7 +76,7 @@ with lib;
 			sopsFile = ../../secrets/cloudreve.env;
 		};
 		systemd.tmpfiles.rules = [
-			"d /opt/cloudreve 0755 cloudreve cloudreve"
+			"d /mnt/bigdisk/cloudreve 0755 cloudreve cloudreve"
 		];
 		# The container here comes from a private repository. In order to get it you need to buy a pro license
 		# and download and configure the image via https://cloudreve.org/manage

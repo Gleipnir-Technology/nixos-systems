@@ -45,6 +45,40 @@ with lib;
 				name = "authentik";
 			}];
 		};
+		services.restic.backups."authentik-db" = {
+			# We can use this due to overridding restic with unstable
+			command = [
+				"${lib.getExe pkgs.sudo}"
+				"-u postgres"
+				"${pkgs.postgresql}/bin/pg_dump authentik"
+			];
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag database"
+			];
+			passwordFile = "/var/run/secrets/restic-password";
+			pruneOpts = [
+				"--keep-daily 14"
+				"--keep-weekly 4"
+				"--keep-monthly 2"
+				"--group-by tags"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/authentik";
+		};
+		services.restic.backups."authentik-files" = {
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag files"
+			];
+			initialize = true;
+			passwordFile = "/var/run/secrets/restic-password";
+			paths = [
+				"/opt/authentik/certs"
+				"/opt/authentik/media"
+				"/opt/authentik/templates"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/authentik";
+		};
 		sops.secrets.authentik-env = with config.virtualisation.oci-containers; {
 			format = "dotenv";
 			group = "authentik";

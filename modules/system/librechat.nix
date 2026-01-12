@@ -37,6 +37,59 @@ in
 				search_path = "\"$user\", public, vector";
 			};
 		};
+		services.restic.backups."mongodb" = {
+			# We can use this due to overridding restic with unstable
+			command = [
+				"${lib.getExe pkgs.sudo}"
+				"-u mongodb"
+				"${pkgs.mongodb}/bin/mongodump --archive=/mnt/bigdisk/temp/mongodb"
+			];
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag database"
+			];
+			passwordFile = "/var/run/secrets/restic-password";
+			pruneOpts = [
+				"--keep-daily 14"
+				"--keep-weekly 4"
+				"--keep-monthly 2"
+				"--group-by tags"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/mongodb";
+		};
+		services.restic.backups."rag_api-db" = {
+			# We can use this due to overridding restic with unstable
+			command = [
+				"${lib.getExe pkgs.sudo}"
+				"-u postgres"
+				"${pkgs.postgresql}/bin/pg_dump rag_api"
+			];
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag database"
+			];
+			passwordFile = "/var/run/secrets/restic-password";
+			pruneOpts = [
+				"--keep-daily 14"
+				"--keep-weekly 4"
+				"--keep-monthly 2"
+				"--group-by tags"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/rag_api";
+		};
+		services.restic.backups."librechat-files" = {
+			environmentFile = "/var/run/secrets/restic-env";
+			extraBackupArgs = [
+				"--tag files"
+			];
+			initialize = true;
+			passwordFile = "/var/run/secrets/restic-password";
+			paths = [
+				"/opt/librechat"
+			];
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/librechat";
+			
+		};
 		sops.secrets.librechat-env = {
 			format = "dotenv";
 			group = "librechat";
