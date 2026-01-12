@@ -70,25 +70,6 @@ in {
 		restartUnits = ["fss-${customer}-webserver.service"];
 		sopsFile = ../../secrets/fieldseeker-sync/${customer}.env;
 	};
-	systemd.services."fss-${customer}-export" = {
-		after=["network.target" "network-online.target" "fss-${customer}-migrate.service"];
-		description="FieldSeeker sync periodic sync tool";
-		requires=["network-online.target"];
-		restartIfChanged = false;
-		stopIfChanged = false;
-		serviceConfig = {
-			EnvironmentFile="${environmentFile}";
-			ExecStart = "${fieldseeker-sync-pkg}/bin/full-export";
-			Group = "${group}";
-			PrivateTmp = true;
-			TimeoutStopSec = "5s";
-			Type = "simple";
-			User = "${user}";
-			WorkingDirectory = "/tmp";
-		};
-		startAt = "*:0/15";
-		wantedBy = ["multi-user.target"];
-	};
 	systemd.services."fss-${customer}-migrate" = {
 		after=["network.target" "network-online.target"];
 		description="FieldSeeker DB migrate";
