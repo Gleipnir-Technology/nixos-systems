@@ -82,12 +82,14 @@ with lib;
 		# and download and configure the image via https://cloudreve.org/manage
 		# You'll do so by getting the image repository credentials and running
 		#   sudo podman login -u <user> -p <password> cloudreve.azurecr.io
+		# the pull the image with
+		#   sudo podman image pull cloudreve.azurecr.io/cloudreve/pro:<version>
 		virtualisation.oci-containers.containers.cloudreve = {
 			environmentFiles = [
 				"/var/run/secrets/cloudreve-env"
 			];
 			#extraOptions = ["--network=pasta:--map-gw"];
-			image = "cloudreve.azurecr.io/cloudreve/pro:4.7.0";
+			image = "cloudreve.azurecr.io/cloudreve/pro:4.10.1";
 			# I'd much rather be doing this, but it fails in inscrutible ways
 			#podman.user = "cloudreve";
 			ports = [ "127.0.0.1:10040:5212" ];
