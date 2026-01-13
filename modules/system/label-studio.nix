@@ -65,8 +65,7 @@ with lib;
 			extraOptions = [
 				"--userns=keep-id:uid=1001,gid=0"
 			];
-			#image = "docker.io/heartexlabs/label-studio:1.21.0";
-			image = "docker.io/library/label-studio:custom";
+			image = "docker.io/heartexlabs/label-studio:1.22.0";
 			ports = [ "127.0.0.1:10070:8080" ];
 			volumes = [
 				"/mnt/bigdisk/label-studio:/label-studio/data"
