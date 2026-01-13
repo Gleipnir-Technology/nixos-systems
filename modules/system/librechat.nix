@@ -157,7 +157,7 @@ in
 			};
 			wantedBy = ["multi-user.target"];
 		};
-		systemd.services.postgresql.serviceConfig.ExecStartPost =
+		/*systemd.services.postgresql.serviceConfig.ExecStartPost =
 			let sqlFile = pkgs.writeText "librechat-pgvectors-setup.sql" ''
 				CREATE EXTENSION IF NOT EXISTS vector;
 
@@ -168,7 +168,7 @@ in
 			'';
 			in [''
 				${lib.getExe' config.services.postgresql.package "psql"} -d "rag_api" -f "${sqlFile}"
-			''];
+			''];*/
 		systemd.tmpfiles.rules = [
 			"d /opt/librechat 0755 librechat librechat"
 			"d /opt/meilisearch 0755 meilisearch meilisearch"
