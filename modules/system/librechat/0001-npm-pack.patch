@@ -1,8 +1,8 @@
 diff --git a/package.json b/package.json
-index 3a86469c..11e6afb3 100644
+index 011551594..f4f98c1a8 100644
 --- a/package.json
 +++ b/package.json
-@@ -146,5 +146,16 @@
+@@ -160,5 +160,16 @@
        "admin/",
        "packages/"
      ]
