@@ -16,7 +16,7 @@ with lib;
 			EDITOR = "nvim";
 			TESTVALUE = "eli";
 		};
-		home.stateVersion = "25.05";
+		home.stateVersion = "25.11";
 	};
 
 	users.users.eliribble = {

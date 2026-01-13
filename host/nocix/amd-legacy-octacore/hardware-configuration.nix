@@ -5,11 +5,6 @@
 		(modulesPath + "/profiles/qemu-guest.nix")
 		./disk-config.nix
 	];
-
-	boot.loader.grub = {
-		efiSupport = true;
-		efiInstallAsRemovable = true;
-	};
 	boot.initrd.availableKernelModules = [ "ahci" "ohci_pci" "ehci_pci" "xhci_pci" "sd_mod" ];
 	boot.initrd.kernelModules = [ ];
 	boot.kernelModules = [ "kvm-amd" ];

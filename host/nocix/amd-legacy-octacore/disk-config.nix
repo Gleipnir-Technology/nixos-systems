@@ -61,22 +61,11 @@
 				type = "lvm_vg";
 				lvs = {
 					root = {
-						size = "50G";
-						content = {
-							type = "filesystem";
-							format = "ext4";
-							mountpoint = "/";
-							mountOptions = [
-								"defaults"
-							];
-						};
-					};
-					var = {
 						size = "100%FREE";
 						content = {
 							type = "filesystem";
 							format = "ext4";
-							mountpoint = "/var";
+							mountpoint = "/";
 							mountOptions = [
 								"defaults"
 							];

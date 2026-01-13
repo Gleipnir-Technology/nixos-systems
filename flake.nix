@@ -3,7 +3,11 @@
 
 	inputs = {
 		authentik-nix = {
-			url = "github:nix-community/authentik-nix";
+			inputs.nixpkgs.follows = "nixpkgs";
+			#url = "github:nix-community/authentik-nix";
+			# Temporary workaround for build failure
+			# See https://github.com/nix-community/authentik-nix/issues/83
+			url = "github:Pentusha/authentik-nix";
 		};
 		disko = {
 			inputs.nixpkgs.follows = "nixpkgs";

@@ -23,6 +23,8 @@
 			}];
 		};
 		nameservers = ["192.187.107.16"];
+		nftables.enable = true;
 		search = ["nocix.net"];
+		useNetworkd = true;
 	};
 }
