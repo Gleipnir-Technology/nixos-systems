@@ -3,7 +3,7 @@ keys:
   - &dev_macmini age1x704pjnueguchkl54ly8w4w26ltys5900v7xnl7w3zlgasus09jszz45t8
   - &dev_pazuzu age15y4k929zaj9fdg3vd40pa40tgvrgv9mn22xfummn5zxfmkcw5d0st6prjx
   - &dev_poweredge age1q5syuyx3n255vllv6elfj72yk5mhxnk9pqawzyy4gzkzmpw3gpjqz9ujx2
-  - &server_corp age1ck44jqpuz3zlthquvuh7wsemrjrgfzhn462sk7rlfetwxpgy0uqs79xn2h
+  - &server_corp age1rqa4qvkk7s26pgj09d269t84vprdrh0jhyl75xq5zyhp9cdssq2qc8hut8
   - &server_nocix_amd_legacy_sexcore age1yfs6d0vac45rnx3q54u52tjk5vnfsqnghaj95kmkl7fd5du3ee8qgse385
   - &server_test_corp age1t3ryfktuhr3cysf49m9q2n8fkjf9ajjjnhztxw9hz8paxgk4lpcq065jge
   - &server_sync_nidus age167q6r28ws6wrpjwxnt4ap2fgs6d9cyvrdhzl2wflr2tnsw5xapxq36n2ec
