@@ -9,6 +9,7 @@
 		label-studio.enable = true;
 		librechat.enable = true;
 		minio.enable = true;
+		restic.role = "corp";
 		static-websites.enable = true;
 		synapse.enable = true;
 		timecardbot.enable = true;

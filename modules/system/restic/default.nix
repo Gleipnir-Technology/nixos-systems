@@ -10,7 +10,7 @@ with lib;
 	config = {
 		sops.secrets.restic-env = {
 			format = "yaml";
-			key = "backblaze";
+			key = "backblaze-${config.myModules.restic.role}";
 			group = "root";
 			mode = "0440";
 			owner = "root";
@@ -18,11 +18,15 @@ with lib;
 		};
 		sops.secrets.restic-password = {
 			format = "yaml";
-			key = "password";
+			key = "password-${config.myModules.restic.role}";
 			group = "root";
 			mode = "0440";
 			owner = "root";
 			sopsFile = ../../../secrets/restic.yaml;
 		};
+	};
+	options.myModules.restic.role = mkOption {
+		description = "The role which picks the key to use";
+		type = types.str;
 	};
 }
