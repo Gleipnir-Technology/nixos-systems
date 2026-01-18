@@ -57,7 +57,7 @@ in {
 			paths = [
 				"/mnt/bigdisk/twenty-crm-data"
 			];
-			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/authentik";
+			repository = "s3:s3.us-west-004.backblazeb2.com/gleipnir-backup-corp/twenty-crm";
 		};
 		sops.secrets.twenty-crm-env = {
 			format = "dotenv";
