@@ -46,6 +46,9 @@ in {
 			};
 			requires=["network-online.target"];
 			restartIfChanged = true;
+			restartTriggers = [
+				config.environment.etc."frps.toml".source
+			];
 			stopIfChanged = true;
 			serviceConfig = {
 				EnvironmentFile = "/var/run/secrets/frps-env";

@@ -14,6 +14,7 @@
 			"docs.theribbles.org"
 			"files.theribbles.org"
 			"home-assistant.theribbles.org"
+			"liam.theribbles.org"
 			"movies.theribbles.org"
 			"notes.theribbles.org"
 			"passwords.theribbles.org"
