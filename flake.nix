@@ -63,6 +63,7 @@
 				"nocix-amd-legacy-sexcore" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-sexcore;
 					roles = [
+						./roles/nidus-marketing.nix
 						./roles/nidus-sync.nix
 						./roles/sovr.nix
 					];
