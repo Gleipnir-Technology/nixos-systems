@@ -7,42 +7,6 @@ port = ":9090"
 type="file"             # cache type
 basepath="/tmp/tegola"  # cache specific config
 
-# register data providers
-[[providers]]
-name = "bonn"   # provider name is referenced from map layers
-type = "mvt_postgis"        # the type of data provider. currently only supports postgis
-#uri = "postgres://tegola:supersecret@localhost:5432/tegola?sslmode=prefer" # PostGIS connection string (required)
-uri = "postgres://tegola:@localhost:/tegola?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
-srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
-
-  [[providers.layers]]
-  name = "road"
-  geometry_fieldname = "wkb_geometry"
-  geometry_type="linestring"
-  id_fieldname = "ogc_fid"
-  sql = "SELECT ST_AsMVTGeom(wkb_geometry, !BBOX!) AS wkb_geometry, name, ogc_fid FROM all_roads WHERE wkb_geometry && !BBOX!"
-
-  [[providers.layers]]
-  name = "main_roads"
-  geometry_fieldname = "wkb_geometry"
-  geometry_type="linestring"
-  id_fieldname = "ogc_fid"
-  sql = "SELECT ST_AsMVTGeom(wkb_geometry, !BBOX!) AS wkb_geometry, name, ogc_fid FROM main_roads WHERE wkb_geometry && !BBOX!"
-
-  [[providers.layers]]
-  name = "lakes"
-  geometry_fieldname = "wkb_geometry"
-  geometry_type="polygon"
-  id_fieldname = "ogc_fid"
-  sql = "SELECT ST_AsMVTGeom(wkb_geometry, !BBOX!) AS wkb_geometry, name, ogc_fid FROM lakes WHERE wkb_geometry && !BBOX!"
-
-  [[providers.layers]]
-  name = "h3"
-  geometry_fieldname = "wkb_geometry"
-  geometry_type="polygon"
-  id_fieldname = "ogc_fid"
-  sql = "SELECT ST_AsMVTGeom(wkb_geometry, !BBOX!) AS wkb_geometry, name, ogc_fid FROM hexes WHERE wkb_geometry && !BBOX!"
-
 [[providers]]
 name = "nidus"   # provider name is referenced from map layers
 type = "mvt_postgis"        # the type of data provider. currently only supports postgis
@@ -51,49 +15,77 @@ uri = "postgres://tegola:@localhost:/nidus-sync?host=/var/run/postgresql&sslmode
 srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
 
   [[providers.layers]]
-  name = "h3_aggregation"
+  name = "mosquito_source"
   geometry_fieldname = "geometry"
   geometry_type="polygon"
   id_fieldname = "id"
-  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE geometry && !BBOX! !PARAM!"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'MosquitoSource' AND geometry && !BBOX! !PARAM!"
 
-[[maps]]
-name = "bonn"
-# center is lng, lat, zoom
-center = [7.0982, 50.7374, 11.0] # set the center of the map so the user is auto navigated to Bonn
+  [[providers.layers]]
+  name = "service_request"
+  geometry_fieldname = "geometry"
+  geometry_type="polygon"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'ServiceRequest' AND geometry && !BBOX! !PARAM!"
 
-  [[maps.layers]]
-  provider_layer = "bonn.road"
-  min_zoom = 10
-  max_zoom = 20
+  [[providers.layers]]
+  name = "trap"
+  geometry_fieldname = "geometry"
+  geometry_type="polygon"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'Trap' AND geometry && !BBOX! !PARAM!"
 
-  [[maps.layers]]
-  provider_layer = "bonn.main_roads"
-  min_zoom = 5
-  max_zoom = 20
+[[providers]]
+name = "mosquito"   # provider name is referenced from map layers
+type = "mvt_postgis"        # the type of data provider. currently only supports postgis
+#uri = "postgres://tegola:supersecret@localhost:5432/tegola?sslmode=prefer" # PostGIS connection string (required)
+uri = "postgres://tegola:@localhost:/nidus-sync?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
+srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
 
-  [[maps.layers]]
-  provider_layer = "bonn.lakes"
-  min_zoom = 5
-  max_zoom = 20
+  [[providers.layers]]
+  name = "district"
+  geometry_fieldname = "geom_4326"
+  geometry_type="polygon"
+  id_fieldname = "gid"
+  sql = "SELECT agency, ST_AsMVTGeom(geom_4326, !BBOX!) as geom_4326, gid, regionid FROM import.district WHERE geom_4326 && !BBOX!"
 
-  [[maps.layers]]
-  provider_layer = "bonn.h3"
-  min_zoom = 3
-  max_zoom = 20
+  [[providers.layers]]
+  name = "report_location"
+  geometry_fieldname = "location"
+  geometry_type="point"
+  id_fieldname = "id"
+  sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status, table_name FROM publicreport.report_location WHERE location && !BBOX!"
 
 [[maps]]
 name = "nidus"
-center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto navigated to Bonn
+center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto navigated to visalia
 
   [[maps.layers]]
-  provider_layer = "nidus.h3_aggregation"
-  #min_zoom = 5
-  #max_zoom = 20
+  provider_layer = "nidus.mosquito_source"
+
+  [[maps.layers]]
+  provider_layer = "nidus.service_request"
+
+  [[maps.layers]]
+  provider_layer = "nidus.trap"
 
   [[maps.params]]
   name = "organization_id"
   token = "!PARAM!"
   type = "int"
   sql = "AND organization_id = ?"
-  default_sql = "1"
+  default_sql = "0"
+
+[[maps]]
+name = "mosquito"
+center = [-119.175, 36.24, 11.0]
+
+  [[maps.layers]]
+  provider_layer = "mosquito.district"
+  #min_zoom = 5
+  #max_zoom = 20
+
+  [[maps.layers]]
+  provider_layer = "mosquito.report_location"
+  #min_zoom = 5
+  #max_zoom = 20

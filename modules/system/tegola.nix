@@ -25,7 +25,11 @@ in {
 		networking.firewall.allowedTCPPorts = [ 9090 ];
 		services.caddy.virtualHosts."${domainName}" = {
 			extraConfig = ''
-				reverse_proxy http://127.0.0.1:${toString port}
+				reverse_proxy {
+					to http://127.0.0.1:${toString port}
+					header_up X-Forwarded-Proto "https"
+				}
+				header / Access-Control-Allow-Origin *
 			'';
 		};
 		services.postgresql = {
@@ -43,6 +47,9 @@ in {
 			description="Tegola Vector Tile";
 			path = [ pkgs.tegola ];
 			requires=["network-online.target"];
+			restartTriggers = [
+				config.environment.etc."tegola.toml".source
+			];
 			serviceConfig = {
 				Group = group;
 				ExecStart = "${pkgs.tegola}/bin/tegola serve --config /etc/tegola.toml";
