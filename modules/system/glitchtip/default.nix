@@ -33,6 +33,8 @@ with lib;
 		};
 		systemd.tmpfiles.rules = [
 			"d /tmp/glitchtip 0755 glitchtip glitchtip 1h"
+			"d /mnt/bigdisk/glitchtip 0755 glitchtip glitchtip"
+			"d /mnt/bigdisk/glitchtip/uploads 0755 glitchtip glitchtip"
 		];
 	};
 }

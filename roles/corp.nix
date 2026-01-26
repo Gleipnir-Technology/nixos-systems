@@ -4,7 +4,7 @@
 		caddy.enable = true;
 		cloudreve.enable = true;
 		collabora.enable = true;
-		glitchtip.enable = false;
+		glitchtip.enable = true;
 		element-web.enable = true;
 		label-studio.enable = true;
 		librechat.enable = true;
