@@ -10,7 +10,7 @@
 		./cloudreve.nix
 		./do-agent.nix
 		./frps.nix
-		./glitchtip
+		./glitchtip.nix
 		./element-web.nix
 		#./fieldseeker-sync.nix
 		./fish.nix
