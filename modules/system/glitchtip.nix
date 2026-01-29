@@ -57,7 +57,7 @@ with lib;
 			mode = "0440";
 			owner = "glitchtip";
 			restartUnits = ["glitchtip.service"];
-			sopsFile = ../../../secrets/glitchtip.env;
+			sopsFile = ../../secrets/glitchtip.env;
 		};
 		systemd.tmpfiles.rules = [
 			"d /tmp/glitchtip 0755 glitchtip glitchtip 1h"
