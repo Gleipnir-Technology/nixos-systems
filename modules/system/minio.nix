@@ -27,8 +27,5 @@ with lib;
 			restartUnits = ["minio.service"];
 			sopsFile = ../../secrets/minio.env;
 		};
-		#systemd.tmpfiles.rules = [
-			#"d /mnt/bigdisk/minio 0755 minio minio"
-		#];
 	};
 }
