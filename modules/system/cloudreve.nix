@@ -35,7 +35,6 @@ with lib;
 			#};
 		};
 		services.restic.backups."cloudreve-db" = {
-			# We can use this due to overridding restic with unstable
 			command = [
 				"${lib.getExe pkgs.sudo}"
 				"-u postgres"
