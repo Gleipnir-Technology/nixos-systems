@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 with lib;
 {
-	disabledModules = [ "services/web-apps/glitchtip.nix" ];
+	/*disabledModules = [ "services/web-apps/glitchtip.nix" ];
 	imports = [
 		./glitchtip.nix
-	];
+	];*/
 	options.myModules.glitchtip.enable = mkEnableOption "custom glitchtip configuration";
 
 	config = mkIf config.myModules.glitchtip.enable {
@@ -13,15 +13,15 @@ with lib;
 		'';
 		services.glitchtip = {
 			enable = true;
-			environment = [
-				"TMPDIR=/tmp/glitchtip"
-			];
+			#environment = [
+				#"TMPDIR=/tmp/glitchtip"
+			#];
 			environmentFiles = [
 				"/var/run/secrets/glitchtip-env"
 			];
 			port = 10060;
 			settings.GLITCHTIP_DOMAIN = "https://glitchtip.gleipnir.technology";
-			workingDirectory = "/mnt/bigdisk/glitchtip";
+			#workingDirectory = "/mnt/bigdisk/glitchtip";
 		};
 		sops.secrets.glitchtip-env = {
 			format = "dotenv";
@@ -34,6 +34,9 @@ with lib;
 		systemd.tmpfiles.rules = [
 			"d /tmp/glitchtip 0755 glitchtip glitchtip 1h"
 			"d /mnt/bigdisk/glitchtip 0755 glitchtip glitchtip"
+			"d /mnt/bigdisk/glitchtip/assets 0755 glitchtip glitchtip"
+			"d /mnt/bigdisk/glitchtip/dist 0755 glitchtip glitchtip"
+			"d /mnt/bigdisk/glitchtip/static 0755 glitchtip glitchtip"
 			"d /mnt/bigdisk/glitchtip/uploads 0755 glitchtip glitchtip"
 		];
 	};
