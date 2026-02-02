@@ -5,6 +5,10 @@
 			root * /var/www/html/nidus.cloud
 			file_server
 		'';
+		"www.nidus.cloud".extraConfig = ''
+			root * /var/www/html/nidus.cloud
+			file_server
+		'';
 	};
 	systemd.tmpfiles.rules = [
 		"d /var/www/html 0755 root root"
