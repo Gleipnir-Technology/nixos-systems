@@ -56,6 +56,20 @@ srid = 4326             # The default srid for this provider. If not provided it
   id_fieldname = "id"
   sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status, table_name FROM publicreport.report_location WHERE location && !BBOX!"
 
+  [[providers.layers]]
+  name = "nuisance_location"
+  geometry_fieldname = "location"
+  geometry_type="point"
+  id_fieldname = "id"
+  sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'nuisance' AND location && !BBOX!"
+
+  [[providers.layers]]
+  name = "pool_location"
+  geometry_fieldname = "location"
+  geometry_type="point"
+  id_fieldname = "id"
+  sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'pool' AND location && !BBOX!"
+
 [[maps]]
 name = "nidus"
 center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto navigated to visalia
@@ -82,6 +96,16 @@ center = [-119.175, 36.24, 11.0]
 
   [[maps.layers]]
   provider_layer = "mosquito.district"
+  #min_zoom = 5
+  #max_zoom = 20
+
+  [[maps.layers]]
+  provider_layer = "mosquito.nuisance_location"
+  #min_zoom = 5
+  #max_zoom = 20
+
+  [[maps.layers]]
+  provider_layer = "mosquito.pool_location"
   #min_zoom = 5
   #max_zoom = 20
 
