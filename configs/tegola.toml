@@ -8,46 +8,51 @@ type="file"             # cache type
 basepath="/tmp/tegola"  # cache specific config
 
 [[providers]]
-name = "nidus"   # provider name is referenced from map layers
+name = "nidus"
 type = "mvt_postgis"        # the type of data provider. currently only supports postgis
-#uri = "postgres://tegola:supersecret@localhost:5432/tegola?sslmode=prefer" # PostGIS connection string (required)
 uri = "postgres://tegola:@localhost:/nidus-sync?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
 srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
+
+  [[providers.layers]]
+  name = "service-area-bounds"
+  geometry_fieldname = "geometry"
+  geometry_type="polygon"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(service_area_geometry, !BBOX!) AS geometry, id FROM organization WHERE service_area_geometry && !BBOX! !PARAM_ID!"
+
+  [[providers.layers]]
+  name = "fileupload-pool"
+  geometry_fieldname = "geometry"
+  geometry_type="point"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(geom, !BBOX!) AS geometry, condition, id, is_new, is_in_district FROM fileupload.pool WHERE geom && !BBOX! !PARAM_ORGANIZATION_ID! !PARAM_CSV_FILE!"
 
   [[providers.layers]]
   name = "mosquito_source"
   geometry_fieldname = "geometry"
   geometry_type="polygon"
   id_fieldname = "id"
-  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'MosquitoSource' AND geometry && !BBOX! !PARAM!"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'MosquitoSource' AND geometry && !BBOX! !PARAM_ORGANIZATION_ID!"
 
   [[providers.layers]]
   name = "service_request"
   geometry_fieldname = "geometry"
   geometry_type="polygon"
   id_fieldname = "id"
-  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'ServiceRequest' AND geometry && !BBOX! !PARAM!"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'ServiceRequest' AND geometry && !BBOX! !PARAM_ORGANIZATION_ID!"
 
   [[providers.layers]]
   name = "trap"
   geometry_fieldname = "geometry"
   geometry_type="polygon"
   id_fieldname = "id"
-  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'Trap' AND geometry && !BBOX! !PARAM!"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'Trap' AND geometry && !BBOX! !PARAM_ORGANIZATION_ID!"
 
 [[providers]]
-name = "mosquito"   # provider name is referenced from map layers
+name = "rmo"
 type = "mvt_postgis"        # the type of data provider. currently only supports postgis
-#uri = "postgres://tegola:supersecret@localhost:5432/tegola?sslmode=prefer" # PostGIS connection string (required)
 uri = "postgres://tegola:@localhost:/nidus-sync?host=/var/run/postgresql&sslmode=disable" # PostGIS connection string (required)
 srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
-
-  [[providers.layers]]
-  name = "district"
-  geometry_fieldname = "geom_4326"
-  geometry_type="polygon"
-  id_fieldname = "gid"
-  sql = "SELECT agency, ST_AsMVTGeom(geom_4326, !BBOX!) as geom_4326, gid, regionid FROM import.district WHERE geom_4326 && !BBOX!"
 
   [[providers.layers]]
   name = "report_location"
@@ -71,6 +76,25 @@ srid = 4326             # The default srid for this provider. If not provided it
   sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'pool' AND location && !BBOX!"
 
 [[maps]]
+name = "rmo"
+center = [-119.175, 36.24, 11.0]
+
+  [[maps.layers]]
+  provider_layer = "rmo.nuisance_location"
+  #min_zoom = 5
+  #max_zoom = 20
+
+  [[maps.layers]]
+  provider_layer = "rmo.pool_location"
+  #min_zoom = 5
+  #max_zoom = 20
+
+  [[maps.layers]]
+  provider_layer = "rmo.report_location"
+  #min_zoom = 5
+  #max_zoom = 20
+
+[[maps]]
 name = "nidus"
 center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto navigated to visalia
 
@@ -83,33 +107,30 @@ center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto
   [[maps.layers]]
   provider_layer = "nidus.trap"
 
+  [[maps.layers]]
+  provider_layer = "nidus.fileupload-pool"
+
+  [[maps.layers]]
+  provider_layer = "nidus.service-area-bounds"
+
+  [[maps.params]]
+  name = "csv_file"
+  token = "!PARAM_CSV_FILE!"
+  type = "int"
+  sql = "AND csv_file = ?"
+  default_sql = "  "
+
+  [[maps.params]]
+  name = "id"
+  token = "!PARAM_ID!"
+  type = "int"
+  sql = "AND id = ?"
+  default_sql = " "
+
   [[maps.params]]
   name = "organization_id"
-  token = "!PARAM!"
+  token = "!PARAM_ORGANIZATION_ID!"
   type = "int"
   sql = "AND organization_id = ?"
-  default_sql = "0"
+  default_sql = " "
 
-[[maps]]
-name = "mosquito"
-center = [-119.175, 36.24, 11.0]
-
-  [[maps.layers]]
-  provider_layer = "mosquito.district"
-  #min_zoom = 5
-  #max_zoom = 20
-
-  [[maps.layers]]
-  provider_layer = "mosquito.nuisance_location"
-  #min_zoom = 5
-  #max_zoom = 20
-
-  [[maps.layers]]
-  provider_layer = "mosquito.pool_location"
-  #min_zoom = 5
-  #max_zoom = 20
-
-  [[maps.layers]]
-  provider_layer = "mosquito.report_location"
-  #min_zoom = 5
-  #max_zoom = 20
