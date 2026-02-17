@@ -22,6 +22,11 @@
 		pkgs.dig
 		pkgs.gitMinimal
 	];
+	myModules = {
+		nidus-sync = {
+			domainNameSync = "staging-sync.nidus.cloud";
+		};
+	};
 	services.openssh.enable = true;
 	users.users.root.openssh.authorizedKeys.keys =
 	[

@@ -2,11 +2,11 @@
 with lib;
 let
 	backupName = nidusName;
+	cfg = config.myModules.nidus-sync;
 	databaseName = nidusName;
 	databaseUser = nidusName;
 	dataDirectory = /mnt/bigdisk/nidus-sync;
 	domainNameReport = "report.mosquitoes.online";
-	domainNameSync = "sync.nidus.cloud";
 	group = nidusName;
 	nidusName = "nidus-sync";
 	nidus-sync-pkg = inputs.nidus-sync.packages.x86_64-linux.default;
@@ -16,7 +16,13 @@ let
 
 	environmentFile = "/var/run/secrets/${nidusName}-env";
 in {
-	options.myModules.nidus-sync.enable = mkEnableOption "custom nidus-sync configuration";
+	options.myModules.nidus-sync = {
+		domainNameSync = mkOption {
+			example = "sync.nidus.cloud";
+			type = types.str;
+		};
+		enable = mkEnableOption "custom nidus-sync configuration";
+	};
 
 	config = mkIf config.myModules.nidus-sync.enable {
 		environment.systemPackages = with pkgs; [
@@ -28,7 +34,7 @@ in {
 				reverse_proxy http://127.0.0.1:${toString port}
 			'';
 		};
-		services.caddy.virtualHosts."${domainNameSync}" = {
+		services.caddy.virtualHosts."${cfg.domainNameSync}" = {
 			extraConfig = ''
 				reverse_proxy http://127.0.0.1:${toString port}
 			'';
