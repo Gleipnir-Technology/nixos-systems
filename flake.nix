@@ -60,6 +60,13 @@
 					];
 					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
+				"nocix-amd-legacy-quadcore" = import ./system.nix {
+					configuration = ./host/nocix/amd-legacy-quadcore;
+					roles = [
+						./roles/nidus-sync.nix
+					];
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
+				};
 				"nocix-amd-legacy-sexcore" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-sexcore;
 					roles = [
