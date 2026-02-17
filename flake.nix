@@ -76,14 +76,6 @@
 					];
 					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
-				"sync.nidus.cloud" = import ./system.nix {
-					configuration = ./host/sync/configuration.nix;
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
-				};
-				test-corp = nixpkgs.lib.nixosSystem {
-					configuration = ./host/test-corp/configuration.nix;
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
-				};
 			};
 		};
 }
