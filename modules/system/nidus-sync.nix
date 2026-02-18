@@ -6,7 +6,6 @@ let
 	databaseName = nidusName;
 	databaseUser = nidusName;
 	dataDirectory = /mnt/bigdisk/nidus-sync;
-	domainNameReport = "report.mosquitoes.online";
 	group = nidusName;
 	nidusName = "nidus-sync";
 	nidus-sync-pkg = inputs.nidus-sync.packages.x86_64-linux.default;
@@ -17,6 +16,10 @@ let
 	environmentFile = "/var/run/secrets/${nidusName}-env";
 in {
 	options.myModules.nidus-sync = {
+		domainNameReport = mkOption {
+			example = "report.mosquitoes.online";
+			type = types.str;
+		};
 		domainNameSync = mkOption {
 			example = "sync.nidus.cloud";
 			type = types.str;
@@ -29,7 +32,7 @@ in {
 			ffmpeg
 			nidus-sync-pkg
 		];
-		services.caddy.virtualHosts."${domainNameReport}" = {
+		services.caddy.virtualHosts."${cfg.domainNameReport}" = {
 			extraConfig = ''
 				reverse_proxy http://127.0.0.1:${toString port}
 			'';

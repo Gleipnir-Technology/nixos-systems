@@ -24,6 +24,7 @@
 	];
 	myModules = {
 		nidus-sync = {
+			domainNameReport = "staging-report.mosquitoes.online";
 			domainNameSync = "staging-sync.nidus.cloud";
 		};
 	};
