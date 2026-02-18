@@ -28,6 +28,9 @@
 			domainNameSync = "sync.nidus.cloud";
 			environment = "prod";
 		};
+		tegola = {
+			domainName = "tegola.nidus.cloud";
+		};
 	};
 	services.openssh.enable = true;
 	users.users.root.openssh.authorizedKeys.keys =

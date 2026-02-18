@@ -2,14 +2,20 @@
 with lib;
 
 let
+	cfg = config.myModules.tegola;
 	databaseName = "tegola";
 	databaseUser = "tegola";
-	domainName = "tegola.nidus.cloud";
 	port = 9090;
 	group = "tegola";
 	user = "tegola";
 in {
-	options.myModules.tegola.enable = mkEnableOption "custom tegola configuration";
+	options.myModules.tegola = {
+		domainName = mkOption {
+			example = "tegola.nidus.cloud";
+			type = types.str;
+		};
+		enable = mkEnableOption "custom tegola configuration";
+	};
 
 	config = mkIf config.myModules.tegola.enable {
 		environment = {
@@ -23,7 +29,7 @@ in {
 			];
 		};
 		networking.firewall.allowedTCPPorts = [ 9090 ];
-		services.caddy.virtualHosts."${domainName}" = {
+		services.caddy.virtualHosts."${cfg.domainName}" = {
 			extraConfig = ''
 				reverse_proxy {
 					to http://127.0.0.1:${toString port}
