@@ -6,6 +6,7 @@ let
 	databaseName = nidusName;
 	databaseUser = nidusName;
 	dataDirectory = /mnt/bigdisk/nidus-sync;
+	dataDirectoryString = "/mnt/bigdisk/nidus-sync";
 	group = nidusName;
 	nidusName = "nidus-sync";
 	nidus-sync-pkg = inputs.nidus-sync.packages.x86_64-linux.default;
@@ -116,6 +117,10 @@ in {
 			};
 			wantedBy = ["multi-user.target"];
 		};
+		systemd.tmpfiles.rules = [
+			"d ${dataDirectoryString} 0755 ${nidusName} ${nidusName}"
+			"d ${dataDirectoryString} 0755 ${nidusName} ${nidusName}"
+		];
 		users.groups.${group} = {};
 		users.users.${user} = {
 			group = "${group}";
