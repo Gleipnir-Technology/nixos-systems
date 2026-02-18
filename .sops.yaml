@@ -6,7 +6,8 @@ keys:
   - &server_corp age1rqa4qvkk7s26pgj09d269t84vprdrh0jhyl75xq5zyhp9cdssq2qc8hut8
   - &server_nocix_amd_legacy_sexcore age1yfs6d0vac45rnx3q54u52tjk5vnfsqnghaj95kmkl7fd5du3ee8qgse385
   - &server_test_corp age1t3ryfktuhr3cysf49m9q2n8fkjf9ajjjnhztxw9hz8paxgk4lpcq065jge
-  - &server_sync_nidus age167q6r28ws6wrpjwxnt4ap2fgs6d9cyvrdhzl2wflr2tnsw5xapxq36n2ec
+  - &server_sync_nidus_prod age167q6r28ws6wrpjwxnt4ap2fgs6d9cyvrdhzl2wflr2tnsw5xapxq36n2ec
+  - &server_sync_nidus_staging age1gcgg40w7ja4gujzsujpgt7kd2ww6fpepkz04s5lkryx6ulnggdhs03yrkw
 creation_rules:
   - path_regex: secrets/.*\.(yaml|json|env|ini)$
     key_groups:
@@ -18,4 +19,5 @@ creation_rules:
       - *server_corp
       - *server_nocix_amd_legacy_sexcore
       - *server_test_corp
-      - *server_sync_nidus
+      - *server_sync_nidus_prod
+      - *server_sync_nidus_staging
