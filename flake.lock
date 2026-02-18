@@ -297,17 +297,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1769893623,
-        "narHash": "sha256-P7vgB78PphpA5Ceyc3XXX2OKy0AndnPbjc8U1bto3D0=",
+        "lastModified": 1771368616,
+        "narHash": "sha256-qRQEoEWFG1W3NBie7NhcA0oMHYClzLiR14KSDD4OqWU=",
         "owner": "Gleipnir-Technology",
         "repo": "nidus-sync",
-        "rev": "f20067b323c0e1001d9d51ecafbbb8e0cb05b65a",
+        "rev": "18c7a5f84b99b76e2d21a2c2c0b8846c5ba25db7",
         "type": "github"
       },
       "original": {
         "owner": "Gleipnir-Technology",
         "repo": "nidus-sync",
-        "rev": "f20067b323c0e1001d9d51ecafbbb8e0cb05b65a",
+        "rev": "18c7a5f84b99b76e2d21a2c2c0b8846c5ba25db7",
         "type": "github"
       }
     },
