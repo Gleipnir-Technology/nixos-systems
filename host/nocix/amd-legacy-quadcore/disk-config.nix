@@ -4,7 +4,7 @@
 	disko.devices = {
 		disk = {
 			root = {
-				device = "/dev/sda";
+				device = "/dev/sdb";
 				type = "disk";
 				content = {
 					type = "gpt";
@@ -35,9 +35,8 @@
 					};
 				};
 			};
-			/*
 			data = {
-				device = "/dev/sdb";
+				device = "/dev/sda";
 				type = "disk";
 				content = {
 					type = "gpt";
@@ -56,7 +55,6 @@
 					};
 				};
 			};
-			*/
 		};
 		lvm_vg = {
 			pool = {
