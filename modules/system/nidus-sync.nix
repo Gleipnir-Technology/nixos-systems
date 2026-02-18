@@ -25,6 +25,10 @@ in {
 			type = types.str;
 		};
 		enable = mkEnableOption "custom nidus-sync configuration";
+		environment = mkOption {
+			example = "prod";
+			type = types.str;
+		};
 	};
 
 	config = mkIf config.myModules.nidus-sync.enable {
@@ -92,7 +96,7 @@ in {
 			mode = "0440";
 			owner = "${user}";
 			restartUnits = ["${nidusName}-webserver.service"];
-			sopsFile = ../../secrets/${nidusName}.env;
+			sopsFile = ../../secrets/${cfg.environment}/${nidusName}.env;
 		};
 		systemd.services."${nidusName}-webserver" = {
 			after=["network.target" "network-online.target"];
