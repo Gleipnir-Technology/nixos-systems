@@ -14,18 +14,18 @@ uri = "postgres://tegola:@localhost:/nidus-sync?host=/var/run/postgresql&sslmode
 srid = 4326             # The default srid for this provider. If not provided it will be WebMercator (3857)
 
   [[providers.layers]]
-  name = "service-area-bounds"
+  name = "address"
   geometry_fieldname = "geometry"
-  geometry_type="polygon"
+  geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT ST_AsMVTGeom(service_area_geometry, !BBOX!) AS geometry, id FROM organization WHERE service_area_geometry && !BBOX! !PARAM_ID!"
+  sql = "SELECT ST_AsMVTGeom(geom, !BBOX!) AS geometry, id, unit, number_, street, postal_code FROM address WHERE geom && !BBOX!"
 
   [[providers.layers]]
   name = "fileupload-pool"
   geometry_fieldname = "geometry"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT ST_AsMVTGeom(geom, !BBOX!) AS geometry, condition, id, is_new, is_in_district FROM fileupload.pool WHERE geom && !BBOX! !PARAM_ORGANIZATION_ID! !PARAM_CSV_FILE!"
+  sql = "SELECT ST_AsMVTGeom(geom, !BBOX!) AS geometry, condition, id, is_new, is_in_district FROM fileupload.pool WHERE geom && !BBOX! !PARAM_CSV_FILE!"
 
   [[providers.layers]]
   name = "mosquito_source"
@@ -33,6 +33,20 @@ srid = 4326             # The default srid for this provider. If not provided it
   geometry_type="polygon"
   id_fieldname = "id"
   sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'MosquitoSource' AND geometry && !BBOX! !PARAM_ORGANIZATION_ID!"
+
+  [[providers.layers]]
+  name = "parcel"
+  geometry_fieldname = "geometry"
+  geometry_type="multipolygon"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, apn, description, id FROM parcel WHERE geometry && !BBOX!"
+
+  [[providers.layers]]
+  name = "service-area-bounds"
+  geometry_fieldname = "geometry"
+  geometry_type="polygon"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(service_area_geometry, !BBOX!) AS geometry, id FROM organization WHERE service_area_geometry && !BBOX! !PARAM_ID!"
 
   [[providers.layers]]
   name = "service_request"
@@ -99,19 +113,25 @@ name = "nidus"
 center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto navigated to visalia
 
   [[maps.layers]]
-  provider_layer = "nidus.mosquito_source"
-
-  [[maps.layers]]
-  provider_layer = "nidus.service_request"
-
-  [[maps.layers]]
-  provider_layer = "nidus.trap"
+  provider_layer = "nidus.address"
 
   [[maps.layers]]
   provider_layer = "nidus.fileupload-pool"
 
   [[maps.layers]]
+  provider_layer = "nidus.mosquito_source"
+
+  [[maps.layers]]
+  provider_layer = "nidus.parcel"
+
+  [[maps.layers]]
+  provider_layer = "nidus.service_request"
+
+  [[maps.layers]]
   provider_layer = "nidus.service-area-bounds"
+
+  [[maps.layers]]
+  provider_layer = "nidus.trap"
 
   [[maps.params]]
   name = "csv_file"
@@ -134,3 +154,9 @@ center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto
   sql = "AND organization_id = ?"
   default_sql = " "
 
+  [[maps.params]]
+  name = "file_organization_id"
+  token = "!PARAM_FILE_ORGANIZATION_ID!"
+  type = "int"
+  sql = "AND file.organization_id = ?"
+  default_sql = " "
