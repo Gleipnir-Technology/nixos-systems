@@ -18,7 +18,7 @@ srid = 4326             # The default srid for this provider. If not provided it
   geometry_fieldname = "geometry"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT ST_AsMVTGeom(geom, !BBOX!) AS geometry, id, unit, number_, street, postal_code FROM address WHERE geom && !BBOX!"
+  sql = "SELECT ST_AsMVTGeom(location, !BBOX!) AS geometry, id, unit, number_, street, postal_code FROM address WHERE location && !BBOX!"
 
   [[providers.layers]]
   name = "fileupload-pool"
