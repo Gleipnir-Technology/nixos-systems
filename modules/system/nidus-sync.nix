@@ -110,6 +110,7 @@ in {
 				EnvironmentFile="${environmentFile}";
 				ExecStart = "${nidus-sync-pkg}/bin/nidus-sync";
 				PrivateTmp = true;
+				Restart = "on-failure";
 				TimeoutStopSec = "5s";
 				Type = "simple";
 				User = "${user}";
