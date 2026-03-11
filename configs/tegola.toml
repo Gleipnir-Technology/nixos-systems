@@ -73,21 +73,21 @@ srid = 4326             # The default srid for this provider. If not provided it
   geometry_fieldname = "location"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status, table_name FROM publicreport.report_location WHERE location && !BBOX!"
+  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status, table_name FROM publicreport.report_location WHERE location && !BBOX!"
 
   [[providers.layers]]
   name = "nuisance_location"
   geometry_fieldname = "location"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'nuisance' AND location && !BBOX!"
+  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'nuisance' AND location && !BBOX!"
 
   [[providers.layers]]
-  name = "pool_location"
+  name = "water_location"
   geometry_fieldname = "location"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT address, created, id, ST_AsMVTGeom(location::geometry, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'pool' AND location && !BBOX!"
+  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'water' AND location && !BBOX!"
 
 [[maps]]
 name = "rmo"
@@ -99,7 +99,7 @@ center = [-119.175, 36.24, 11.0]
   #max_zoom = 20
 
   [[maps.layers]]
-  provider_layer = "rmo.pool_location"
+  provider_layer = "rmo.water_location"
   #min_zoom = 5
   #max_zoom = 20
 

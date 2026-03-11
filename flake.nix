@@ -27,7 +27,7 @@
 			type = "github";
 			owner = "Gleipnir-Technology";
 			repo = "nidus-sync";
-			rev = "4972dd05ee29181cfea2b9a2608f12b0f9ad0726";
+			rev = "edcb48f84f49d44bbff3e1bb83c4182db932f4e7";
 		};
 		nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
