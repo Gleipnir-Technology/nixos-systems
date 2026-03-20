@@ -21,6 +21,13 @@ srid = 4326             # The default srid for this provider. If not provided it
   sql = "SELECT ST_AsMVTGeom(location, !BBOX!) AS geometry, id, unit, number_, street, postal_code FROM address WHERE location && !BBOX!"
 
   [[providers.layers]]
+  name = "feature-pool"
+  geometry_fieldname = "location"
+  geometry_type="point"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(f.location, !BBOX!) AS location, fp.condition AS condition, f.id AS id, 'pool' AS type, a.number_ AS address_number, a.street AS address_street, a.locality AS address_locality, a.region AS address_region, a.country AS address_country, a.postal_code AS address_postal_code FROM feature f INNER JOIN feature_pool fp ON f.id = fp.feature_id INNER JOIN site s ON s.id = f.site_id INNER JOIN address a ON a.id = s.address_id WHERE f.location && !BBOX! !PARAM_FEATURE_ORGANIZATION_ID!"
+
+  [[providers.layers]]
   name = "fileupload-pool"
   geometry_fieldname = "geometry"
   geometry_type="point"
@@ -56,6 +63,13 @@ srid = 4326             # The default srid for this provider. If not provided it
   sql = "SELECT ST_AsMVTGeom(geometry, !BBOX!) AS geometry, id, cell, count_, resolution FROM h3_aggregation WHERE type_ = 'ServiceRequest' AND geometry && !BBOX! !PARAM_ORGANIZATION_ID!"
 
   [[providers.layers]]
+  name = "signal-point"
+  geometry_fieldname = "location"
+  geometry_type="point"
+  id_fieldname = "id"
+  sql = "SELECT ST_AsMVTGeom(location, !BBOX!) AS location, id, type_, created FROM signal WHERE GeometryType(location) = 'POINT' AND location && !BBOX! !PARAM_ORGANIZATION_ID!"
+
+  [[providers.layers]]
   name = "trap"
   geometry_fieldname = "geometry"
   geometry_type="polygon"
@@ -73,21 +87,21 @@ srid = 4326             # The default srid for this provider. If not provided it
   geometry_fieldname = "location"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status, table_name FROM publicreport.report_location WHERE location && !BBOX!"
+  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, report_type AS type, status FROM publicreport.report WHERE location && !BBOX!"
 
   [[providers.layers]]
   name = "nuisance_location"
   geometry_fieldname = "location"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'nuisance' AND location && !BBOX!"
+  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status FROM publicreport.report WHERE report_type = 'nuisance' AND location && !BBOX!"
 
   [[providers.layers]]
   name = "water_location"
   geometry_fieldname = "location"
   geometry_type="point"
   id_fieldname = "id"
-  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status FROM publicreport.report_location WHERE table_name = 'water' AND location && !BBOX!"
+  sql = "SELECT address_raw, created, id, ST_AsMVTGeom(location, !BBOX!) AS location, public_id, status FROM publicreport.report WHERE report_type = 'water' AND location && !BBOX!"
 
 [[maps]]
 name = "rmo"
@@ -116,6 +130,9 @@ center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto
   provider_layer = "nidus.address"
 
   [[maps.layers]]
+  provider_layer = "nidus.feature-pool"
+
+  [[maps.layers]]
   provider_layer = "nidus.fileupload-pool"
 
   [[maps.layers]]
@@ -129,6 +146,9 @@ center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto
 
   [[maps.layers]]
   provider_layer = "nidus.service-area-bounds"
+
+  [[maps.layers]]
+  provider_layer = "nidus.signal-point"
 
   [[maps.layers]]
   provider_layer = "nidus.trap"
@@ -152,6 +172,13 @@ center = [-119.175, 36.24, 11.0] # set the center of the map so the user is auto
   token = "!PARAM_ORGANIZATION_ID!"
   type = "int"
   sql = "AND organization_id = ?"
+  default_sql = " "
+
+  [[maps.params]]
+  name = "feature_organization_id"
+  token = "!PARAM_FEATURE_ORGANIZATION_ID!"
+  type = "int"
+  sql = "AND f.organization_id = ?"
   default_sql = " "
 
   [[maps.params]]
