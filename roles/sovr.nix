@@ -21,8 +21,10 @@
 			"pdf.theribbles.org"
 			"photos.theribbles.org"
 			"plex.theribbles.org"
+			"recipes.theribbles.org"
 			"s3.theribbles.org"
 			"source.theribbles.org"
+			"tandoor.theribbles.org"
 			"todo.theribbles.org"
 			"tv.theribbles.org"
 		];
