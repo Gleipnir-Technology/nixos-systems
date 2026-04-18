@@ -2,6 +2,7 @@
 let 
 	allowed-unfree-packages = [
 		"corefonts"
+		"google-chrome"
 		"mongodb"
 	];
 in nixpkgs.lib.nixosSystem {

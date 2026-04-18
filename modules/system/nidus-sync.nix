@@ -102,19 +102,26 @@ in {
 		systemd.services."${nidusName}-webserver" = {
 			after=["network.target" "network-online.target"];
 			description="Nidus Sync Webserver";
-			path = [ pkgs.ffmpeg ];
+			path = with pkgs; [
+				ffmpeg
+				google-chrome
+			];
 			requires=["network-online.target"];
 			serviceConfig = {
 				Group = "${group}";
-				Environment="SENTRY_RELEASE=${inputs.nidus-sync.rev}";
+				Environment=[
+					"SENTRY_RELEASE=${inputs.nidus-sync.rev}"
+					"HOME=/var/lib/nidus-sync"
+				];
 				EnvironmentFile="${environmentFile}";
 				ExecStart = "${nidus-sync-pkg}/bin/nidus-sync";
 				PrivateTmp = true;
 				Restart = "on-failure";
+				StateDirectory = "nidus-sync"; # Creates /var/lib/nidus-sync
 				TimeoutStopSec = "5s";
 				Type = "simple";
 				User = "${user}";
-				WorkingDirectory = "/tmp";
+				WorkingDirectory = "/var/lib/nidus-sync";
 			};
 			wantedBy = ["multi-user.target"];
 		};
