@@ -27,6 +27,7 @@
 		./sudo.nix
 		./switch-fix.nix
 		./synapse.nix
+		./taiga.nix
 		./tegola.nix
 		./timecardbot.nix
 		./tmux.nix

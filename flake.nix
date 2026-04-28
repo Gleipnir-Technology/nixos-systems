@@ -4,10 +4,7 @@
 	inputs = {
 		authentik-nix = {
 			inputs.nixpkgs.follows = "nixpkgs";
-			#url = "github:nix-community/authentik-nix";
-			# Temporary workaround for build failure
-			# See https://github.com/nix-community/authentik-nix/issues/83
-			url = "github:Pentusha/authentik-nix";
+			url = "github:nix-community/authentik-nix";
 		};
 		disko = {
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -27,7 +24,7 @@
 			type = "github";
 			owner = "Gleipnir-Technology";
 			repo = "nidus-sync";
-			rev = "78458760ec5524d5ad9696b7ba923fc75264dfe1";
+			rev = "175fd8d0fbbde0f556fa38e5eb93c056d4595ed2";
 		};
 		nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
