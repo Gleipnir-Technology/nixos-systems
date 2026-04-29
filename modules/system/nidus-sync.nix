@@ -9,6 +9,8 @@ let
 	dataDirectoryString = "/mnt/bigdisk/nidus-sync";
 	group = nidusName;
 	nidusName = "nidus-sync";
+	nidusNameSocket = "${nidusName}";
+	nidusNameWebserver = "${nidusName}-webserver";
 	nidus-sync-pkg = inputs.nidus-sync.packages.x86_64-linux.default;
 	port = 10000;
 	secretsName = "${nidusName}-env";
@@ -96,17 +98,17 @@ in {
 			group = "${group}";
 			mode = "0440";
 			owner = "${user}";
-			restartUnits = ["${nidusName}-webserver.service"];
+			restartUnits = ["${nidusNameWebserver}.service"];
 			sopsFile = ../../secrets/${cfg.environment}/${nidusName}.env;
 		};
-		systemd.services."${nidusName}-webserver" = {
-			after=["network.target" "network-online.target"];
+		systemd.services."${nidusNameWebserver}" = {
+			after=["${nidusNameSocket}.socket" "network.target"];
 			description="Nidus Sync Webserver";
 			path = with pkgs; [
 				ffmpeg
 				google-chrome
 			];
-			requires=["network-online.target"];
+			requires=["${nidusNameSocket}.socket"];
 			serviceConfig = {
 				Group = "${group}";
 				Environment=[
@@ -115,15 +117,24 @@ in {
 				];
 				EnvironmentFile="${environmentFile}";
 				ExecStart = "${nidus-sync-pkg}/bin/nidus-sync";
+				KillMode = "mixed"; # SIGTERM to main process, SIGKILL to process group after timeout
+				KillSignal = "SIGTERM";
 				PrivateTmp = true;
 				Restart = "on-failure";
 				StateDirectory = "nidus-sync"; # Creates /var/lib/nidus-sync
-				TimeoutStopSec = "5s";
+				TimeoutStopSec = 30;
 				Type = "simple";
 				User = "${user}";
 				WorkingDirectory = "/var/lib/nidus-sync";
 			};
-			wantedBy = ["multi-user.target"];
+		};
+		systemd.sockets."${nidusNameSocket}" = {
+			listenStreams = [ "${toString port}" ];
+			socketConfig = {
+				BindIPv6Only = "both";
+				Service = "${nidusNameWebserver}.service";
+			};
+			wantedBy = [ "multi-user.target" ];
 		};
 		systemd.tmpfiles.rules = [
 			"d ${dataDirectoryString} 0755 ${nidusName} ${nidusName}"
