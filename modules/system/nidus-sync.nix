@@ -9,6 +9,7 @@ let
 	dataDirectoryString = "/mnt/bigdisk/nidus-sync";
 	group = nidusName;
 	nidusName = "nidus-sync";
+	nidusNameSentryUpload = "nidus-sentry-symbol-upload";
 	nidusNameSocket = "${nidusName}";
 	nidusNameWebserver = "${nidusName}-webserver";
 	nidus-sync-pkg = inputs.nidus-sync.packages.x86_64-linux.default;
@@ -38,6 +39,7 @@ in {
 		environment.systemPackages = with pkgs; [
 			ffmpeg
 			nidus-sync-pkg
+			sentry-cli
 		];
 		services.caddy.virtualHosts."${cfg.domainNameReport}" = {
 			extraConfig = ''
@@ -100,6 +102,19 @@ in {
 			owner = "${user}";
 			restartUnits = ["${nidusNameWebserver}.service"];
 			sopsFile = ../../secrets/${cfg.environment}/${nidusName}.env;
+		};
+		systemd.services."${nidusNameSentryUpload}" = {
+			description = "Upload source maps to Sentry";
+			after = [ "network-online.target" ];
+			wants = [ "network-online.target" ];
+			wantedBy = [ "multi-user.target" ];
+			serviceConfig = {
+				EnvironmentFile = "${environmentFile}";
+				Type = "oneshot";
+			};
+			script = ''
+				${pkgs.sentry-cli}/bin/sentry-cli releases files ${inputs.nidus-sync.rev} upload-sourcemaps ${nidus-sync-pkg}/share/frontend/ --rewrite --log-level=info
+			'';
 		};
 		systemd.services."${nidusNameWebserver}" = {
 			after=["${nidusNameSocket}.socket" "network.target"];
