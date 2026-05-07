@@ -4,7 +4,7 @@
 	disko.devices = {
 		disk = {
 			root = {
-				device = "/dev/sda";
+				device = "/dev/disk/by-id/ata-SATA_SSD_18072512000554";
 				type = "disk";
 				content = {
 					type = "gpt";

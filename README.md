@@ -4,65 +4,82 @@ These are the system definitions for various systems being run by Gleipnir Techn
 
 ## Current Method
 
-### Start a new system
-
-You'll need to spawn a new shell that has access to `doctl`, the Digital Ocean CLI.
-
-You need to use something with at least 2GB RAM. This has to do with the limits of `kexec`, which `nixos-anywherer` uses to spawn a newly built shell. I tested it myself (see below).
-
-You can get the list of available sizes via `doctl compute size list`. We're cheap, so we care about the small ones:
-
-```
-$ doctl compute size list
-Slug                        Description                      Memory     VCPUs    Disk    Price Monthly    Price Hourly
-s-1vcpu-512mb-10gb          Basic                            512        1        10      4.00             0.005950
-s-1vcpu-1gb                 Basic                            1024       1        25      6.00             0.008930
-s-1vcpu-1gb-amd             Basic AMD                        1024       1        25      7.00             0.010420
-s-1vcpu-1gb-intel           Basic Intel                      1024       1        25      7.00             0.010420
-s-1vcpu-1gb-35gb-intel      Basic Intel                      1024       1        35      8.00             0.011900
-s-1vcpu-2gb                 Basic                            2048       1        50      12.00            0.017860
-s-1vcpu-2gb-amd             Basic AMD                        2048       1        50      14.00            0.020830
-s-1vcpu-2gb-intel           Basic Intel                      2048       1        50      14.00            0.020830
-s-1vcpu-2gb-70gb-intel      Basic Intel                      2048       1        70      16.00            0.023810
-s-2vcpu-2gb                 Basic                            2048       2        60      18.00            0.026790
-s-2vcpu-2gb-amd             Basic AMD                        2048       2        60      21.00            0.031250
-s-2vcpu-2gb-intel           Basic Intel                      2048       2        60      21.00            0.031250
-s-2vcpu-2gb-90gb-intel      Basic Intel                      2048       2        90      24.00            0.035710
-s-2vcpu-4gb                 Basic                            4096       2        80      24.00            0.035710
-s-2vcpu-4gb-amd             Basic AMD                        4096       2        80      28.00            0.041670
-s-2vcpu-4gb-intel           Basic Intel                      4096       2        80      28.00            0.041670
-s-2vcpu-4gb-120gb-intel     Basic Intel                      4096       2        120     32.00            0.047620
-s-2vcpu-8gb-amd             Basic AMD                        8192       2        100     42.00            0.062500
-```
-
-This chart may change, of course. With this we'll choose the `s-1vcpu-2gb` basic system. You'll want to pick the project to start the droplet from the list at `doctl projects list`. Then use `digitalocean/create-droplet.sh` to create the droplet.
-
-
-```
-$ digitalocean/create-droplet.sh
-```
-
 ### Convert to NixOS with nixos-anywhere
 
 First log in to the host using regular credentials. Set up an ssh key for root access.
 
-Get the disk layout using `/sbin/fdisk -l`. You're looking to figure out which disk is the boot disk and which isn't. Then update the `disk-config.nix` file for the matching provider to ensure that the boot disk gets written.
+#### SSH key for root access
 
-Then check the network configuration via `ip route` and `ip addr` or `/etc/network/interfaces`. Update the network configuration at `network.nix` to match.
+Assuming you're using a Debian base for these instructions.
+
+```bash
+$ su
+# apt install sudo
+# echo 'ssh-ed25519 AAA....JGTm3 me@somewhere' > ~/.ssh/authorized_keys
+# chmod 600 ~/.ssh/authorized_keys
+```
+
+Now log out and see if you can SSH into the host as root. nixos-anywhere will be using SSH as root quite a bit.
+
+#### Copy a baseline config
+
+Start by copying an existing host config to a new subdirectory. For me right now I'm working on an AMD Legacy Quadrcore, so I"ll copy one of those:
+
+```shell
+cp host/nocix/amd-legacy-quadcore host/nocix/amd-legacy-quadcore-123456
+```
+
+You'll then need to update `flake.nix` to have an entry for the new host configuration.
+
+#### Configure root disk
+
+Get the disk layout using `/sbin/fdisk -l`. You're looking to figure out which disk is the boot disk and which isn't. Use `ls -l /dev/disk/by-id/` to figure out the ID, which should be stable across reboots. Then update the `host/nocix/amd-legacy-quadcore-123456/disk-config.nix` file for the matching provider to ensure that the boot disk gets written.
+
+#### Configure network
+
+Then check the network configuration via `ip route` and `ip addr` or `/etc/network/interfaces`. Update the network configuration at `host/nocix/amd-legacy-quadcore-123456/network.nix` to match.
+
+#### Generate the hardware configuration
 
 Generate the hardware configuration
 ```
 $ cd nixos-anywhere
-$ nix run github:nix-community/nixos-anywhere -- --flake ./#nocix --generate-hardware-config nixos-generate-config ./nocix/hardware-configuration --target-host root@1.2.3.4
+$ nix run github:nix-community/nixos-anywhere -- --flake ./#nocix --generate-hardware-config nixos-generate-config ./nocix/hardware-configuration.nix --target-host root@1.2.3.4
 ```
 This apparently destroys the operating system. I'm not sure why.
 
+The important thing is that it'll generate the hardware configuration at `./nocix/hardware-configuration.nix` which is different for every host and based on the specific CPU architecture and features.
+
+You'll have to reload the operating system after this. Sorry. Then restart by adding the SSH config with the new password generated when the OS is reloaded.
+
+At this point you can then actually deploy the NixOS anywhere with:
+
 ```
 $ cd nixos-anywhere
-$ nix run github:nix-community/nixos-anywhere -- --flake ./#nocix-amd-legacy-sexcore --target-host root@nocix-amd-legacy-sexcore.gleipnir.technology
+$ nix run github:nix-community/nixos-anywhere -- --flake ./#nocix --target-host root@1.2.3.4
 ```
 
-This will take a while, maybe 20 minutes, but after you'll have a fully-functioning NixOS system with the correct SSH keys.
+This will take a while, maybe 10 minutes, and disconnect and reboot the server. From there you can ping it and wait for it to come back, usually around 10 minutes again. I think. I don't watch it.
+
+#### Deploy full system
+
+At this point you've got a server that has NixOS on it, but it's just a bare system missing most of its purpose. That's because we used nixos-anywhere and a special flake instead of our regular flakes.
+
+You can start with copyng files from a working host
+
+```
+$ cp -R host/nocix/amd-legacy-quadcore-123 host/nocix/amd-legacy-quadcore-456
+```
+
+Then copy over the configuration files created during the nixos-anywhere steps above
+
+```
+$ cp nixos-anywhere/nocix/hardware-configuranion.nix nixos-anywhere/nocix/network.nix host/nocix/amd-legacy-quadcore-456
+```
+
+Before this will work you need to commit the files created in the above steps - nix flakes ignore files on disk that aren't in source code management if you're operating in a git repo context.
+
+This may take a while, maybe 20 minutes, but after you'll have a fully-functioning NixOS system with the correct SSH keys.
 
 ### Adding a new host to the secrets
 

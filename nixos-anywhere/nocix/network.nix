@@ -2,23 +2,23 @@
 {
 	networking = {
 		defaultGateway = {
-			address = "63.141.227.153";
-			interface = "enp3s0";
+			address = "107.150.42.1";
+			interface = "enp2s0";
 		};
 		defaultGateway6 = {
-			address = "2604:4300:a:88::1";
-			interface = "enp3s0";
+			address = "2604:4300:a:30::1";
+			interface = "enp2s0";
 		};
 		firewall = {
 			enable = false;
 		};
-		interfaces.enp3s0 = {
+		interfaces.enp2s0 = {
 			ipv4.addresses = [{
-				address = "63.141.227.154";
+				address = "107.150.42.2";
 				prefixLength = 29;
 			}];
 			ipv6.addresses = [{
-				address = "2604:4300:a:88::2";
+				address = "2604:4300:a:30::2";
 				prefixLength = 64;
 			}];
 		};
