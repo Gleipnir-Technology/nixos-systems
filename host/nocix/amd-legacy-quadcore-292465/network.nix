@@ -6,7 +6,7 @@
 			interface = "enp2s0";
 		};
 		defaultGateway6 = {
-			address = "2604:4300:a:30::";
+			address = "2604:4300:a:30::1";
 			interface = "enp2s0";
 		};
 		domain = "gleipnir.technology";
@@ -19,7 +19,7 @@
 				allowedTCPPorts = [ 22 80 443 7000 16652 ];
 			};*/
 		};
-		hostName = "nocix-amd-legacy-quadcore";
+		hostName = "nocix-amd-legacy-quadcore-292465";
 		interfaces.enp2s0 = {
 			ipv4.addresses = [{
 				address = "107.150.42.2";
@@ -32,8 +32,8 @@
 		};
 		nameservers = ["8.8.8.8"];
 		networkmanager.enable = false;
-		nftables.enable = true;
-		useNetworkd = true;
+		#nftables.enable = true;
 		search = ["nocix.net"];
+		useNetworkd = true;
 	};
 }

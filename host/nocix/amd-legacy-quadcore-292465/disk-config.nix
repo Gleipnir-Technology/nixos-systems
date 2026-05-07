@@ -4,7 +4,7 @@
 	disko.devices = {
 		disk = {
 			root = {
-				device = "/dev/sdb";
+				device = "/dev/disk/by-id/ata-SATA_SSD_18072512000554";
 				type = "disk";
 				content = {
 					type = "gpt";
@@ -35,8 +35,9 @@
 					};
 				};
 			};
+			/*
 			data = {
-				device = "/dev/sda";
+				device = "/dev/sdb";
 				type = "disk";
 				content = {
 					type = "gpt";
@@ -55,6 +56,7 @@
 					};
 				};
 			};
+			*/
 		};
 		lvm_vg = {
 			pool = {
