@@ -333,17 +333,17 @@
         "proj": "proj"
       },
       "locked": {
-        "lastModified": 1777520933,
-        "narHash": "sha256-8gSnitV1AuAvVc+gbWS1sKt1rmW5v7/Pd9ZRP05vu18=",
+        "lastModified": 1777603074,
+        "narHash": "sha256-Y6Sqn5GoLSO4Lu1S+fAj8iEQPrlBrGITMbHm8lZ4hCg=",
         "owner": "Gleipnir-Technology",
         "repo": "nidus-sync",
-        "rev": "839ed138ca734d05a2f2763be096717d327c5050",
+        "rev": "4bd62b3567b94c9c0ba7b13f2547a0a4d38979d4",
         "type": "github"
       },
       "original": {
         "owner": "Gleipnir-Technology",
         "repo": "nidus-sync",
-        "rev": "839ed138ca734d05a2f2763be096717d327c5050",
+        "rev": "4bd62b3567b94c9c0ba7b13f2547a0a4d38979d4",
         "type": "github"
       }
     },
