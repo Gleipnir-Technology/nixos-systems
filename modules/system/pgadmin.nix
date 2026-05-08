@@ -2,6 +2,7 @@
 with lib;
 
 let
+	databaseName = "nidus-sync";
 	dbUsername = "pgadmin";
 	cfg = config.myModules.pgadmin;
 	group = "root";
@@ -35,7 +36,7 @@ in {
 				# Pre-configure the database server
 				Servers = {
 					"1" = {
-						Name = "Local nidus-sync";
+						Name = "Local ${databaseName}";
 						Group = "Servers";
 						Host = "/run/postgresql"; # unix socket directory
 						Port = 5432;
@@ -52,20 +53,50 @@ in {
 				ensureClauses.login = true;
 				name = dbUsername;
 			}];
-			initialScript = pkgs.writeText "postgresql-init.sql" ''
+		};
+		systemd.services.pgadmin-setup-permissions = {
+			description = "Setup read-only permissions for pgadmin user";
+			after = [ "postgresql.service" ];
+			requires = [ "postgresql.service" ];
+			wantedBy = [ "multi-user.target" ];
+        
+			serviceConfig = {
+				Type = "oneshot";
+				User = "postgres";
+				RemainAfterExit = true;
+			};
+        
+			script = ''
+				${config.services.postgresql.package}/bin/psql -d ${databaseName} << 'EOF'
 				-- Grant connection to database
-				GRANT CONNECT ON DATABASE "nidus-sync" TO ${dbUsername};
-
-				-- Connect to the database and grant schema usage
-				\c nidus-sync
-				GRANT USAGE ON SCHEMA public TO ${dbUsername};
-
-				-- Grant SELECT on all existing tables
-				GRANT SELECT ON ALL TABLES IN SCHEMA public TO ${dbUsername};
-
-				-- GRANT SELECT on all future tables
-				ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO ${dbUsername};
+				GRANT CONNECT ON DATABASE ${databaseName} TO pgadmin;
+				
+				-- Dynamically grant permissions on all non-system schemas
+				DO $$
+				DECLARE
+				    schema_name text;
+				BEGIN
+				    FOR schema_name IN 
+					SELECT nspname 
+					FROM pg_namespace 
+					WHERE nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+					AND nspname NOT LIKE 'pg_temp%'
+					AND nspname NOT LIKE 'pg_toast_temp%'
+				    LOOP
+					EXECUTE format('GRANT USAGE ON SCHEMA %I TO pgadmin', schema_name);
+					EXECUTE format('GRANT SELECT ON ALL TABLES IN SCHEMA %I TO pgadmin', schema_name);
+					EXECUTE format('GRANT SELECT ON ALL SEQUENCES IN SCHEMA %I TO pgadmin', schema_name);
+					EXECUTE format('ALTER DEFAULT PRIVILEGES IN SCHEMA %I GRANT SELECT ON TABLES TO pgadmin', schema_name);
+				    END LOOP;
+				END $$;
+				EOF
 			'';
+        
+			# This ensures the service runs again when you deploy changes
+			restartTriggers = [ 
+				config.services.postgresql.package
+				"${databaseName}"
+			];
 		};
 		sops.secrets."pgadmin-initial-password-file" = {
 			format = "yaml";
