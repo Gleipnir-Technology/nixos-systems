@@ -16,6 +16,7 @@ in {
 
 	config = mkIf config.myModules.pi.enable {
 		environment.systemPackages = with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
+			pkgs.nodejs_24
 			pi
 		];
 		sops.secrets."pi-env" = {
@@ -27,4 +28,14 @@ in {
 			sopsFile = ../../secrets/pi.env;
 		};
 	};
+	/* notes on other stuff I did
+
+	I'm installing pi-semaphore and pi-tmux with:
+
+	```shell
+	pi install git:github.com/offline-ant/pi-semaphore
+	pi install git:github.com/offline-ant/pi-tmux
+	```
+	*/
+
 }
