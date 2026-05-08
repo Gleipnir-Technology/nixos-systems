@@ -35,9 +35,8 @@
 					};
 				};
 			};
-			/*
 			data = {
-				device = "/dev/sdb";
+				device = "ata-Hitachi_HUA722020ALA331_B9HMU2WF";
 				type = "disk";
 				content = {
 					type = "gpt";
@@ -56,7 +55,6 @@
 					};
 				};
 			};
-			*/
 		};
 		lvm_vg = {
 			pool = {
