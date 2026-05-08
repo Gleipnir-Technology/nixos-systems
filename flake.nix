@@ -64,6 +64,11 @@
 					];
 					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
 				};
+				"nocix-amd-legacy-quadcore-292465" = import ./system.nix {
+					configuration = ./host/nocix/amd-legacy-quadcore-292465;
+					roles = [ ];
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
+				};
 				"nocix-amd-legacy-sexcore" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-sexcore;
 					roles = [

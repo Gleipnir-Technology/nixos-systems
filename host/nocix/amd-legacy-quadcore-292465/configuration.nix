@@ -22,16 +22,7 @@
 		pkgs.dig
 		pkgs.gitMinimal
 	];
-	myModules = {
-		nidus-sync = {
-			domainNameReport = "staging-report.mosquitoes.online";
-			domainNameSync = "staging-sync.nidus.cloud";
-			environment = "staging";
-		};
-		tegola = {
-			domainName = "staging-tegola.nidus.cloud";
-		};
-	};
+	myModules = {};
 	services.openssh.enable = true;
 	users.users.root.openssh.authorizedKeys.keys =
 	[
