@@ -4,6 +4,7 @@
 		caddy.enable = true;
 		cloudreve.enable = true;
 		collabora.enable = true;
+		forgejo.enable = true;
 		glitchtip.enable = true;
 		element-web.enable = true;
 		label-studio.enable = true;

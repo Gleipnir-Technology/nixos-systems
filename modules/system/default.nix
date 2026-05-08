@@ -14,6 +14,7 @@
 		./element-web.nix
 		#./fieldseeker-sync.nix
 		./fish.nix
+		./forgejo.nix
 		./label-studio.nix
 		./librechat.nix
 		./minio.nix
