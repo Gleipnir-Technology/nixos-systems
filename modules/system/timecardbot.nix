@@ -1,7 +1,7 @@
-{ config, lib, pkgs, timecard-bot, ... }:
+{ config, inputs, lib, pkgs, ... }:
 with lib;
 let
-	timecard-bot-pkg = timecard-bot.packages.x86_64-linux.default;
+	timecard-bot-pkg = inputs.timecard-bot.packages.x86_64-linux.default;
 in
 {
 	options.myModules.timecardbot.enable = mkEnableOption "custom timecardbot configuration";
