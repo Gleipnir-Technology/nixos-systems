@@ -36,7 +36,7 @@
 		timecard-bot.url = "github:Gleipnir-Technology/timecard-bot?rev=8c81b6683f97aa2712323836e629adf102be58ac";
 	};
 
-	outputs = inputs@{ self, disko, home-manager, nixpkgs, nixvim, sops-nix, timecard-bot, ...}:
+	outputs = inputs@{ self, disko, home-manager, nixpkgs, nixvim, sops-nix, ...}:
 		let
 			configFiles = pkgs.stdenv.mkDerivation {
 				installPhase = ''
@@ -55,19 +55,19 @@
 					roles = [
 						./roles/corp.nix
 					];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
 				};
 				"nocix-amd-legacy-quadcore" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-quadcore;
 					roles = [
 						./roles/nidus-sync.nix
 					];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
 				};
 				"nocix-amd-legacy-quadcore-292465" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-quadcore-292465;
 					roles = [ ];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
 				};
 				"nocix-amd-legacy-sexcore" = import ./system.nix {
 					configuration = ./host/nocix/amd-legacy-sexcore;
@@ -76,7 +76,7 @@
 						./roles/nidus-sync.nix
 						./roles/sovr.nix
 					];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system timecard-bot;
+					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
 				};
 			};
 		};
