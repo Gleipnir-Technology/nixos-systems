@@ -4,10 +4,13 @@ with lib;
 let
 	cfg = config.services.forgejo;
 	srv = cfg.settings.server;
-{
+in {
 	options.myModules.forgejo.enable = mkEnableOption "custom forgejo configuration";
 
 	config = mkIf config.myModules.forgejo.enable {
+		services.caddy.virtualHosts."source.gleipnir.technology".extraConfig = ''
+			reverse_proxy unix//var/run/forgejo/socket
+		'';
 		services.forgejo = {
 			database.type = "postgres";
 			enable = true;
