@@ -1,13 +1,18 @@
 { pkgs, lib, config, ... }:
 with lib;
-{
+
+let
+	cfg = config.myModules.restic;
+	resticEnabled = cfg.role != null;
+in {
 	# Disable the stable channel version of restic and use our
 	# local copy of the unstable version so that we get access to stdin-from-command
 	disabledModules = [ "services/backup/restic.nix" ];
 	imports = [
 		./restic.nix
 	];
-	config = {
+
+	config = mkIf resticEnabled {
 		sops.secrets.restic-env = {
 			format = "yaml";
 			key = "backblaze-${config.myModules.restic.role}";
@@ -27,6 +32,7 @@ with lib;
 	};
 	options.myModules.restic.role = mkOption {
 		description = "The role which picks the key to use";
-		type = types.str;
+		default = null;
+		type = types.nullOr types.str;
 	};
 }
