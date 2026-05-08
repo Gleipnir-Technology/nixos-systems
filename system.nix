@@ -1,4 +1,4 @@
-{ configFiles, configuration, disko, home-manager, inputs, nixpkgs, nixvim, roles, sops-nix, system, timecard-bot, ... }:
+{ configFiles, configuration, disko, home-manager, inputs, nixpkgs, nixvim, roles, sops-nix, system }:
 let 
 	allowed-unfree-packages = [
 		"corefonts"
@@ -38,7 +38,7 @@ in nixpkgs.lib.nixosSystem {
 		system = "${system}";
 	};
 	specialArgs = {
-		inherit configFiles inputs timecard-bot;
+		inherit configFiles inputs;
 	};
 	system = "${system}";
 }
