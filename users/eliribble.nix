@@ -9,6 +9,7 @@ with lib;
 		myModules.home = {
 			fish.enable = true;
 			git.enable = true;
+			pi.enable = true;
 			user = "eliribble";
 		};
 
