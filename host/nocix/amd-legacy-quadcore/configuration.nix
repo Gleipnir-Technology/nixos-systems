@@ -28,6 +28,9 @@
 			domainNameSync = "staging-sync.nidus.cloud";
 			environment = "staging";
 		};
+		pgadmin = {
+			domainName = "staging-pgadmin.nidus.cloud";
+		};
 		tegola = {
 			domainName = "staging-tegola.nidus.cloud";
 		};

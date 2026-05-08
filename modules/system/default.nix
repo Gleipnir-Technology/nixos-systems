@@ -19,6 +19,8 @@
 		./minio.nix
 		./nidus-sync.nix
 		./openssh.nix
+		./pi.nix
+		./pgadmin.nix
 		./podman.nix
 		./qgis.nix
 		./restic
