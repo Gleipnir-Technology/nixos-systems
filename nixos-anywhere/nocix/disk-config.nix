@@ -36,7 +36,7 @@
 				};
 			};
 			data = {
-				device = "ata-Hitachi_HUA722020ALA331_B9HMU2WF";
+				device = "/dev/disk/by-id/ata-Hitachi_HUA722020ALA331_B9HMU2WF";
 				type = "disk";
 				content = {
 					type = "gpt";

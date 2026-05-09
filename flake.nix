@@ -20,6 +20,7 @@
 			url = "github:nix-community/home-manager/release-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+		llm-agents.url = "github:numtide/llm-agents.nix";
 		nidus-sync = {
 			type = "github";
 			owner = "Gleipnir-Technology";
@@ -28,6 +29,7 @@
 		};
 		nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+		nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 		nixvim = {
 			url = "github:nix-community/nixvim/nixos-25.11";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -36,48 +38,44 @@
 		timecard-bot.url = "github:Gleipnir-Technology/timecard-bot?rev=8c81b6683f97aa2712323836e629adf102be58ac";
 	};
 
-	outputs = inputs@{ self, disko, home-manager, nixpkgs, nixvim, sops-nix, ...}:
-		let
-			configFiles = pkgs.stdenv.mkDerivation {
-				installPhase = ''
-					mkdir -p $out
-					cp -r * $out/
-				'';
-				name = "config-files";
-				src = ./configs;
+	outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, ... }: {
+		nixosConfigurations = {
+			"nocix-amd-legacy-octacore" = import ./system.nix {
+				inherit inputs;
+				configuration = ./host/nocix/amd-legacy-octacore;
+				nixpkgs = nixpkgs;
+				roles = [
+					./roles/corp.nix
+				];
+				system = "x86_64-linux";
 			};
-			pkgs = nixpkgs.legacyPackages.${system};
-			system = "x86_64-linux";
-		in {
-			nixosConfigurations = {
-				"nocix-amd-legacy-octacore" = import ./system.nix {
-					configuration = ./host/nocix/amd-legacy-octacore;
-					roles = [
-						./roles/corp.nix
-					];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
-				};
-				"nocix-amd-legacy-quadcore" = import ./system.nix {
-					configuration = ./host/nocix/amd-legacy-quadcore;
-					roles = [
-						./roles/nidus-sync.nix
-					];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
-				};
-				"nocix-amd-legacy-quadcore-292465" = import ./system.nix {
-					configuration = ./host/nocix/amd-legacy-quadcore-292465;
-					roles = [ ./roles/llm.nix ];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
-				};
-				"nocix-amd-legacy-sexcore" = import ./system.nix {
-					configuration = ./host/nocix/amd-legacy-sexcore;
-					roles = [
-						./roles/nidus-marketing.nix
-						./roles/nidus-sync.nix
-						./roles/sovr.nix
-					];
-					inherit configFiles disko home-manager inputs nixpkgs nixvim sops-nix system;
-				};
+			"nocix-amd-legacy-quadcore" = import ./system.nix {
+				inherit inputs;
+				configuration = ./host/nocix/amd-legacy-quadcore;
+				nixpkgs = nixpkgs;
+				roles = [
+					./roles/nidus-sync.nix
+				];
+				system = "x86_64-linux";
+			};
+			"nocix-amd-legacy-quadcore-292465" = import ./system.nix {
+				inherit inputs;
+				configuration = ./host/nocix/amd-legacy-quadcore-292465;
+				nixpkgs = nixpkgs-unstable;
+				roles = [ ./roles/llm.nix ];
+				system = "x86_64-linux";
+			};
+			"nocix-amd-legacy-sexcore" = import ./system.nix {
+				inherit inputs;
+				configuration = ./host/nocix/amd-legacy-sexcore;
+				nixpkgs = nixpkgs;
+				roles = [
+					./roles/nidus-marketing.nix
+					./roles/nidus-sync.nix
+					./roles/sovr.nix
+				];
+				system = "x86_64-linux";
 			};
 		};
+	};
 }

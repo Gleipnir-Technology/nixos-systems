@@ -1,44 +1,59 @@
-{ configFiles, configuration, disko, home-manager, inputs, nixpkgs, nixvim, roles, sops-nix, system }:
-let 
+{ configuration, inputs, nixpkgs, roles ? [], system}:
+let
 	allowed-unfree-packages = [
 		"corefonts"
 		"google-chrome"
 		"mongodb"
 	];
-in nixpkgs.lib.nixosSystem {
+	
+	configFiles = nixpkgs.legacyPackages.${system}.stdenv.mkDerivation {
+		name = "config-files";
+		src = ./configs;
+		installPhase = ''
+			mkdir -p $out
+			cp -r * $out/
+		'';
+	};
+	
+	pkgs = import nixpkgs {
+		inherit system;
+		config = {
+			allowUnfreePredicate = pkg: 
+				builtins.elem (nixpkgs.lib.getName pkg) allowed-unfree-packages;
+		};
+	};
+in
+nixpkgs.lib.nixosSystem {
+	inherit system pkgs;
+	
+	specialArgs = {
+		inherit inputs configFiles;
+	};
+	
 	modules = [
+		configuration
 		inputs.authentik-nix.nixosModules.default
-		disko.nixosModules.disko
-		home-manager.nixosModules.home-manager
+		inputs.disko.nixosModules.disko
+		inputs.home-manager.nixosModules.home-manager
 		{
 			home-manager.extraSpecialArgs = { inherit configFiles inputs; };
 			home-manager.sharedModules = [
-				nixvim.homeModules.nixvim
+				inputs.nixvim.homeModules.nixvim
 				./modules/home/nixvim.nix
 			];
 			home-manager.useGlobalPkgs = true;
 			home-manager.useUserPackages = true;
 		}
-		configuration
-		./modules
-		sops-nix.nixosModules.sops {
+		inputs.sops-nix.nixosModules.sops
+		{
 			sops = {
 				age.generateKey = true;
-				age.keyFile = "/var/libs/sops-nix/key.txt";
+				age.keyFile = "/var/lib/sops-nix/key.txt";
 				age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 				defaultSopsFile = ./secrets/secrets.yaml;
 			};
 		}
+		./modules
 		./users
 	] ++ roles;
-	pkgs = import nixpkgs {
-		config = {
-			allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) allowed-unfree-packages;
-		};
-		system = "${system}";
-	};
-	specialArgs = {
-		inherit configFiles inputs;
-	};
-	system = "${system}";
 }
